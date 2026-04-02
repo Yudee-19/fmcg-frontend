@@ -1,4 +1,12 @@
-import type { ApiResponse, Product, Review, ReviewStats } from '@/types';
+import type {
+  ApiResponse,
+  Product,
+  ProductListDto,
+  ProductDetailApiResponse,
+  ReviewListResponse,
+  CategoryDto,
+  ProductStatsDto,
+} from '@/types';
 
 const API = process.env.NEXT_PUBLIC_API_URL!;
 
@@ -11,11 +19,18 @@ async function apiFetch<T>(path: string, options?: RequestInit): Promise<T> {
   return res.json();
 }
 
+// ─── Products ───────────────────────────────────────────────────────────────
+
 export const getProducts = (params?: {
   page?: number;
   limit?: number;
   search?: string;
   category?: string;
+  minPrice?: number;
+  maxPrice?: number;
+  minRating?: number;
+  tags?: string;
+  sort?: string;
 }) => {
   const q = new URLSearchParams(
     Object.entries(params ?? {}).reduce(
@@ -28,13 +43,14 @@ export const getProducts = (params?: {
   });
 };
 
+// GET /products/:id — product is `data`, recommendations are top-level `recommended`
 export const getProduct = (id: string) =>
-  apiFetch<ApiResponse<Product>>(`/products/${id}`, {
+  apiFetch<ProductDetailApiResponse>(`/products/${id}`, {
     next: { revalidate: 300 },
   });
 
 export const getCategories = () =>
-  apiFetch<ApiResponse<string[]>>('/products/categories', {
+  apiFetch<ApiResponse<{ name: string; count: number }[]>>('/products/categories', {
     next: { revalidate: 3600 },
   });
 
@@ -48,6 +64,8 @@ export const getNewArrivals = () =>
     next: { revalidate: 300 },
   });
 
+// ─── Reviews ────────────────────────────────────────────────────────────────
+
 export const getProductReviews = (
   productId: string,
   params?: { page?: number; limit?: number; sort?: string }
@@ -58,17 +76,45 @@ export const getProductReviews = (
       {} as Record<string, string>
     )
   ).toString();
-  return apiFetch<ApiResponse<Review[]> & { stats?: ReviewStats }>(
+  return apiFetch<ApiResponse<ReviewListResponse>>(
     `/reviews/${productId}${q ? `?${q}` : ''}`,
     { next: { revalidate: 60 } }
   );
 };
 
-export const getRelatedProducts = (category: string, excludeId: string) =>
-  apiFetch<ApiResponse<Product[]>>(
-    `/products?category=${encodeURIComponent(category)}&limit=4`,
-    { next: { revalidate: 300 } }
-  ).then((res) => ({
-    ...res,
-    data: res.data.filter((p) => p.id !== excludeId),
-  }));
+// ─── Filters & Stats ────────────────────────────────────────────────────────
+
+export const getSubcategories = (categoryName: string) =>
+  apiFetch<ApiResponse<string[]>>(
+    `/products/categories/${encodeURIComponent(categoryName)}/subcategories`,
+    { next: { revalidate: 3600 } }
+  );
+
+// Old filters endpoint
+export const getFilters = () =>
+  apiFetch<ApiResponse<any>>('/products/filters', {
+    next: { revalidate: 3600 },
+  });
+
+// NEW: Aggregated filters with values (categories, subcategories, tags, priceRange, ratings)
+export const getAllFilters = () =>
+  apiFetch<ApiResponse<{
+    categories: string[];
+    subCategories: string[];
+    tags: string[];
+    priceRange: { min: number; max: number };
+    ratings: number[];
+  }>>('/products/all-filters', {
+    next: { revalidate: 3600 },
+  });
+
+export const getProductStats = () =>
+  apiFetch<ApiResponse<ProductStatsDto>>('/products/stats', {
+    next: { revalidate: 300 },
+  });
+
+export const validateCategory = (category: string) =>
+  apiFetch<ApiResponse<any>>('/products/validate-category', {
+    method: 'POST',
+    body: JSON.stringify({ category }),
+  });

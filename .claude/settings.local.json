@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ls:*)",
+      "Bash(find D:/Projects/fmcg-frontend/src -type f -name *.json)",
+      "Bash(xargs grep:*)",
+      "Bash(npx tsc:*)",
+      "Bash(grep -E \"\\\\.\\(tsx|ts\\)$\")",
+      "Bash(find /d/Projects/fmcg-frontend/src/components -type f -name *.tsx)"
+    ]
+  }
+}

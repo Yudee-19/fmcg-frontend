@@ -21,8 +21,7 @@ export async function generateMetadata({
       canonical: `${process.env.NEXT_PUBLIC_SITE_URL}/en/shop`,
       languages: {
         en: `${process.env.NEXT_PUBLIC_SITE_URL}/en/shop`,
-        hi: `${process.env.NEXT_PUBLIC_SITE_URL}/hi/shop`,
-        bn: `${process.env.NEXT_PUBLIC_SITE_URL}/bn/shop`,
+        ar: `${process.env.NEXT_PUBLIC_SITE_URL}/ar/shop`,
       },
     },
   };
@@ -49,7 +48,7 @@ export default async function ShopPage({
 
   let products: Product[] = [];
   let pagination: PaginationMeta | undefined;
-  let categories: string[] = [];
+  let categories: { name: string; count: number }[] = [];
 
   try {
     const [productsRes, categoriesRes] = await Promise.all([
@@ -63,7 +62,7 @@ export default async function ShopPage({
     ]);
     products = productsRes.data ?? [];
     pagination = productsRes.pagination;
-    categories = categoriesRes.data ?? [];
+    categories = (categoriesRes.data as any) ?? [];
   } catch {
     // API unavailable — show empty state
   }
@@ -118,14 +117,15 @@ export default async function ShopPage({
             {t('all_products')}
           </Link>
           {categories.map((cat) => {
-            const label = cat
+            const catName = typeof cat === 'string' ? cat : cat.name;
+            const label = catName
               .replace(/-/g, ' ')
               .replace(/\b\w/g, (c) => c.toUpperCase());
-            const isActive = currentCategory === cat;
+            const isActive = currentCategory === catName;
             return (
               <Link
-                key={cat}
-                href={`/${locale}/shop?category=${encodeURIComponent(cat)}`}
+                key={catName}
+                href={`/${locale}/shop?category=${encodeURIComponent(catName)}`}
                 className={`px-3 py-1.5 text-sm rounded-full border transition-colors ${
                   isActive
                     ? 'bg-primary text-white border-primary'

@@ -1,0 +1,59 @@
+{
+  "title": {
+    "en": "String",
+    "ar": "String"
+  },
+
+  "description": {
+    "en": "String",
+    "ar": "String"
+  },
+
+  "category": {
+    "en": "String",
+    "ar": "String"
+  },
+
+  "subCategory": {
+    "en": "String",
+    "ar": "String"
+  },
+
+  "barcode": "String",
+  "itemCode": "String",
+  "sku": "String",
+
+  "price": "Number",
+  "discountPercentage": "Number",
+
+  "rating": "Number",
+  “review_count” : “Number”,
+  "stock": "Number",
+  "minimumOrderQuantity": "Number",
+
+  "isFeatured": "Boolean",
+
+  "warrantyInformation": {
+    "en": "String",
+    "ar": "String"
+  },
+
+  "tags": ["String"],
+
+  "images": ["String (URL)"],
+  "thumbnail": "String (URL)",
+
+  "attributes": {
+    "en": {
+      "key": "value"
+    },
+    "ar": {
+      "key": "value"
+    }
+  },
+
+  "searchKeywords": ["String"],
+
+  "createdAt": "Date",
+  "updatedAt": "Date"
+}

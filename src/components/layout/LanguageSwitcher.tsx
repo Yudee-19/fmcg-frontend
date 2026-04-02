@@ -6,8 +6,7 @@ import { routing } from '@/i18n/routing';
 
 const LOCALE_LABELS: Record<string, string> = {
   en: 'EN',
-  hi: 'हिं',
-  bn: 'বাং',
+  ar: 'عربي',
 };
 
 export default function LanguageSwitcher() {

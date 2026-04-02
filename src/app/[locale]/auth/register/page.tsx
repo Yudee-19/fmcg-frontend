@@ -3,8 +3,11 @@
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { Link, useRouter } from "@/i18n/navigation";
-import { register as registerApi, sendOtp } from "@/lib/apiClient";
+import { register as registerApi } from "@/lib/apiClient";
 import Button from "@/components/ui/Button";
+
+const inputClass =
+    "w-full px-3 py-2 border border-border rounded-md text-text-primary bg-white focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent";
 
 export default function RegisterPage() {
     const t = useTranslations("auth");
@@ -20,11 +23,56 @@ export default function RegisterPage() {
         phoneNumber: "",
         countryCode: "",
     });
+    const [address, setAddress] = useState({
+        street: "",
+        city: "",
+        state: "",
+        postalCode: "",
+        country: "",
+        addressType: "home" as "home" | "work",
+    });
+    const [showAddress, setShowAddress] = useState(false);
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
 
     function updateField(field: string, value: string) {
         setForm((prev) => ({ ...prev, [field]: value }));
+    }
+
+    function updateAddress(field: string, value: string) {
+        setAddress((prev) => ({ ...prev, [field]: value }));
+    }
+
+    function buildPayload() {
+        // Required fields
+        const payload: Record<string, any> = {
+            username: form.username,
+            email: form.email,
+            password: form.password,
+            confirmPassword: form.confirmPassword,
+        };
+
+        // Optional fields — only include if non-empty
+        if (form.firstName.trim()) payload.firstName = form.firstName.trim();
+        if (form.lastName.trim()) payload.lastName = form.lastName.trim();
+        if (form.phoneNumber.trim())
+            payload.phoneNumber = form.phoneNumber.trim();
+        if (form.countryCode) payload.countryCode = form.countryCode;
+
+        // Address — include if at least street is filled
+        if (showAddress && address.street.trim()) {
+            payload.address = {
+                street: address.street.trim(),
+                city: address.city.trim(),
+                state: address.state.trim(),
+                postalCode: address.postalCode.trim(),
+                country: address.country.trim(),
+                isDefault: true,
+                addressType: address.addressType,
+            };
+        }
+
+        return payload;
     }
 
     async function handleSubmit(e: React.FormEvent) {
@@ -39,19 +87,9 @@ export default function RegisterPage() {
         setLoading(true);
 
         try {
-            await registerApi({
-                username: form.username,
-                email: form.email,
-                password: form.password,
-                confirmPassword: form.confirmPassword,
-                firstName: form.firstName,
-                lastName: form.lastName,
-                phoneNumber: form.phoneNumber,
-                countryCode: form.countryCode,
-            });
+            await registerApi(buildPayload());
 
-            await sendOtp(form.email, "registration");
-
+            // Backend auto-sends OTP on registration — no explicit sendOtp needed
             router.push(
                 `/auth/verify-otp?email=${encodeURIComponent(form.email)}`,
             );
@@ -64,7 +102,7 @@ export default function RegisterPage() {
 
     return (
         <div className="min-h-[60vh] flex items-center justify-center px-4 py-12">
-            <div className="w-full max-w-md bg-bg-card rounded-xl border border-border p-8">
+            <div className="w-full max-w-lg bg-bg-card rounded-xl border border-border p-8">
                 <h1 className="text-2xl font-semibold text-text-primary text-center mb-6">
                     {t("register_cta")}
                 </h1>
@@ -76,6 +114,7 @@ export default function RegisterPage() {
                 )}
 
                 <form onSubmit={handleSubmit} className="space-y-4">
+                    {/* Name row */}
                     <div className="grid grid-cols-2 gap-4">
                         <div>
                             <label
@@ -91,7 +130,7 @@ export default function RegisterPage() {
                                 onChange={(e) =>
                                     updateField("firstName", e.target.value)
                                 }
-                                className="w-full px-3 py-2 border border-border rounded-md text-text-primary bg-white focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                                className={inputClass}
                             />
                         </div>
                         <div>
@@ -108,11 +147,12 @@ export default function RegisterPage() {
                                 onChange={(e) =>
                                     updateField("lastName", e.target.value)
                                 }
-                                className="w-full px-3 py-2 border border-border rounded-md text-text-primary bg-white focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                                className={inputClass}
                             />
                         </div>
                     </div>
 
+                    {/* Username */}
                     <div>
                         <label
                             htmlFor="username"
@@ -128,10 +168,11 @@ export default function RegisterPage() {
                             onChange={(e) =>
                                 updateField("username", e.target.value)
                             }
-                            className="w-full px-3 py-2 border border-border rounded-md text-text-primary bg-white focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                            className={inputClass}
                         />
                     </div>
 
+                    {/* Email */}
                     <div>
                         <label
                             htmlFor="email"
@@ -147,11 +188,12 @@ export default function RegisterPage() {
                             onChange={(e) =>
                                 updateField("email", e.target.value)
                             }
-                            className="w-full px-3 py-2 border border-border rounded-md text-text-primary bg-white focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                            className={inputClass}
                             placeholder="you@example.com"
                         />
                     </div>
 
+                    {/* Phone */}
                     <div>
                         <label
                             htmlFor="phone"
@@ -192,12 +234,13 @@ export default function RegisterPage() {
                                 onChange={(e) =>
                                     updateField("phoneNumber", e.target.value)
                                 }
-                                className="flex-1 px-3 py-2 border border-border rounded-md text-text-primary bg-white focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                                className={`flex-1 ${inputClass}`}
                                 placeholder="98765 43210"
                             />
                         </div>
                     </div>
 
+                    {/* Password */}
                     <div>
                         <label
                             htmlFor="password"
@@ -213,10 +256,11 @@ export default function RegisterPage() {
                             onChange={(e) =>
                                 updateField("password", e.target.value)
                             }
-                            className="w-full px-3 py-2 border border-border rounded-md text-text-primary bg-white focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                            className={inputClass}
                         />
                     </div>
 
+                    {/* Confirm Password */}
                     <div>
                         <label
                             htmlFor="confirmPassword"
@@ -232,9 +276,170 @@ export default function RegisterPage() {
                             onChange={(e) =>
                                 updateField("confirmPassword", e.target.value)
                             }
-                            className="w-full px-3 py-2 border border-border rounded-md text-text-primary bg-white focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                            className={inputClass}
                         />
                     </div>
+
+                    {/* Address toggle */}
+                    <div className="border-t border-border pt-4">
+                        <button
+                            type="button"
+                            onClick={() => setShowAddress(!showAddress)}
+                            className="flex items-center gap-2 text-sm font-medium text-primary hover:text-primary-hover transition-colors"
+                        >
+                            <svg
+                                className={`w-4 h-4 transition-transform ${showAddress ? "rotate-90" : ""}`}
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                            >
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M9 5l7 7-7 7"
+                                />
+                            </svg>
+                            {t("address_section")}
+                        </button>
+                    </div>
+
+                    {/* Address fields */}
+                    {showAddress && (
+                        <div className="space-y-3 pl-1 border-l-2 border-primary/20 ml-1 pl-4">
+                            <div>
+                                <label
+                                    htmlFor="street"
+                                    className="block text-sm font-medium text-text-primary mb-1"
+                                >
+                                    {t("street")}
+                                </label>
+                                <input
+                                    id="street"
+                                    type="text"
+                                    value={address.street}
+                                    onChange={(e) =>
+                                        updateAddress("street", e.target.value)
+                                    }
+                                    className={inputClass}
+                                />
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-3">
+                                <div>
+                                    <label
+                                        htmlFor="city"
+                                        className="block text-sm font-medium text-text-primary mb-1"
+                                    >
+                                        {t("city")}
+                                    </label>
+                                    <input
+                                        id="city"
+                                        type="text"
+                                        value={address.city}
+                                        onChange={(e) =>
+                                            updateAddress(
+                                                "city",
+                                                e.target.value,
+                                            )
+                                        }
+                                        className={inputClass}
+                                    />
+                                </div>
+                                <div>
+                                    <label
+                                        htmlFor="state"
+                                        className="block text-sm font-medium text-text-primary mb-1"
+                                    >
+                                        {t("state")}
+                                    </label>
+                                    <input
+                                        id="state"
+                                        type="text"
+                                        value={address.state}
+                                        onChange={(e) =>
+                                            updateAddress(
+                                                "state",
+                                                e.target.value,
+                                            )
+                                        }
+                                        className={inputClass}
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-3">
+                                <div>
+                                    <label
+                                        htmlFor="postalCode"
+                                        className="block text-sm font-medium text-text-primary mb-1"
+                                    >
+                                        {t("postal_code")}
+                                    </label>
+                                    <input
+                                        id="postalCode"
+                                        type="text"
+                                        value={address.postalCode}
+                                        onChange={(e) =>
+                                            updateAddress(
+                                                "postalCode",
+                                                e.target.value,
+                                            )
+                                        }
+                                        className={inputClass}
+                                    />
+                                </div>
+                                <div>
+                                    <label
+                                        htmlFor="country"
+                                        className="block text-sm font-medium text-text-primary mb-1"
+                                    >
+                                        {t("country")}
+                                    </label>
+                                    <input
+                                        id="country"
+                                        type="text"
+                                        value={address.country}
+                                        onChange={(e) =>
+                                            updateAddress(
+                                                "country",
+                                                e.target.value,
+                                            )
+                                        }
+                                        className={inputClass}
+                                        placeholder="IN"
+                                    />
+                                </div>
+                            </div>
+
+                            <div>
+                                <label
+                                    htmlFor="addressType"
+                                    className="block text-sm font-medium text-text-primary mb-1"
+                                >
+                                    {t("address_type")}
+                                </label>
+                                <select
+                                    id="addressType"
+                                    value={address.addressType}
+                                    onChange={(e) =>
+                                        updateAddress(
+                                            "addressType",
+                                            e.target.value,
+                                        )
+                                    }
+                                    className={inputClass}
+                                >
+                                    <option value="home">
+                                        {t("address_type_home")}
+                                    </option>
+                                    <option value="work">
+                                        {t("address_type_work")}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                    )}
 
                     <Button type="submit" fullWidth loading={loading} size="lg">
                         {t("register_cta")}

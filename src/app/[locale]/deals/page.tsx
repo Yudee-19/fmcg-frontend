@@ -21,8 +21,7 @@ export async function generateMetadata({
       canonical: `${process.env.NEXT_PUBLIC_SITE_URL}/en/deals`,
       languages: {
         en: `${process.env.NEXT_PUBLIC_SITE_URL}/en/deals`,
-        hi: `${process.env.NEXT_PUBLIC_SITE_URL}/hi/deals`,
-        bn: `${process.env.NEXT_PUBLIC_SITE_URL}/bn/deals`,
+        ar: `${process.env.NEXT_PUBLIC_SITE_URL}/ar/deals`,
       },
     },
   };

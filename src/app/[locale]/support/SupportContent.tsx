@@ -51,6 +51,7 @@ export default function SupportContent() {
   const [category, setCategory] = useState('');
   const [priority, setPriority] = useState('medium');
   const [message, setMessage] = useState('');
+  const [orderId, setOrderId] = useState('');
 
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
 
@@ -84,17 +85,21 @@ export default function SupportContent() {
     setSuccess('');
 
     try {
-      await createTicket({
+      const payload: Record<string, any> = {
         subject: subject.trim(),
         category,
         priority,
         message: message.trim(),
-      });
+      };
+      if (orderId.trim()) payload.orderId = orderId.trim();
+
+      await createTicket(payload);
       setSuccess(t('ticket_created'));
       setSubject('');
       setCategory('');
       setPriority('medium');
       setMessage('');
+      setOrderId('');
       // Refresh tickets list
       await fetchTickets();
     } catch (err: any) {
@@ -228,6 +233,29 @@ export default function SupportContent() {
               </select>
             </div>
           </div>
+
+          {/* Order ID — show when category is order/delivery/refund related */}
+          {(category === 'order' ||
+            category === 'delivery' ||
+            category === 'refund' ||
+            category === 'payment') && (
+            <div>
+              <label
+                htmlFor="orderId"
+                className="block text-sm font-medium text-text-secondary mb-1"
+              >
+                {t('order_id')}
+              </label>
+              <input
+                id="orderId"
+                type="text"
+                value={orderId}
+                onChange={(e) => setOrderId(e.target.value)}
+                placeholder={t('order_id_placeholder')}
+                className={inputClass}
+              />
+            </div>
+          )}
 
           <div>
             <label

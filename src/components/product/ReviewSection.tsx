@@ -23,9 +23,10 @@ export default async function ReviewSection({
 
   try {
     const res = await getProductReviews(productId, { limit: 5 });
-    reviews = res.data ?? [];
-    if (res.stats?.ratingDistribution) {
-      distribution = res.stats.ratingDistribution;
+    const reviewData = res.data;
+    reviews = reviewData?.reviews ?? [];
+    if (reviewData?.stats?.ratingDistribution) {
+      distribution = reviewData.stats.ratingDistribution;
     }
   } catch {
     // Reviews failed to load

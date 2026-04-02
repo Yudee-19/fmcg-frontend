@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { useCartStore } from '@/store/cartStore';
 import { useAuthStore } from '@/store/authStore';
-import { createOrder } from '@/lib/apiClient';
+import { createOrder, getAddresses } from '@/lib/apiClient';
 import { usePreferenceStore } from '@/store/preferenceStore';
 import Button from '@/components/ui/Button';
 import PriceDisplay from '@/components/ui/PriceDisplay';
@@ -46,20 +46,28 @@ export default function CheckoutForm() {
     setMounted(true);
   }, []);
 
-  // Pre-fill address from user's default address if available
+  // Pre-fill address from user's default address via Address API
   useEffect(() => {
-    if (user?.addresses?.length) {
-      const defaultAddr =
-        user.addresses.find((a) => a.isDefault) ?? user.addresses[0];
-      setAddress({
-        street: defaultAddr.street || '',
-        city: defaultAddr.city || '',
-        state: defaultAddr.state || '',
-        postalCode: defaultAddr.postalCode || '',
-        country: defaultAddr.country || 'India',
+    if (!isAuthenticated) return;
+    getAddresses()
+      .then((res) => {
+        const addrs = res.data ?? [];
+        if (addrs.length > 0) {
+          const defaultAddr =
+            addrs.find((a: any) => a.isDefault) ?? addrs[0];
+          setAddress({
+            street: defaultAddr.street || '',
+            city: defaultAddr.city || '',
+            state: defaultAddr.state || '',
+            postalCode: defaultAddr.postalCode || '',
+            country: defaultAddr.country || 'India',
+          });
+        }
+      })
+      .catch(() => {
+        // Address fetch failed — user enters manually
       });
-    }
-  }, [user]);
+  }, [isAuthenticated]);
 
   if (!mounted) {
     return (

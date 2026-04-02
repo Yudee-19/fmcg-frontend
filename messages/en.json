@@ -104,7 +104,18 @@
     "forgot_password": "Forgot Password?",
     "no_account": "Don't have an account?",
     "has_account": "Already have an account?",
-    "register_cta": "Create Account"
+    "register_cta": "Create Account",
+    "address_section": "Address (Optional)",
+    "street": "Street Address",
+    "city": "City",
+    "state": "State",
+    "postal_code": "Postal Code",
+    "country": "Country",
+    "address_type": "Address Type",
+    "address_type_home": "Home",
+    "address_type_work": "Work",
+    "resend_otp": "Resend OTP",
+    "resend_otp_in": "Resend OTP in {seconds}s"
   },
   "order": {
     "title": "My Orders",
@@ -220,6 +231,8 @@
     "priority_medium": "Medium",
     "priority_high": "High",
     "priority_urgent": "Urgent",
+    "order_id": "Related Order (Optional)",
+    "order_id_placeholder": "e.g. ORD-20260331-XXXX",
     "select_category": "Select a category",
     "select_priority": "Select priority",
     "ticket_created": "Ticket created successfully!",

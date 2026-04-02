@@ -8,14 +8,15 @@ import { formatDate } from '@/lib/utils';
 import Button from '@/components/ui/Button';
 import Skeleton from '@/components/ui/Skeleton';
 import { Link } from '@/i18n/navigation';
-import type { User } from '@/types';
+import type { ProfileUserDto, ProfileAddressDto } from '@/types';
 
 export default function ProfileContent() {
   const t = useTranslations('profile');
   const tAuth = useTranslations('auth');
 
   const [mounted, setMounted] = useState(false);
-  const [profile, setProfile] = useState<User | null>(null);
+  const [profile, setProfile] = useState<ProfileUserDto | null>(null);
+  const [addresses, setAddresses] = useState<ProfileAddressDto[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
@@ -33,11 +34,13 @@ export default function ProfileContent() {
       try {
         setLoading(true);
         const response = await getProfile();
-        setProfile(response.data);
+        // Profile response is now { user, addresses }
+        const data = response.data;
+        setProfile(data.user ?? data);
+        setAddresses(data.addresses ?? []);
       } catch (err: any) {
-        // Fallback to stored user data
         if (user) {
-          setProfile(user);
+          setProfile({ id: user.id, name: user.username, email: user.email, phone: null, createdAt: user.createdAt, updatedAt: user.updatedAt });
         } else {
           setError(err.message || t('error_loading'));
         }
@@ -109,32 +112,15 @@ export default function ProfileContent() {
     <div className="space-y-6">
       {/* Personal Information */}
       <div className="bg-bg-card rounded-xl border border-border p-6">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-semibold text-text-primary">
-            {t('personal_info')}
-          </h2>
-          <span
-            className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold ${
-              profile.status === 'ACTIVE'
-                ? 'bg-green-100 text-green-800'
-                : 'bg-gray-100 text-gray-800'
-            }`}
-          >
-            {profile.status}
-          </span>
-        </div>
+        <h2 className="text-lg font-semibold text-text-primary mb-4">
+          {t('personal_info')}
+        </h2>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           <div>
             <p className="text-sm text-text-muted">{t('full_name')}</p>
             <p className="text-text-primary font-medium mt-0.5">
-              {profile.firstName} {profile.lastName}
-            </p>
-          </div>
-          <div>
-            <p className="text-sm text-text-muted">{t('username')}</p>
-            <p className="text-text-primary font-medium mt-0.5">
-              {profile.username}
+              {profile.name}
             </p>
           </div>
           <div>
@@ -146,10 +132,7 @@ export default function ProfileContent() {
           <div>
             <p className="text-sm text-text-muted">{t('phone')}</p>
             <p className="text-text-primary font-medium mt-0.5">
-              {profile.countryCode
-                ? `${profile.countryCode} `
-                : ''}
-              {profile.phoneNumber || '-'}
+              {profile.phone || '-'}
             </p>
           </div>
           <div>
@@ -167,18 +150,18 @@ export default function ProfileContent() {
           {t('addresses')}
         </h2>
 
-        {(!profile.addresses || profile.addresses.length === 0) ? (
+        {addresses.length === 0 ? (
           <p className="text-text-muted text-sm">{t('no_addresses')}</p>
         ) : (
           <div className="space-y-3">
-            {profile.addresses.map((address, index) => (
+            {addresses.map((address: ProfileAddressDto) => (
               <div
-                key={index}
+                key={address.id}
                 className="rounded-lg border border-border p-4 bg-gray-50"
               >
                 <div className="flex items-center gap-2 mb-2">
                   <span className="text-xs font-bold text-text-secondary uppercase bg-gray-200 px-2 py-0.5 rounded">
-                    {address.addressType}
+                    {address.type}
                   </span>
                   {address.isDefault && (
                     <span className="text-xs font-bold text-green-700 bg-green-100 px-2 py-0.5 rounded">

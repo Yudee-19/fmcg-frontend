@@ -1,11 +1,13 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { useRouter } from '@/i18n/navigation';
-import { verifyOtp } from '@/lib/apiClient';
+import { verifyOtp, sendOtp } from '@/lib/apiClient';
 import Button from '@/components/ui/Button';
+
+const RESEND_COOLDOWN = 60; // seconds
 
 export default function VerifyOtpPage() {
   const t = useTranslations('auth');
@@ -16,6 +18,14 @@ export default function VerifyOtpPage() {
   const [otp, setOtp] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [resendCooldown, setResendCooldown] = useState(0);
+  const [resending, setResending] = useState(false);
+
+  useEffect(() => {
+    if (resendCooldown <= 0) return;
+    const timer = setTimeout(() => setResendCooldown((c) => c - 1), 1000);
+    return () => clearTimeout(timer);
+  }, [resendCooldown]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -31,6 +41,21 @@ export default function VerifyOtpPage() {
       setLoading(false);
     }
   }
+
+  const handleResendOtp = useCallback(async () => {
+    if (resendCooldown > 0 || resending || !email) return;
+    setResending(true);
+    setError('');
+
+    try {
+      await sendOtp(email, 'registration');
+      setResendCooldown(RESEND_COOLDOWN);
+    } catch (err: any) {
+      setError(err.message || 'Failed to resend OTP');
+    } finally {
+      setResending(false);
+    }
+  }, [email, resendCooldown, resending]);
 
   return (
     <div className="min-h-[60vh] flex items-center justify-center px-4 py-12">
@@ -73,6 +98,24 @@ export default function VerifyOtpPage() {
             {t('verify_otp')}
           </Button>
         </form>
+
+        {/* Resend OTP */}
+        <div className="mt-4 text-center">
+          {resendCooldown > 0 ? (
+            <p className="text-sm text-text-muted">
+              {t('resend_otp_in', { seconds: resendCooldown })}
+            </p>
+          ) : (
+            <button
+              type="button"
+              onClick={handleResendOtp}
+              disabled={resending}
+              className="text-sm text-primary hover:text-primary-hover font-medium disabled:opacity-50"
+            >
+              {resending ? '...' : t('resend_otp')}
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );

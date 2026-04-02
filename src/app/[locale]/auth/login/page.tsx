@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { Link, useRouter } from '@/i18n/navigation';
-import { login as loginApi } from '@/lib/apiClient';
+import { login as loginApi, ApiError } from '@/lib/apiClient';
 import { useAuthStore } from '@/store/authStore';
 import Button from '@/components/ui/Button';
 
@@ -27,6 +27,10 @@ export default function LoginPage() {
       setAuth(data.data.user, data.data.token);
       router.push('/');
     } catch (err: any) {
+      if (err instanceof ApiError && err.code === 'ACCOUNT_NOT_ACTIVE') {
+        router.push(`/auth/verify-otp?email=${encodeURIComponent(email)}`);
+        return;
+      }
       setError(err.message || 'Login failed');
     } finally {
       setLoading(false);

@@ -28,8 +28,7 @@ export async function generateMetadata({
       canonical: `${process.env.NEXT_PUBLIC_SITE_URL}/en/category/${category}`,
       languages: {
         en: `${process.env.NEXT_PUBLIC_SITE_URL}/en/category/${category}`,
-        hi: `${process.env.NEXT_PUBLIC_SITE_URL}/hi/category/${category}`,
-        bn: `${process.env.NEXT_PUBLIC_SITE_URL}/bn/category/${category}`,
+        ar: `${process.env.NEXT_PUBLIC_SITE_URL}/ar/category/${category}`,
       },
     },
   };
