@@ -2,7 +2,8 @@ import { setRequestLocale, getTranslations } from 'next-intl/server';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { getProducts, getCategories } from '@/lib/api';
-import type { Product, PaginationMeta } from '@/types';
+import type { Product, PaginationMeta, LocalizedString } from '@/types';
+import { getLocalized } from '@/lib/utils';
 import ProductGrid from '@/components/product/ProductGrid';
 import Breadcrumb from '@/components/ui/Breadcrumb';
 import PaginationLink from '@/components/ui/PaginationLink';
@@ -48,7 +49,7 @@ export default async function ShopPage({
 
   let products: Product[] = [];
   let pagination: PaginationMeta | undefined;
-  let categories: { name: string; count: number }[] = [];
+  let categories: LocalizedString[] = [];
 
   try {
     const [productsRes, categoriesRes] = await Promise.all([
@@ -62,7 +63,14 @@ export default async function ShopPage({
     ]);
     products = productsRes.data ?? [];
     pagination = productsRes.pagination;
-    categories = (categoriesRes.data as any) ?? [];
+    // Deduplicate by English name (API can return duplicates with different ar translations)
+    const rawCats = categoriesRes.data ?? [];
+    const seen = new Set<string>();
+    categories = rawCats.filter((c) => {
+      if (seen.has(c.en)) return false;
+      seen.add(c.en);
+      return true;
+    });
   } catch {
     // API unavailable — show empty state
   }
@@ -117,15 +125,16 @@ export default async function ShopPage({
             {t('all_products')}
           </Link>
           {categories.map((cat) => {
-            const catName = typeof cat === 'string' ? cat : cat.name;
-            const label = catName
+            const catEnName = cat.en;
+            const displayName = getLocalized(cat, locale);
+            const label = displayName
               .replace(/-/g, ' ')
               .replace(/\b\w/g, (c) => c.toUpperCase());
-            const isActive = currentCategory === catName;
+            const isActive = currentCategory === catEnName;
             return (
               <Link
-                key={catName}
-                href={`/${locale}/shop?category=${encodeURIComponent(catName)}`}
+                key={catEnName}
+                href={`/${locale}/shop?category=${encodeURIComponent(catEnName)}`}
                 className={`px-3 py-1.5 text-sm rounded-full border transition-colors ${
                   isActive
                     ? 'bg-primary text-white border-primary'

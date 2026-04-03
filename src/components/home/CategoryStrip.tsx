@@ -1,71 +1,180 @@
-import { getTranslations } from "next-intl/server";
-import Link from "next/link";
-import { getCategories } from "@/lib/api";
+"use client";
 
-const CATEGORY_ICONS: Record<string, string> = {
-    groceries: "🛒",
-    electronics: "📱",
-    furniture: "🪑",
-    beauty: "💄",
-    fragrances: "🌸",
-    "skin-care": "🧴",
-    "home-decoration": "🏠",
-    "kitchen-accessories": "🍳",
-    laptops: "💻",
-    "mens-shirts": "👔",
-    "mens-shoes": "👞",
-    "mens-watches": "⌚",
-    "mobile-accessories": "🔌",
-    motorcycle: "🏍️",
-    sports: "⚽",
-    sunglasses: "🕶️",
-    tablets: "📱",
-    tops: "👚",
-    vehicle: "🚗",
-    "womens-bags": "👜",
-    "womens-dresses": "👗",
-    "womens-jewellery": "💍",
-    "womens-shoes": "👠",
-    "womens-watches": "⌚",
+import { useEffect, useRef, useState } from "react";
+import { useTranslations, useLocale } from "next-intl";
+import { Link } from "@/i18n/navigation";
+import Image from "next/image";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import type { LocalizedString } from "@/types";
+import { getLocalized } from "@/lib/utils";
+
+// Map category names (lowercase) to image URLs.
+// Replace these with your own images at /public/images/categories/<name>.png
+const CATEGORY_IMAGES: Record<string, string> = {
+    "fruits & vegetables":
+        "https://img.freepik.com/free-photo/healthy-vegetables-wooden-table_1150-38014.jpg?w=300",
+    "dairy & bakery":
+        "https://img.freepik.com/free-photo/bread-rolls-croissants-pastries_23-2148255976.jpg?w=300",
+    snacks: "https://img.freepik.com/free-photo/french-fries-plate_23-2150640902.jpg?w=300",
+    "personal care":
+        "https://img.freepik.com/free-photo/cosmetics-products_23-2147690401.jpg?w=300",
+    household:
+        "https://img.freepik.com/free-photo/cleaning-products_23-2147636461.jpg?w=300",
+    beverages:
+        "https://img.freepik.com/free-photo/soda-cans-rows_23-2148255882.jpg?w=300",
+    groceries:
+        "https://img.freepik.com/free-photo/top-view-batch-fresh-vegetables-fruits_23-2148255879.jpg?w=300",
+    electronics:
+        "https://img.freepik.com/free-photo/modern-stationary-collection-arrangement_23-2149309643.jpg?w=300",
+    cleaning:
+        "https://img.freepik.com/free-photo/cleaning-products_23-2147636461.jpg?w=300",
+    beauty: "https://img.freepik.com/free-photo/cosmetics-products_23-2147690401.jpg?w=300",
 };
 
-export default async function CategoryStrip() {
-    const t = await getTranslations("home");
+function getCategoryImage(name: string): string {
+    const key = name.toLowerCase().trim();
+    return (
+        CATEGORY_IMAGES[key] ??
+        `https://placehold.co/300x200/f5f5f5/999?text=${encodeURIComponent(name)}`
+    );
+}
 
-    let categories: { name: string; count: number }[] = [];
-    try {
-        const res = await getCategories();
-        console.log("Fetched categories:", res);
-        categories = ((res.data as any) ?? []).slice(0, 8);
-    } catch {
-        categories = [];
-    }
+export default function CategoryStrip() {
+    const t = useTranslations("home");
+    const tc = useTranslations("common");
+    const locale = useLocale();
+    const scrollRef = useRef<HTMLDivElement>(null);
+    const [categories, setCategories] = useState<LocalizedString[]>([]);
+    const [canScrollLeft, setCanScrollLeft] = useState(false);
+    const [canScrollRight, setCanScrollRight] = useState(false);
+
+    // Fetch categories client-side
+    useEffect(() => {
+        const API = process.env.NEXT_PUBLIC_API_URL;
+        if (!API) return;
+        fetch(`${API}/products/categories`, {
+            headers: { "Content-Type": "application/json" },
+        })
+            .then((res) => res.json())
+            .then((data) => {
+                if (data.success) {
+                    const raw: LocalizedString[] = data.data ?? [];
+                    const seen = new Set<string>();
+                    setCategories(raw.filter((c) => {
+                        if (seen.has(c.en)) return false;
+                        seen.add(c.en);
+                        return true;
+                    }));
+                }
+            })
+            .catch(() => {});
+    }, []);
+
+    // Check scroll positions
+    const updateScrollState = () => {
+        const el = scrollRef.current;
+        if (!el) return;
+        setCanScrollLeft(el.scrollLeft > 0);
+        setCanScrollRight(el.scrollLeft + el.clientWidth < el.scrollWidth - 1);
+    };
+
+    useEffect(() => {
+        updateScrollState();
+        const el = scrollRef.current;
+        if (!el) return;
+        el.addEventListener("scroll", updateScrollState, { passive: true });
+        const observer = new ResizeObserver(updateScrollState);
+        observer.observe(el);
+        return () => {
+            el.removeEventListener("scroll", updateScrollState);
+            observer.disconnect();
+        };
+    }, [categories]);
+
+    const scroll = (direction: "left" | "right") => {
+        const el = scrollRef.current;
+        if (!el) return;
+        const cardWidth = el.querySelector("a")?.offsetWidth ?? 200;
+        const gap = 16;
+        const scrollAmount = (cardWidth + gap) * 2;
+        el.scrollBy({
+            left: direction === "left" ? -scrollAmount : scrollAmount,
+            behavior: "smooth",
+        });
+    };
 
     if (categories.length === 0) return null;
 
     return (
         <section>
-            <h2 className="text-xl font-semibold text-text-primary mb-4">
-                {t("shop_by_category")}
-            </h2>
-            <div className="flex gap-4 overflow-x-auto pb-2 scrollbar-hide">
-                {categories.map((cat) => {
-                    const catName = typeof cat === "string" ? cat : cat.name;
-                    return (
-                        <Link
-                            key={catName}
-                            href={`/category/${encodeURIComponent(catName)}`}
-                            className="flex flex-col items-center gap-2 shrink-0 group"
-                        >
-                            <div className="w-16 h-16 rounded-full bg-primary-light flex items-center justify-center text-2xl group-hover:bg-primary/10 transition-colors">
-                                {CATEGORY_ICONS[catName.toLowerCase()] ?? "📦"}
-                            </div>
-                            <span className="text-xs text-text-secondary font-medium text-center capitalize max-w-[72px] truncate">
-                                {catName.replace(/-/g, " ")}
-                            </span>
-                        </Link>
-                    );
-                })}
+            {/* ── Header row ── */}
+            <div className="flex items-center justify-between mb-5">
+                <h2 className="text-xl md:text-2xl font-semibold text-text-primary font-poppins">
+                    {t("shop_by_category")}
+                </h2>
+                <Link
+                    href="/shop"
+                    className="text-sm font-medium text-primary hover:underline underline-offset-2"
+                >
+                    {tc("view_all")}
+                </Link>
+            </div>
+
+            {/* ── Carousel wrapper ── */}
+            <div className="relative group/carousel">
+                {/* Left arrow */}
+                <button
+                    onClick={() => scroll("left")}
+                    disabled={!canScrollLeft}
+                    className="absolute -left-3 md:-left-5 top-1/2 -translate-y-1/2 z-10 w-10 h-10 bg-white border border-border rounded-full shadow-lg flex items-center justify-center transition-all duration-200 hover:bg-primary-light hover:border-primary disabled:opacity-0 disabled:pointer-events-none cursor-pointer"
+                    aria-label="Scroll left"
+                >
+                    <ChevronLeft className="w-5 h-5 text-text-primary" />
+                </button>
+
+                {/* Scrollable track */}
+                <div
+                    ref={scrollRef}
+                    className="flex gap-4 overflow-x-auto scroll-smooth scrollbar-hide px-1 py-1"
+                >
+                    {categories.map((cat) => {
+                        const catEnName = cat.en;
+                        const displayName = getLocalized(cat, locale);
+                        return (
+                            <Link
+                                key={catEnName}
+                                href={`/category/${encodeURIComponent(catEnName)}`}
+                                className="flex flex-col items-center shrink-0 group w-[140px] sm:w-[160px] md:w-[175px]"
+                            >
+                                {/* Image card */}
+                                <div className="w-full aspect-[4/3] rounded-xl border border-border bg-white overflow-hidden transition-all duration-200 group-hover:shadow-lg group-hover:border-primary/30 group-hover:-translate-y-0.5 shadow-md">
+                                    <Image
+                                        src={getCategoryImage(catEnName)}
+                                        alt={displayName}
+                                        width={300}
+                                        height={200}
+                                        className="w-full h-full object-cover"
+                                        unoptimized
+                                    />
+                                </div>
+                                {/* Label */}
+                                <span className="mt-2.5 text-sm font-medium text-text-primary text-center capitalize leading-tight group-hover:text-primary transition-colors duration-200">
+                                    {displayName.replace(/-/g, " ")}
+                                </span>
+                            </Link>
+                        );
+                    })}
+                </div>
+
+                {/* Right arrow */}
+                <button
+                    onClick={() => scroll("right")}
+                    disabled={!canScrollRight}
+                    className="absolute -right-3 md:-right-5 top-1/2 -translate-y-1/2 z-10 w-10 h-10 bg-white border border-border rounded-full shadow-lg flex items-center justify-center transition-all duration-200 hover:bg-primary-light hover:border-primary disabled:opacity-0 disabled:pointer-events-none cursor-pointer"
+                    aria-label="Scroll right"
+                >
+                    <ChevronRight className="w-5 h-5 text-text-primary" />
+                </button>
             </div>
         </section>
     );

@@ -6,7 +6,12 @@
       "Bash(xargs grep:*)",
       "Bash(npx tsc:*)",
       "Bash(grep -E \"\\\\.\\(tsx|ts\\)$\")",
-      "Bash(find /d/Projects/fmcg-frontend/src/components -type f -name *.tsx)"
+      "Bash(find /d/Projects/fmcg-frontend/src/components -type f -name *.tsx)",
+      "WebFetch(domain:www.uniglodiamonds.com)",
+      "WebFetch(domain:www.millenniumstar.be)",
+      "WebFetch(domain:navalsoni.lovable.app)",
+      "WebFetch(domain:www.donaigems.com)",
+      "WebFetch(domain:www.daliladiamonds.com)"
     ]
   }
 }

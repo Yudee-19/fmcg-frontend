@@ -76,6 +76,7 @@ export default async function ProductDetailPage({
     try {
         const res = await getProduct(id);
         product = res.data;
+        console.log("Product detail response:", res);
         recommendations = res.recommended ?? [];
     } catch {
         notFound();
@@ -236,34 +237,37 @@ export default async function ProductDetailPage({
                             </span>
                         </div>
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                            {recommendations.map((rec) => (
-                                <a
-                                    key={rec.id}
-                                    href={`/${locale}/products/${rec.id}`}
-                                    className="bg-bg-card rounded-xl border border-border overflow-hidden hover:shadow-md transition-shadow p-3"
-                                >
-                                    <div className="relative aspect-square bg-gray-50 rounded-lg overflow-hidden mb-2">
-                                        <img
-                                            src={rec.thumbnail}
-                                            alt={rec.title}
-                                            className="w-full h-full object-contain p-2"
-                                        />
-                                    </div>
-                                    <h3 className="text-sm font-medium text-text-primary line-clamp-2 min-h-[2.5rem]">
-                                        {rec.title}
-                                    </h3>
-                                    <div className="mt-1">
-                                        <span className="text-primary font-bold text-sm">
-                                            ₹{rec.finalPrice}
-                                        </span>
-                                        {rec.discountPercentage > 0 && (
-                                            <span className="text-text-muted text-xs line-through ml-2">
-                                                ₹{rec.price}
+                            {recommendations.map((rec) => {
+                                const recTitle = getLocalized(rec.title as any, locale);
+                                return (
+                                    <a
+                                        key={rec.id}
+                                        href={`/${locale}/products/${rec.id}`}
+                                        className="bg-bg-card rounded-xl border border-border overflow-hidden hover:shadow-md transition-shadow p-3"
+                                    >
+                                        <div className="relative aspect-square bg-gray-50 rounded-lg overflow-hidden mb-2">
+                                            <img
+                                                src={rec.thumbnail}
+                                                alt={recTitle}
+                                                className="w-full h-full object-contain p-2"
+                                            />
+                                        </div>
+                                        <h3 className="text-sm font-medium text-text-primary line-clamp-2 min-h-[2.5rem]">
+                                            {recTitle}
+                                        </h3>
+                                        <div className="mt-1">
+                                            <span className="text-primary font-bold text-sm">
+                                                ₹{rec.finalPrice ?? rec.price}
                                             </span>
-                                        )}
-                                    </div>
-                                </a>
-                            ))}
+                                            {rec.discountPercentage > 0 && (
+                                                <span className="text-text-muted text-xs line-through ml-2">
+                                                    ₹{rec.price}
+                                                </span>
+                                            )}
+                                        </div>
+                                    </a>
+                                );
+                            })}
                         </div>
                     </section>
                 )}

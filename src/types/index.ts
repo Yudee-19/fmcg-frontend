@@ -291,12 +291,9 @@ export interface ApiResponse<T> {
     pagination?: PaginationMeta;
 }
 
-// --- Category DTO ---
+// --- Category DTO (now returns LocalizedString[]) ---
 
-export interface CategoryDto {
-    name: string;
-    count: number;
-}
+export type CategoryDto = LocalizedString;
 
 // --- Wishlist wrapper ---
 

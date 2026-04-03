@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { useCartStore } from '@/store/cartStore';
 import { useAuthStore } from '@/store/authStore';
-import { createOrder, getAddresses } from '@/lib/apiClient';
+import { createOrder, getAddresses, clearCartApi } from '@/lib/apiClient';
 import { usePreferenceStore } from '@/store/preferenceStore';
 import Button from '@/components/ui/Button';
 import PriceDisplay from '@/components/ui/PriceDisplay';
@@ -179,6 +179,8 @@ export default function CheckoutForm() {
         cancelUrl: `${siteUrl}/checkout`,
       });
 
+      // Clear cart on both server and client
+      clearCartApi().catch(() => {});
       clearCart();
 
       if (

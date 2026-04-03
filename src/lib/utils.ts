@@ -24,10 +24,11 @@ export function truncate(str: string, maxLength: number): string {
  * Falls back to `en` if the locale key doesn't exist.
  */
 export function getLocalized(
-  field: LocalizedString | undefined | null,
+  field: LocalizedString | string | undefined | null,
   locale: string
 ): string {
   if (!field) return '';
+  if (typeof field === 'string') return field;
   return (field as unknown as Record<string, string>)[locale] ?? field.en ?? '';
 }
 
