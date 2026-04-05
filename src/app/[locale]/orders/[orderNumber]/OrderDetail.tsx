@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { useAuthStore } from '@/store/authStore';
-import { getOrderByNumber, cancelOrder } from '@/lib/apiClient';
+import { getOrderByNumber, cancelOrder } from '@/services/orderService';
 import { usePreferenceStore } from '@/store/preferenceStore';
 import { formatDate } from '@/lib/utils';
 import Button from '@/components/ui/Button';

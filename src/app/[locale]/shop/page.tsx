@@ -1,7 +1,7 @@
 import { setRequestLocale, getTranslations } from 'next-intl/server';
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { getProducts, getCategories } from '@/lib/api';
+import { getCachedProducts, getCachedCategories } from '@/services/productService.cached';
 import type { Product, PaginationMeta, LocalizedString } from '@/types';
 import { getLocalized } from '@/lib/utils';
 import ProductGrid from '@/components/product/ProductGrid';
@@ -53,13 +53,13 @@ export default async function ShopPage({
 
   try {
     const [productsRes, categoriesRes] = await Promise.all([
-      getProducts({
+      getCachedProducts({
         search: query.search,
         category: query.category,
         page: query.page ? Number(query.page) : 1,
         limit: 12,
       }),
-      getCategories(),
+      getCachedCategories(),
     ]);
     products = productsRes.data ?? [];
     pagination = productsRes.pagination;

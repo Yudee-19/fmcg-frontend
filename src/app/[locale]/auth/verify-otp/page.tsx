@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { useRouter } from '@/i18n/navigation';
-import { verifyOtp, sendOtp } from '@/lib/apiClient';
+import { verifyOtp, sendOtp } from '@/services/authService';
 import Button from '@/components/ui/Button';
 
 const RESEND_COOLDOWN = 60; // seconds

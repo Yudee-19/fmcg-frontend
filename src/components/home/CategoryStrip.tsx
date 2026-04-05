@@ -8,6 +8,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import type { LocalizedString } from "@/types";
 import { getLocalized } from "@/lib/utils";
 import { getCategoryImage } from "@/lib/categoryImage";
+import { getCategories } from "@/services/productService";
 
 export default function CategoryStrip() {
     const t = useTranslations("home");
@@ -20,22 +21,15 @@ export default function CategoryStrip() {
 
     // Fetch categories client-side
     useEffect(() => {
-        const API = process.env.NEXT_PUBLIC_API_URL;
-        if (!API) return;
-        fetch(`${API}/products/categories`, {
-            headers: { "Content-Type": "application/json" },
-        })
-            .then((res) => res.json())
-            .then((data) => {
-                if (data.success) {
-                    const raw: LocalizedString[] = data.data ?? [];
-                    const seen = new Set<string>();
-                    setCategories(raw.filter((c) => {
-                        if (seen.has(c.en)) return false;
-                        seen.add(c.en);
-                        return true;
-                    }));
-                }
+        getCategories()
+            .then((res) => {
+                const raw: LocalizedString[] = res.data ?? [];
+                const seen = new Set<string>();
+                setCategories(raw.filter((c) => {
+                    if (seen.has(c.en)) return false;
+                    seen.add(c.en);
+                    return true;
+                }));
             })
             .catch(() => {});
     }, []);

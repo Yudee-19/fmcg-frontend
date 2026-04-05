@@ -7,7 +7,7 @@ import { useAuthStore } from "@/store/authStore";
 import {
     updateCartItem,
     removeCartItem,
-} from "@/lib/apiClient";
+} from "@/services/cartService";
 import type { CartItem as CartItemType } from "@/types";
 import PriceDisplay from "@/components/ui/PriceDisplay";
 import QuantityStepper from "@/components/product/QuantityStepper";

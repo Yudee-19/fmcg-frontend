@@ -1,9 +1,10 @@
 import { getTranslations } from 'next-intl/server';
-import { getProductReviews } from '@/lib/api';
+import { getCachedProductReviews } from '@/services/productService.cached';
 import type { Review } from '@/types';
 import StarRating from '@/components/ui/StarRating';
 import RatingBar from './RatingBar';
 import ReviewCard from './ReviewCard';
+import WriteReviewForm from './WriteReviewForm';
 
 interface ReviewSectionProps {
   productId: string;
@@ -22,11 +23,16 @@ export default async function ReviewSection({
   let distribution = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
 
   try {
-    const res = await getProductReviews(productId, { limit: 5 });
-    const reviewData = res.data;
-    reviews = reviewData?.reviews ?? [];
-    if (reviewData?.stats?.ratingDistribution) {
-      distribution = reviewData.stats.ratingDistribution;
+    const res = await getCachedProductReviews(productId, { limit: 100 });
+    const allReviews: Review[] = Array.isArray(res.data) ? res.data : (res.data as any)?.reviews ?? [];
+    reviews = allReviews.slice(0, 5);
+
+    // Compute distribution from all fetched reviews
+    for (const review of allReviews) {
+      const r = review.rating as keyof typeof distribution;
+      if (r >= 1 && r <= 5) {
+        distribution[r]++;
+      }
     }
   } catch {
     // Reviews failed to load
@@ -34,16 +40,9 @@ export default async function ReviewSection({
 
   return (
     <section>
-      <div className="flex items-center justify-between mb-6">
-        <h2 className="text-xl font-semibold text-text-primary">
-          {t('rating_title')}
-        </h2>
-        {reviews.length > 0 && (
-          <span className="text-sm text-primary font-medium cursor-pointer hover:underline">
-            {t('write_review')}
-          </span>
-        )}
-      </div>
+      <h2 className="text-xl font-semibold text-text-primary mb-6">
+        {t('rating_title')}
+      </h2>
 
       <div className="flex flex-col md:flex-row gap-8">
         {/* Aggregate */}
@@ -66,6 +65,11 @@ export default async function ReviewSection({
               total={reviewCount}
             />
           ))}
+        </div>
+
+        {/* Write Review Form */}
+        <div className="shrink-0 md:w-72">
+          <WriteReviewForm productId={productId} />
         </div>
       </div>
 

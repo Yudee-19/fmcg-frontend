@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
+import axios from 'axios';
 import { usePreferenceStore } from '@/store/preferenceStore';
 
 export default function RatesSync() {
@@ -9,12 +10,9 @@ export default function RatesSync() {
   useEffect(() => {
     const fetchRates = async () => {
       try {
-        const res = await fetch('/api/exchange-rates');
-        if (res.ok) {
-          const data = await res.json();
-          if (data.rates) {
-            updateRates(data.rates);
-          }
+        const { data } = await axios.get('/api/exchange-rates');
+        if (data.rates) {
+          updateRates(data.rates);
         }
       } catch {
         // Silently fail - fallback rates are already in the store

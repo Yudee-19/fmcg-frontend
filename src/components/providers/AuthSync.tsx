@@ -2,6 +2,7 @@
 
 import { useEffect } from 'react';
 import { useAuthStore } from '@/store/authStore';
+import apiServer from '@/services/apiServer';
 
 export default function AuthSync() {
   const token = useAuthStore((s) => s.token);
@@ -12,17 +13,12 @@ export default function AuthSync() {
 
     const validateToken = async () => {
       try {
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/users/profile`,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        );
-        if (!res.ok) {
-          clearAuth();
-        }
+        await apiServer.get('/users/profile', {
+          headers: { Authorization: `Bearer ${token}` },
+        });
       } catch {
-        // Network error — keep the token for offline usage
+        // API error (401 etc.) — clear auth. Network error — keep token for offline.
+        clearAuth();
       }
     };
 

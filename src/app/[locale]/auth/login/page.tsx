@@ -3,7 +3,8 @@
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { Link, useRouter } from '@/i18n/navigation';
-import { login as loginApi, ApiError } from '@/lib/apiClient';
+import { login as loginApi } from '@/services/authService';
+import { ApiError } from '@/services/apiError';
 import { useAuthStore } from '@/store/authStore';
 import Button from '@/components/ui/Button';
 

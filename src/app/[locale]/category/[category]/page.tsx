@@ -1,7 +1,7 @@
 import { setRequestLocale, getTranslations } from 'next-intl/server';
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { getProducts } from '@/lib/api';
+import { getCachedProducts } from '@/services/productService.cached';
 import type { Product, PaginationMeta } from '@/types';
 import ProductGrid from '@/components/product/ProductGrid';
 import Breadcrumb from '@/components/ui/Breadcrumb';
@@ -54,7 +54,7 @@ export default async function CategoryPage({
   let pagination: PaginationMeta | undefined;
 
   try {
-    const res = await getProducts({
+    const res = await getCachedProducts({
       category: decodeURIComponent(category),
       page: query.page ? Number(query.page) : 1,
       limit: 12,

@@ -6,10 +6,8 @@ import { useWishlistStore } from "@/store/wishlistStore";
 import { useCartStore } from "@/store/cartStore";
 import { useAuthStore } from "@/store/authStore";
 import { usePreferenceStore } from "@/store/preferenceStore";
-import {
-    addToCart,
-    removeFromWishlist,
-} from "@/lib/apiClient";
+import { addToCart } from "@/services/cartService";
+import { removeFromWishlist } from "@/services/wishlistService";
 import Button from "@/components/ui/Button";
 import Skeleton from "@/components/ui/Skeleton";
 import { Link } from "@/i18n/navigation";

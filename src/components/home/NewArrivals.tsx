@@ -1,6 +1,6 @@
 import { getTranslations } from "next-intl/server";
 import Link from "next/link";
-import { getNewArrivals } from "@/lib/api";
+import { getCachedNewArrivals } from "@/services/productService.cached";
 import ProductGrid from "@/components/product/ProductGrid";
 
 export default async function NewArrivals() {
@@ -9,7 +9,7 @@ export default async function NewArrivals() {
 
     let products: import("@/types").Product[] = [];
     try {
-        const res = await getNewArrivals();
+        const res = await getCachedNewArrivals();
         console.log("New Arrivals:", res.data);
         products = res.data ?? [];
     } catch {

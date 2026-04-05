@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { Link, useRouter } from "@/i18n/navigation";
-import { register as registerApi } from "@/lib/apiClient";
+import { register as registerApi } from "@/services/authService";
 import Button from "@/components/ui/Button";
 
 const inputClass =

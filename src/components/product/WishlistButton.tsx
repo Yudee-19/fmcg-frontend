@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useWishlistStore } from "@/store/wishlistStore";
 import { useAuthStore } from "@/store/authStore";
-import { addToWishlist, removeFromWishlist } from "@/lib/apiClient";
+import { addToWishlist, removeFromWishlist } from "@/services/wishlistService";
 import { cn } from "@/lib/utils";
 
 interface WishlistButtonProps {

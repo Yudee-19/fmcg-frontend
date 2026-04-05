@@ -5,7 +5,7 @@ import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { useCartStore } from "@/store/cartStore";
 import { useAuthStore } from "@/store/authStore";
-import { clearCartApi } from "@/lib/apiClient";
+import { clearCartApi } from "@/services/cartService";
 import Skeleton from "@/components/ui/Skeleton";
 import CartItem from "./CartItem";
 

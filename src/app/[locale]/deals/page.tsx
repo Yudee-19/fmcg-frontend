@@ -1,7 +1,7 @@
 import { setRequestLocale, getTranslations } from 'next-intl/server';
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { getFeaturedProducts, getProducts } from '@/lib/api';
+import { getCachedFeaturedProducts, getCachedProducts } from '@/services/productService.cached';
 import type { Product, PaginationMeta } from '@/types';
 import ProductGrid from '@/components/product/ProductGrid';
 import Breadcrumb from '@/components/ui/Breadcrumb';
@@ -48,8 +48,8 @@ export default async function DealsPage({
 
   try {
     const [featuredRes, dealsRes] = await Promise.all([
-      getFeaturedProducts(),
-      getProducts({
+      getCachedFeaturedProducts(),
+      getCachedProducts({
         page: query.page ? Number(query.page) : 1,
         limit: 12,
       }),

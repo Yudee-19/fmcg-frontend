@@ -7,7 +7,7 @@ import { Link } from "@/i18n/navigation";
 import { ShoppingCart } from "lucide-react";
 import { useCartStore } from "@/store/cartStore";
 import { useAuthStore } from "@/store/authStore";
-import { addToCart } from "@/lib/apiClient";
+import { addToCart } from "@/services/cartService";
 import type { Product } from "@/types";
 import { getLocalized, getDiscountPercentage } from "@/lib/utils";
 import PriceDisplay from "@/components/ui/PriceDisplay";

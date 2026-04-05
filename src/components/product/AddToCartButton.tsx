@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useTranslations, useLocale } from "next-intl";
 import { useCartStore } from "@/store/cartStore";
 import { useAuthStore } from "@/store/authStore";
-import { addToCart } from "@/lib/apiClient";
+import { addToCart } from "@/services/cartService";
 import { useRouter } from "@/i18n/navigation";
 import type { Product } from "@/types";
 import { getLocalized } from "@/lib/utils";

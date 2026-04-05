@@ -2,7 +2,7 @@ import { setRequestLocale } from "next-intl/server";
 import { getTranslations } from "next-intl/server";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getProduct, getNewArrivals } from "@/lib/api";
+import { getCachedProduct, getCachedNewArrivals } from "@/services/productService.cached";
 import type { Product, ProductListDto } from "@/types";
 import { getLocalized, getLocalizedRecord } from "@/lib/utils";
 import Breadcrumb from "@/components/ui/Breadcrumb";
@@ -23,7 +23,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
     const { id, locale } = await params;
     try {
-        const { data: product } = await getProduct(id);
+        const { data: product } = await getCachedProduct(id);
         const title = getLocalized(product.title, locale);
         const category = getLocalized(product.category, locale);
         const subCategory = getLocalized(product.subCategory, locale);
@@ -74,7 +74,7 @@ export default async function ProductDetailPage({
     let product: Product;
     let recommendations: ProductListDto[] = [];
     try {
-        const res = await getProduct(id);
+        const res = await getCachedProduct(id);
         product = res.data;
         console.log("Product data:", product);
         recommendations = res.recommended ?? [];
@@ -91,7 +91,7 @@ export default async function ProductDetailPage({
     // Fetch new arrivals (non-critical)
     let newArrivals: Product[] = [];
     try {
-        const arrivalsRes = await getNewArrivals();
+        const arrivalsRes = await getCachedNewArrivals();
         newArrivals = arrivalsRes.data ?? [];
     } catch {
         // Non-critical data

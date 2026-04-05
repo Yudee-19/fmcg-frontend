@@ -1,6 +1,6 @@
 import { getTranslations } from 'next-intl/server';
 import Link from 'next/link';
-import { getFeaturedProducts } from '@/lib/api';
+import { getCachedFeaturedProducts } from '@/services/productService.cached';
 import ProductGrid from '@/components/product/ProductGrid';
 
 export default async function TrendingProducts() {
@@ -9,7 +9,7 @@ export default async function TrendingProducts() {
 
   let products: import('@/types').Product[] = [];
   try {
-    const res = await getFeaturedProducts();
+    const res = await getCachedFeaturedProducts();
     products = res.data ?? [];
   } catch {
     products = [];

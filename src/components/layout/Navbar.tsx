@@ -8,6 +8,7 @@ import { Menu } from "lucide-react";
 import Image from "next/image";
 import type { LocalizedString } from "@/types";
 import { getCategoryImage } from "@/lib/categoryImage";
+import { getCategories } from "@/services/productService";
 
 const NAV_ITEMS = [
     { key: "deals", href: "/deals" },
@@ -28,22 +29,15 @@ export default function Navbar() {
     const locale = useLocale();
 
     useEffect(() => {
-        const API = process.env.NEXT_PUBLIC_API_URL;
-        if (!API) return;
-        fetch(`${API}/products/categories`, {
-            headers: { "Content-Type": "application/json" },
-        })
-            .then((res) => res.json())
-            .then((data) => {
-                if (data.success) {
-                    const raw: LocalizedString[] = data.data ?? [];
-                    const seen = new Set<string>();
-                    setCategories(raw.filter((c) => {
-                        if (seen.has(c.en)) return false;
-                        seen.add(c.en);
-                        return true;
-                    }));
-                }
+        getCategories()
+            .then((res) => {
+                const raw: LocalizedString[] = res.data ?? [];
+                const seen = new Set<string>();
+                setCategories(raw.filter((c) => {
+                    if (seen.has(c.en)) return false;
+                    seen.add(c.en);
+                    return true;
+                }));
             })
             .catch(() => {});
     }, []);

@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { useAuthStore } from '@/store/authStore';
-import { getTickets, createTicket } from '@/lib/apiClient';
+import { getTickets, createTicket } from '@/services/ticketService';
 import { formatDate } from '@/lib/utils';
 import Button from '@/components/ui/Button';
 import Skeleton from '@/components/ui/Skeleton';

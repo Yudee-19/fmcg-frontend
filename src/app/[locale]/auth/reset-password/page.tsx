@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { Link, useRouter } from '@/i18n/navigation';
-import { sendOtp, resetPassword as resetPasswordApi } from '@/lib/apiClient';
+import { sendOtp, resetPassword as resetPasswordApi } from '@/services/authService';
 import Button from '@/components/ui/Button';
 
 type Step = 'email' | 'reset';

@@ -12,7 +12,12 @@
       "WebFetch(domain:navalsoni.lovable.app)",
       "WebFetch(domain:www.donaigems.com)",
       "WebFetch(domain:www.daliladiamonds.com)",
-      "WebSearch"
+      "WebSearch",
+      "Bash(grep -r from.*api /d/Projects/fmcg-frontend/src --include=*.ts --include=*.tsx)",
+      "Bash(grep -r \"apiClient\\\\|adminApi\\\\|import.*api\" /d/Projects/fmcg-frontend/src --include=*.ts --include=*.tsx)",
+      "Bash(grep -r \"from ['''']@/lib\" /d/Projects/fmcg-frontend/src --include=*.ts --include=*.tsx)",
+      "Bash(npm install:*)",
+      "Bash(node -e \"require\\(''axios''\\); console.log\\(''axios installed''\\)\")"
     ]
   }
 }
