@@ -24,7 +24,7 @@ export default function ProductJsonLd({ product, locale }: ProductJsonLdProps) {
         offers: {
             "@type": "Offer",
             price: product.price,
-            priceCurrency: "INR",
+            priceCurrency: "KWD",
             availability:
                 product.stock > 0
                     ? "https://schema.org/InStock"

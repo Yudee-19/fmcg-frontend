@@ -16,11 +16,8 @@ export async function GET() {
 
     // Fallback rates in case API is unavailable
     const fallbackRates: Record<string, number> = {
-        INR: 1,
-        USD: 0.012,
-        GBP: 0.0095,
-        EUR: 0.011,
-        AED: 0.044,
+        KWD: 1,
+        USD: 3.26,
     };
 
     if (!EXCHANGE_API_KEY || EXCHANGE_API_KEY === "your_exchangerate_api_key") {
@@ -29,7 +26,7 @@ export async function GET() {
 
     try {
         const res = await fetch(
-            `https://v6.exchangerate-api.com/v6/${EXCHANGE_API_KEY}/latest/INR`,
+            `https://v6.exchangerate-api.com/v6/${EXCHANGE_API_KEY}/latest/KWD`,
             { next: { revalidate: CACHE_TTL } },
         );
 
@@ -38,14 +35,10 @@ export async function GET() {
         }
 
         const data = await res.json();
-        console.log("Fetched new exchange rates from API", data);
 
         const rates: Record<string, number> = {
-            INR: 1,
+            KWD: 1,
             USD: data.conversion_rates?.USD ?? fallbackRates.USD,
-            GBP: data.conversion_rates?.GBP ?? fallbackRates.GBP,
-            EUR: data.conversion_rates?.EUR ?? fallbackRates.EUR,
-            AED: data.conversion_rates?.AED ?? fallbackRates.AED,
         };
 
         cachedRates = rates;

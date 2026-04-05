@@ -15,7 +15,7 @@ export default async function HeroBanner() {
             {/* Subtle background pattern */}
 
             <div className="relative max-w-7xl mx-auto px-6 md:px-10">
-                <div className="flex flex-col md:flex-row items-center gap-6 py-10 md:py-14 lg:py-16">
+                <div className="flex flex-col md:flex-row items-center gap-6 py-10 md:py-10">
                     {/* ── Left: Text content ── */}
                     <div className="flex-1 text-center md:text-left z-10">
                         <h1 className="font-poppins text-3xl md:text-4xl lg:text-[2.75rem] xl:text-5xl font-bold text-text-primary leading-tight tracking-tight">

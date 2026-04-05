@@ -40,6 +40,10 @@
     "trending": "المنتجات الرائجة",
     "new_arrivals": "وصل حديثاً",
     "cashback_title": "احصل على 15% استرداد نقدي على طلباتك",
+    "cashback_heading_before": "احصل على 15%",
+    "cashback_highlight": "استرداد نقدي",
+    "cashback_heading_after": "على طلباتك",
+    "cashback_email_placeholder": "أدخل بريدك الإلكتروني",
     "cashback_cta": "ابدأ الآن"
   },
   "product": {

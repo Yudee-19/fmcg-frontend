@@ -76,6 +76,7 @@ export default async function ProductDetailPage({
     try {
         const res = await getProduct(id);
         product = res.data;
+        console.log("Product data:", product);
         recommendations = res.recommended ?? [];
     } catch {
         notFound();
@@ -257,16 +258,16 @@ export default async function ProductDetailPage({
                                         <h3 className="text-sm font-medium text-text-primary line-clamp-2 min-h-[2.5rem]">
                                             {recTitle}
                                         </h3>
-                                        <div className="mt-1">
-                                            <span className="text-primary font-bold text-sm">
-                                                ₹{rec.finalPrice ?? rec.price}
-                                            </span>
-                                            {rec.discountPercentage > 0 && (
-                                                <span className="text-text-muted text-xs line-through ml-2">
-                                                    ₹{rec.price}
-                                                </span>
-                                            )}
-                                        </div>
+                                        <PriceDisplay
+                                            price={rec.finalPrice ?? rec.price}
+                                            originalPrice={
+                                                rec.discountPercentage > 0
+                                                    ? rec.price
+                                                    : undefined
+                                            }
+                                            size="sm"
+                                            className="mt-1"
+                                        />
                                     </a>
                                 );
                             })}

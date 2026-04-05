@@ -40,6 +40,10 @@
     "trending": "Trending Products",
     "new_arrivals": "New Arrivals",
     "cashback_title": "Get 15% Cashback on Your Orders You Make",
+    "cashback_heading_before": "Get 15%",
+    "cashback_highlight": "Cashback",
+    "cashback_heading_after": "on Your Orders You Make",
+    "cashback_email_placeholder": "Enter Your Email",
     "cashback_cta": "Get Started"
   },
   "product": {

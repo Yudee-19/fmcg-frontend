@@ -15,7 +15,7 @@ export default function CurrencySwitcher() {
   useEffect(() => setMounted(true), []);
 
   if (!mounted) {
-    return <span className="text-xs text-white">INR</span>;
+    return <span className="text-xs text-white">KWD</span>;
   }
 
   return (

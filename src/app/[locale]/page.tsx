@@ -22,12 +22,14 @@ export default async function HomePage({
     setRequestLocale(locale);
 
     return (
-        <div className="max-w-7xl mx-auto px-4 py-6 space-y-8">
-            <HeroBanner />
-            <CategoryStrip />
-            <PromoCards />
-            <NewArrivals />
-            <CashbackBanner />
-        </div>
+        <>
+            <div className="max-w-7xl mx-auto px-4 py-6 space-y-8">
+                <HeroBanner />
+                <CategoryStrip />
+                <NewArrivals />
+                <PromoCards />
+                <CashbackBanner />
+            </div>
+        </>
     );
 }

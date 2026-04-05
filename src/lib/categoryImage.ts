@@ -2,12 +2,12 @@
 const CATEGORY_IMAGE_MAP: Record<string, string> = {
     "baby care": "baby-care",
     "bath and body": "bath-and-body",
-    "dishwash": "dishwash",
-    "hair care": "haircare",
+    dishwash: "dishwash",
+    "hair care": "haircare1",
     "health and wellness": "health-and-wellness",
     "home and hardware": "home-and-hardware",
     "home care": "homecare",
-    "household": "household",
+    household: "household",
     "laundry care": "laundry-care",
     "personal care": "personal-care",
 };

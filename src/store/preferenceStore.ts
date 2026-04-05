@@ -2,11 +2,8 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
 export const CURRENCIES = {
-  INR: { symbol: '₹', code: 'INR', name: 'Indian Rupee', rate: 1 },
-  USD: { symbol: '$', code: 'USD', name: 'US Dollar', rate: 0.012 },
-  GBP: { symbol: '£', code: 'GBP', name: 'British Pound', rate: 0.0095 },
-  EUR: { symbol: '€', code: 'EUR', name: 'Euro', rate: 0.011 },
-  AED: { symbol: 'د.إ', code: 'AED', name: 'UAE Dirham', rate: 0.044 },
+  KWD: { symbol: 'د.ك', code: 'KWD', name: 'Kuwaiti Dinar', rate: 1 },
+  USD: { symbol: '$', code: 'USD', name: 'US Dollar', rate: 3.26 },
 } as const;
 
 export type CurrencyCode = keyof typeof CURRENCIES;
@@ -16,13 +13,13 @@ interface PreferenceStore {
   rates: typeof CURRENCIES;
   setCurrency: (code: CurrencyCode) => void;
   updateRates: (newRates: Record<string, number>) => void;
-  formatPrice: (amountInINR: number) => string;
+  formatPrice: (amountInKWD: number) => string;
 }
 
 export const usePreferenceStore = create<PreferenceStore>()(
   persist(
     (set, get) => ({
-      currency: 'INR',
+      currency: 'KWD',
       rates: { ...CURRENCIES },
       setCurrency: (currency) => set({ currency }),
       updateRates: (newRates) =>
@@ -34,19 +31,29 @@ export const usePreferenceStore = create<PreferenceStore>()(
             ])
           ) as typeof CURRENCIES,
         })),
-      formatPrice: (amountInINR) => {
+      formatPrice: (amountInKWD) => {
         const { currency, rates } = get();
-        const { symbol, rate } = rates[currency];
-        const converted = amountInINR * rate;
+        const currencyData = rates[currency] ?? rates.KWD;
+        const { symbol, rate } = currencyData;
+        const converted = amountInKWD * rate;
         const formatted =
           converted < 10
-            ? converted.toFixed(2)
+            ? converted.toFixed(3)
             : converted < 1000
-              ? converted.toFixed(0)
+              ? converted.toFixed(2)
               : Math.round(converted).toLocaleString();
         return `${symbol}${formatted}`;
       },
     }),
-    { name: 'crown-preferences' }
+    {
+      name: 'crown-preferences',
+      merge: (persisted: any, current) => ({
+        ...current,
+        ...persisted,
+        // Reset to KWD if persisted currency no longer exists
+        currency: persisted?.currency in CURRENCIES ? persisted.currency : 'KWD',
+        rates: { ...CURRENCIES },
+      }),
+    }
   )
 );
