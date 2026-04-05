@@ -7,37 +7,7 @@ import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import type { LocalizedString } from "@/types";
 import { getLocalized } from "@/lib/utils";
-
-// Map category names (lowercase) to image URLs.
-// Replace these with your own images at /public/images/categories/<name>.png
-const CATEGORY_IMAGES: Record<string, string> = {
-    "fruits & vegetables":
-        "https://img.freepik.com/free-photo/healthy-vegetables-wooden-table_1150-38014.jpg?w=300",
-    "dairy & bakery":
-        "https://img.freepik.com/free-photo/bread-rolls-croissants-pastries_23-2148255976.jpg?w=300",
-    snacks: "https://img.freepik.com/free-photo/french-fries-plate_23-2150640902.jpg?w=300",
-    "personal care":
-        "https://img.freepik.com/free-photo/cosmetics-products_23-2147690401.jpg?w=300",
-    household:
-        "https://img.freepik.com/free-photo/cleaning-products_23-2147636461.jpg?w=300",
-    beverages:
-        "https://img.freepik.com/free-photo/soda-cans-rows_23-2148255882.jpg?w=300",
-    groceries:
-        "https://img.freepik.com/free-photo/top-view-batch-fresh-vegetables-fruits_23-2148255879.jpg?w=300",
-    electronics:
-        "https://img.freepik.com/free-photo/modern-stationary-collection-arrangement_23-2149309643.jpg?w=300",
-    cleaning:
-        "https://img.freepik.com/free-photo/cleaning-products_23-2147636461.jpg?w=300",
-    beauty: "https://img.freepik.com/free-photo/cosmetics-products_23-2147690401.jpg?w=300",
-};
-
-function getCategoryImage(name: string): string {
-    const key = name.toLowerCase().trim();
-    return (
-        CATEGORY_IMAGES[key] ??
-        `https://placehold.co/300x200/f5f5f5/999?text=${encodeURIComponent(name)}`
-    );
-}
+import { getCategoryImage } from "@/lib/categoryImage";
 
 export default function CategoryStrip() {
     const t = useTranslations("home");

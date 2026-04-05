@@ -76,7 +76,6 @@ export default async function ProductDetailPage({
     try {
         const res = await getProduct(id);
         product = res.data;
-        console.log("Product detail response:", res);
         recommendations = res.recommended ?? [];
     } catch {
         notFound();
@@ -238,7 +237,10 @@ export default async function ProductDetailPage({
                         </div>
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                             {recommendations.map((rec) => {
-                                const recTitle = getLocalized(rec.title as any, locale);
+                                const recTitle = getLocalized(
+                                    rec.title as any,
+                                    locale,
+                                );
                                 return (
                                     <a
                                         key={rec.id}
