@@ -11,7 +11,8 @@
       "WebFetch(domain:www.millenniumstar.be)",
       "WebFetch(domain:navalsoni.lovable.app)",
       "WebFetch(domain:www.donaigems.com)",
-      "WebFetch(domain:www.daliladiamonds.com)"
+      "WebFetch(domain:www.daliladiamonds.com)",
+      "WebSearch"
     ]
   }
 }
