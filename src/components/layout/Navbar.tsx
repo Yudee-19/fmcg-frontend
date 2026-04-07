@@ -8,7 +8,7 @@ import { Menu } from "lucide-react";
 import Image from "next/image";
 import type { LocalizedString } from "@/types";
 import { getCategoryImage } from "@/lib/categoryImage";
-import { getCategories } from "@/services/productService";
+import { getCategoriesClient } from "@/services/categoryService";
 
 const NAV_ITEMS = [
     { key: "deals", href: "/deals" },
@@ -29,7 +29,7 @@ export default function Navbar() {
     const locale = useLocale();
 
     useEffect(() => {
-        getCategories()
+        getCategoriesClient()
             .then((res) => {
                 const raw: LocalizedString[] = res.data ?? [];
                 const seen = new Set<string>();

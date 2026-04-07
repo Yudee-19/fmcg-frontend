@@ -8,7 +8,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import type { LocalizedString } from "@/types";
 import { getLocalized } from "@/lib/utils";
 import { getCategoryImage } from "@/lib/categoryImage";
-import { getCategories } from "@/services/productService";
+import { getCategoriesClient } from "@/services/categoryService";
 
 export default function CategoryStrip() {
     const t = useTranslations("home");
@@ -21,7 +21,7 @@ export default function CategoryStrip() {
 
     // Fetch categories client-side
     useEffect(() => {
-        getCategories()
+        getCategoriesClient()
             .then((res) => {
                 const raw: LocalizedString[] = res.data ?? [];
                 const seen = new Set<string>();
