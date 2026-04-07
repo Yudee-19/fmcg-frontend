@@ -295,6 +295,27 @@ export interface ApiResponse<T> {
 
 export type CategoryDto = LocalizedString;
 
+// --- Filters response from GET /products/filters ---
+
+export interface FilterCategoryDto {
+    en: string;
+    ar: string;
+    subCategories: LocalizedString[];
+}
+
+export interface FiltersResponse {
+    queryParams: {
+        sortBy: string[];
+        values: string[];
+    };
+    categories: FilterCategoryDto[];
+    priceRange: {
+        min: number;
+        max: number;
+    };
+    tags: string[];
+}
+
 // --- Wishlist wrapper ---
 
 export interface Wishlist {

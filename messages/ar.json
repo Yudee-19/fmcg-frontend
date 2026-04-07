@@ -295,7 +295,18 @@
     "no_products": "لم يتم العثور على منتجات",
     "no_products_desc": "حاول تعديل البحث أو الفلاتر للعثور على ما تبحث عنه.",
     "clear_filters": "مسح الفلاتر",
-    "all_products": "جميع المنتجات"
+    "all_products": "جميع المنتجات",
+    "filters": "التصفية",
+    "categories": "الفئات",
+    "price_range": "نطاق السعر",
+    "min_price": "أدنى",
+    "max_price": "أقصى",
+    "apply_filters": "تطبيق",
+    "sort_by": "ترتيب حسب",
+    "sort_newest": "الأحدث",
+    "sort_price_low": "السعر: من الأقل للأعلى",
+    "sort_price_high": "السعر: من الأعلى للأقل",
+    "sort_rating": "الأعلى تقييماً"
   },
   "category": {
     "title": "{category} - تسوق حسب الفئة",

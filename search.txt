@@ -1,0 +1,1204 @@
+{{BASE_URL_ON_RENDER}}/api/products?search=Kama
+
+response inetrface:
+{
+    "success": true,
+    "code": "PRODUCTS_RETRIEVED",
+    "message": "Products retrieved successfully",
+    "data": [
+        {
+            "id": "69d1eae3d862547882097887",
+            "createdAt": "2026-04-05T04:53:55.773Z",
+            "updatedAt": "2026-04-05T04:53:55.773Z",
+            "title": {
+                "en": "KAMASUTRA CONDOMS VARIETY 12PCS",
+                "ar": "واقي ذكري كاما سوترا مجموعة متنوعة 12 قطعة"
+            },
+            "category": {
+                "en": "HEALTH AND WELLNESS",
+                "ar": "الصحة والعافية"
+            },
+            "subCategory": {
+                "en": "CONDOMS",
+                "ar": "الواقي الذكري"
+            },
+            "price": 1.9200000000000002,
+            "discountPercentage": 0,
+            "rating": 0,
+            "reviewCount": 0,
+            "stock": 500,
+            "thumbnail": "https://ecommerce-application-kajkarma.s3.us-east-1.amazonaws.com/ecommerce-images/products/seed_191_1775364835440/product_seed_191_1775364835440_1_2026-04-05T04-53-55-440Z.png",
+            "isFeatured": false
+        },
+        {
+            "id": "69d1eae3d862547882097884",
+            "createdAt": "2026-04-05T04:53:55.405Z",
+            "updatedAt": "2026-04-05T04:53:55.405Z",
+            "title": {
+                "en": "KAMASUTRA CONDOMS ULTRA THIN 12PCS",
+                "ar": "واقي ذكري كاما سوترا رفيع جدًا 12 قطعة"
+            },
+            "category": {
+                "en": "HEALTH AND WELLNESS",
+                "ar": "الصحة والعافية"
+            },
+            "subCategory": {
+                "en": "CONDOMS",
+                "ar": "الواقي الذكري"
+            },
+            "price": 1.9200000000000002,
+            "discountPercentage": 0,
+            "rating": 0,
+            "reviewCount": 0,
+            "stock": 500,
+            "thumbnail": "https://ecommerce-application-kajkarma.s3.us-east-1.amazonaws.com/ecommerce-images/products/seed_190_1775364835024/product_seed_190_1775364835024_1_2026-04-05T04-53-55-024Z.png",
+            "isFeatured": false
+        },
+        {
+            "id": "69d1eae2d862547882097881",
+            "createdAt": "2026-04-05T04:53:54.986Z",
+            "updatedAt": "2026-04-05T04:53:54.986Z",
+            "title": {
+                "en": "KAMASUTRA CONDOMS RIBBED 3PCS",
+                "ar": "واقي ذكري كاما سوترا مخطط 3 قطع"
+            },
+            "category": {
+                "en": "HEALTH AND WELLNESS",
+                "ar": "الصحة والعافية"
+            },
+            "subCategory": {
+                "en": "CONDOMS",
+                "ar": "الواقي الذكري"
+            },
+            "price": 0.9600000000000001,
+            "discountPercentage": 0,
+            "rating": 0,
+            "reviewCount": 0,
+            "stock": 500,
+            "thumbnail": "https://ecommerce-application-kajkarma.s3.us-east-1.amazonaws.com/ecommerce-images/products/seed_189_1775364834692/product_seed_189_1775364834692_1_2026-04-05T04-53-54-692Z.png",
+            "isFeatured": false
+        },
+        {
+            "id": "69d1eae2d86254788209787e",
+            "createdAt": "2026-04-05T04:53:54.653Z",
+            "updatedAt": "2026-04-05T04:53:54.653Z",
+            "title": {
+                "en": "KAMASUTRA CONDOMS RIBBED 12PCS",
+                "ar": "واقي ذكري كاما سوترا مخطط 12 قطعة"
+            },
+            "category": {
+                "en": "HEALTH AND WELLNESS",
+                "ar": "الصحة والعافية"
+            },
+            "subCategory": {
+                "en": "CONDOMS",
+                "ar": "الواقي الذكري"
+            },
+            "price": 1.9200000000000002,
+            "discountPercentage": 0,
+            "rating": 0,
+            "reviewCount": 0,
+            "stock": 500,
+            "thumbnail": "https://ecommerce-application-kajkarma.s3.us-east-1.amazonaws.com/ecommerce-images/products/seed_188_1775364834022/product_seed_188_1775364834022_1_2026-04-05T04-53-54-022Z.png",
+            "isFeatured": false
+        },
+        {
+            "id": "69d1eae1d86254788209787b",
+            "createdAt": "2026-04-05T04:53:53.985Z",
+            "updatedAt": "2026-04-05T04:53:53.985Z",
+            "title": {
+                "en": "KAMASUTRA CONDOMS PLAIN 12PCS",
+                "ar": "واقي ذكري كاما سوترا عادي 12 قطعة"
+            },
+            "category": {
+                "en": "HEALTH AND WELLNESS",
+                "ar": "الصحة والعافية"
+            },
+            "subCategory": {
+                "en": "CONDOMS",
+                "ar": "الواقي الذكري"
+            },
+            "price": 1.9200000000000002,
+            "discountPercentage": 0,
+            "rating": 0,
+            "reviewCount": 0,
+            "stock": 500,
+            "thumbnail": "https://ecommerce-application-kajkarma.s3.us-east-1.amazonaws.com/ecommerce-images/products/seed_187_1775364833681/product_seed_187_1775364833681_1_2026-04-05T04-53-53-681Z.png",
+            "isFeatured": false
+        },
+        {
+            "id": "69d1eae1d862547882097878",
+            "createdAt": "2026-04-05T04:53:53.643Z",
+            "updatedAt": "2026-04-05T04:53:53.643Z",
+            "title": {
+                "en": "KAMASUTRA CONDOMS LONG LAST 12PCS",
+                "ar": "واقي ذكري كاما سوترا طويل المفعول 12 قطعة"
+            },
+            "category": {
+                "en": "HEALTH AND WELLNESS",
+                "ar": "الصحة والعافية"
+            },
+            "subCategory": {
+                "en": "CONDOMS",
+                "ar": "الواقي الذكري"
+            },
+            "price": 1.9200000000000002,
+            "discountPercentage": 0,
+            "rating": 0,
+            "reviewCount": 0,
+            "stock": 500,
+            "thumbnail": "https://ecommerce-application-kajkarma.s3.us-east-1.amazonaws.com/ecommerce-images/products/seed_186_1775364833347/product_seed_186_1775364833347_1_2026-04-05T04-53-53-347Z.webp",
+            "isFeatured": false
+        },
+        {
+            "id": "69d1eae1d862547882097875",
+            "createdAt": "2026-04-05T04:53:53.312Z",
+            "updatedAt": "2026-04-05T04:53:53.312Z",
+            "title": {
+                "en": "KAMASUTRA CONDOMS FRUIT FLAVOURS 12PCS",
+                "ar": "واقي ذكري كاما سوترا بنكهة الفواكه 12 قطعة"
+            },
+            "category": {
+                "en": "HEALTH AND WELLNESS",
+                "ar": "الصحة والعافية"
+            },
+            "subCategory": {
+                "en": "CONDOMS",
+                "ar": "الواقي الذكري"
+            },
+            "price": 1.9200000000000002,
+            "discountPercentage": 0,
+            "rating": 0,
+            "reviewCount": 0,
+            "stock": 500,
+            "thumbnail": "https://ecommerce-application-kajkarma.s3.us-east-1.amazonaws.com/ecommerce-images/products/seed_185_1775364832962/product_seed_185_1775364832962_1_2026-04-05T04-53-52-962Z.webp",
+            "isFeatured": false
+        },
+        {
+            "id": "69d1eae0d862547882097872",
+            "createdAt": "2026-04-05T04:53:52.922Z",
+            "updatedAt": "2026-04-05T04:53:52.922Z",
+            "title": {
+                "en": "KAMASUTRA CONDOMS FRUIT FLAVOUR 3PCS",
+                "ar": "واقي ذكري كاما سوترا بنكهة الفواكه 3 قطع"
+            },
+            "category": {
+                "en": "HEALTH AND WELLNESS",
+                "ar": "الصحة والعافية"
+            },
+            "subCategory": {
+                "en": "CONDOMS",
+                "ar": "الواقي الذكري"
+            },
+            "price": 0.9600000000000001,
+            "discountPercentage": 0,
+            "rating": 0,
+            "reviewCount": 0,
+            "stock": 500,
+            "thumbnail": "https://ecommerce-application-kajkarma.s3.us-east-1.amazonaws.com/ecommerce-images/products/seed_184_1775364832636/product_seed_184_1775364832636_1_2026-04-05T04-53-52-636Z.webp",
+            "isFeatured": false
+        },
+        {
+            "id": "69d1eae0d86254788209786f",
+            "createdAt": "2026-04-05T04:53:52.597Z",
+            "updatedAt": "2026-04-05T04:53:52.597Z",
+            "title": {
+                "en": "KAMASUTRA CONDOMS DOTTED 3PCS",
+                "ar": "واقي ذكري كاما سوترا منقط 3 قطع"
+            },
+            "category": {
+                "en": "HEALTH AND WELLNESS",
+                "ar": "الصحة والعافية"
+            },
+            "subCategory": {
+                "en": "CONDOMS",
+                "ar": "الواقي الذكري"
+            },
+            "price": 0.9600000000000001,
+            "discountPercentage": 0,
+            "rating": 0,
+            "reviewCount": 0,
+            "stock": 500,
+            "thumbnail": "https://ecommerce-application-kajkarma.s3.us-east-1.amazonaws.com/ecommerce-images/products/seed_183_1775364831838/product_seed_183_1775364831838_1_2026-04-05T04-53-51-838Z.jpg",
+            "isFeatured": false
+        },
+        {
+            "id": "69d1eadfd86254788209786c",
+            "createdAt": "2026-04-05T04:53:51.798Z",
+            "updatedAt": "2026-04-05T04:53:51.798Z",
+            "title": {
+                "en": "KAMASUTRA CONDOMS DOTTED 12PCS",
+                "ar": "واقي ذكري كاما سوترا منقط 12 قطعة"
+            },
+            "category": {
+                "en": "HEALTH AND WELLNESS",
+                "ar": "الصحة والعافية"
+            },
+            "subCategory": {
+                "en": "CONDOMS",
+                "ar": "الواقي الذكري"
+            },
+            "price": 1.9200000000000002,
+            "discountPercentage": 0,
+            "rating": 0,
+            "reviewCount": 0,
+            "stock": 500,
+            "thumbnail": "https://ecommerce-application-kajkarma.s3.us-east-1.amazonaws.com/ecommerce-images/products/seed_182_1775364831514/product_seed_182_1775364831514_1_2026-04-05T04-53-51-514Z.jpg",
+            "isFeatured": false
+        }
+    ],
+    "pagination": {
+        "currentPage": 1,
+        "totalPages": 2,
+        "totalRecords": 12,
+        "recordsPerPage": 10,
+        "hasNextPage": true,
+        "hasPrevPage": false
+    },
+    "filters": {
+        "applied": [
+            "search"
+        ]
+    }
+}
+
+
+
+get filters: {{BASE_URL_ON_RENDER}}/api/products/filters
+
+response type:
+{
+    "success": true,
+    "code": "FILTERS_RETRIEVED",
+    "message": "Available filters retrieved successfully",
+    "data": {
+        "categories": [
+            {
+                "en": "BABY CARE",
+                "ar": "رعاية الأطفال",
+                "subCategories": [
+                    {
+                        "en": "BABY COLOGNE",
+                        "ar": "كولونيا للأطفال"
+                    }
+                ]
+            },
+            {
+                "en": "BATH AND BODY",
+                "ar": "حمام وجسم",
+                "subCategories": [
+                    {
+                        "en": "SOAPS",
+                        "ar": "الصابون"
+                    }
+                ]
+            },
+            {
+                "en": "BATH AND BODY",
+                "ar": "باث آند بودي",
+                "subCategories": [
+                    {
+                        "en": "SOAPS",
+                        "ar": "الصابون"
+                    }
+                ]
+            },
+            {
+                "en": "DISHWASH",
+                "ar": "غسل الصحون",
+                "subCategories": [
+                    {
+                        "en": "DISHWASH GEL",
+                        "ar": "جل غسيل الأطباق"
+                    }
+                ]
+            },
+            {
+                "en": "HAIR CARE",
+                "ar": "العناية بالشعر",
+                "subCategories": [
+                    {
+                        "en": "SHAMPOO",
+                        "ar": "شامبو"
+                    }
+                ]
+            },
+            {
+                "en": "HEALTH AND WELLNESS",
+                "ar": "الصحة والعافية",
+                "subCategories": [
+                    {
+                        "en": "ANTISEPTIC ALCOHOL",
+                        "ar": "الكحول المطهر"
+                    },
+                    {
+                        "en": "CONDOMS",
+                        "ar": "الواقي الذكري"
+                    },
+                    {
+                        "en": "FIRST AID",
+                        "ar": "الإسعافات الأولية"
+                    },
+                    {
+                        "en": "PAIN RELEF CREAM",
+                        "ar": "كريم لتخفيف الألم"
+                    },
+                    {
+                        "en": "PAIN RELEF SPRAY",
+                        "ar": "بخاخ مسكن للألم"
+                    },
+                    {
+                        "en": "PAIN RELIEF BALM",
+                        "ar": "بلسم مسكن للألم"
+                    },
+                    {
+                        "en": "PAIN RELIEF CREAM",
+                        "ar": "كريم لتخفيف الألم"
+                    },
+                    {
+                        "en": "PAIN RELIEF GEL",
+                        "ar": "جل لتخفيف الألم"
+                    },
+                    {
+                        "en": "PAIN RELIEF LINIMENT",
+                        "ar": "مرهم لتسكين الألم"
+                    },
+                    {
+                        "en": "PAIN RELIEF OIL",
+                        "ar": "زيت مسكن للألم"
+                    },
+                    {
+                        "en": "PAIN RELIEF SPRAY",
+                        "ar": "بخاخ مسكن للألم"
+                    }
+                ]
+            },
+            {
+                "en": "HOME AND HARDWARE",
+                "ar": "الأدوات المنزلية",
+                "subCategories": [
+                    {
+                        "en": "ADHESIVES",
+                        "ar": "المواد اللاصقة"
+                    }
+                ]
+            },
+            {
+                "en": "HOME CARE",
+                "ar": "الرعاية المنزلية",
+                "subCategories": [
+                    {
+                        "en": "AIR FRESHENER",
+                        "ar": "معطر جو"
+                    },
+                    {
+                        "en": "CANDLES",
+                        "ar": "الشموع"
+                    },
+                    {
+                        "en": "CHARCOAL",
+                        "ar": "فحم"
+                    },
+                    {
+                        "en": "DISHWASH LIQUID",
+                        "ar": "سائل غسيل الأطباق"
+                    },
+                    {
+                        "en": "DISHWASHING BAR",
+                        "ar": "صابون غسيل الأطباق"
+                    },
+                    {
+                        "en": "DISHWASHING PASTE",
+                        "ar": "معجون غسيل الأطباق"
+                    },
+                    {
+                        "en": "FLOOR CLEANER",
+                        "ar": "منظف ​​أرضيات"
+                    },
+                    {
+                        "en": "GLASS CLEANER",
+                        "ar": "منظف ​​زجاج"
+                    },
+                    {
+                        "en": "INCENSE",
+                        "ar": "البخور"
+                    },
+                    {
+                        "en": "KITCHEN ESSENTIALS",
+                        "ar": "مستلزمات المطبخ الأساسية"
+                    },
+                    {
+                        "en": "LAUNDRY",
+                        "ar": "مغسلة"
+                    },
+                    {
+                        "en": "LAUNDRY BAR SOAP",
+                        "ar": "صابون غسيل الملابس"
+                    },
+                    {
+                        "en": "LAUNDRY SOAP BAR",
+                        "ar": "صابون غسيل الملابس"
+                    },
+                    {
+                        "en": "LIGHTERS",
+                        "ar": "ولاعات"
+                    },
+                    {
+                        "en": "LIQUID DETERGENT",
+                        "ar": "منظف ​​سائل"
+                    },
+                    {
+                        "en": "PARTY SUPPLIES",
+                        "ar": "مستلزمات الحفلات"
+                    },
+                    {
+                        "en": "PEST CONTROL",
+                        "ar": "مكافحة الآفات"
+                    },
+                    {
+                        "en": "TOILET CLEANER GEL",
+                        "ar": "جل منظف للمراحيض"
+                    }
+                ]
+            },
+            {
+                "en": "HOME CARE",
+                "ar": "العناية المنزلية",
+                "subCategories": [
+                    {
+                        "en": "INSECT REPELLANT",
+                        "ar": "طارد للحشرات"
+                    },
+                    {
+                        "en": "TOILET CLEANER",
+                        "ar": "منظف ​​المراحيض"
+                    }
+                ]
+            },
+            {
+                "en": "HOUSEHOLD",
+                "ar": "أُسرَة",
+                "subCategories": [
+                    {
+                        "en": "ALUMINIUM TAPE",
+                        "ar": "شريط ألومنيوم"
+                    },
+                    {
+                        "en": "COTTON WICKS",
+                        "ar": "فتائل قطنية"
+                    },
+                    {
+                        "en": "DOUBLE SIDED TAPE",
+                        "ar": "شريط لاصق مزدوج الجوانب"
+                    },
+                    {
+                        "en": "PACKING TAPE",
+                        "ar": "شريط تغليف"
+                    },
+                    {
+                        "en": "STRETCH FILM",
+                        "ar": "فيلم مطاطي"
+                    }
+                ]
+            },
+            {
+                "en": "LAUNDRY CARE",
+                "ar": "العناية بالغسيل",
+                "subCategories": [
+                    {
+                        "en": "DETERGENT",
+                        "ar": "المنظفات"
+                    },
+                    {
+                        "en": "DETERGENT",
+                        "ar": "منظف"
+                    }
+                ]
+            },
+            {
+                "en": "PERSONAL CARE",
+                "ar": "العناية الشخصية",
+                "subCategories": [
+                    {
+                        "en": "AFTER SHAVE",
+                        "ar": "ما بعد الحلاقة"
+                    },
+                    {
+                        "en": "ALOE VERA GEL",
+                        "ar": "جل الصبار"
+                    },
+                    {
+                        "en": "ANTISEPTIC ALCOHOL",
+                        "ar": "الكحول المطهر"
+                    },
+                    {
+                        "en": "BODY COLOGNE",
+                        "ar": "عطر للجسم"
+                    },
+                    {
+                        "en": "BODY CREAM",
+                        "ar": "كريم للجسم"
+                    },
+                    {
+                        "en": "BODY LOTION",
+                        "ar": "لوشن للجسم"
+                    },
+                    {
+                        "en": "BODY OIL",
+                        "ar": "زيت للجسم"
+                    },
+                    {
+                        "en": "BODY POWDER",
+                        "ar": "بودرة للجسم"
+                    },
+                    {
+                        "en": "BODY SCRUB",
+                        "ar": "مقشر للجسم"
+                    },
+                    {
+                        "en": "COTTON BALLS",
+                        "ar": "كرات قطنية"
+                    },
+                    {
+                        "en": "COTTON BUDS",
+                        "ar": "براعم القطن"
+                    },
+                    {
+                        "en": "COTTON PADS",
+                        "ar": "فوط قطنية"
+                    },
+                    {
+                        "en": "COTTON SWABS",
+                        "ar": "مسحات قطنية"
+                    },
+                    {
+                        "en": "DENTAL FLOSS",
+                        "ar": "خيط تنظيف الأسنان"
+                    },
+                    {
+                        "en": "EYE SERUM",
+                        "ar": "سيروم للعين"
+                    },
+                    {
+                        "en": "FACE CREAM",
+                        "ar": "كريم للوجه"
+                    },
+                    {
+                        "en": "FACE MASK",
+                        "ar": "قناع وجه"
+                    },
+                    {
+                        "en": "FACE POWDER",
+                        "ar": "بودرة الوجه"
+                    },
+                    {
+                        "en": "FACE SERUM",
+                        "ar": "سيروم للوجه"
+                    },
+                    {
+                        "en": "FACE TONER",
+                        "ar": "تونر للوجه"
+                    },
+                    {
+                        "en": "FACE WASH",
+                        "ar": "غسل الوجه"
+                    },
+                    {
+                        "en": "FACIAL CLEANSER",
+                        "ar": "غسول للوجه"
+                    },
+                    {
+                        "en": "FOOT CARE",
+                        "ar": "العناية بالقدمين"
+                    },
+                    {
+                        "en": "GROOMING TOOLS",
+                        "ar": "أدوات العناية الشخصية"
+                    },
+                    {
+                        "en": "HAIR ACCESSORIES",
+                        "ar": "إكسسوارات الشعر"
+                    },
+                    {
+                        "en": "HAIR COLOUR",
+                        "ar": "لون الشعر"
+                    },
+                    {
+                        "en": "HAIR OIL",
+                        "ar": "زيت الشعر"
+                    },
+                    {
+                        "en": "HAIR SERUM",
+                        "ar": "سيروم للشعر"
+                    },
+                    {
+                        "en": "HAIR STYLING",
+                        "ar": "تصفيف الشعر"
+                    },
+                    {
+                        "en": "HAIR TREATMENT",
+                        "ar": "علاج الشعر"
+                    },
+                    {
+                        "en": "HENNA HAIR COLOUR",
+                        "ar": "صبغة الشعر بالحناء"
+                    },
+                    {
+                        "en": "HENNA POWDER",
+                        "ar": "مسحوق الحناء"
+                    },
+                    {
+                        "en": "HERBAL HENNA POWDER",
+                        "ar": "مسحوق الحناء العشبي"
+                    },
+                    {
+                        "en": "INTIMATE WASH",
+                        "ar": "غسول للمناطق الحساسة"
+                    },
+                    {
+                        "en": "MOUTH WASH",
+                        "ar": "غسول الفم"
+                    },
+                    {
+                        "en": "NAIL POLISH REMOVER",
+                        "ar": "مزيل طلاء الأظافر"
+                    },
+                    {
+                        "en": "PANTY LINERS",
+                        "ar": "فوط صحية يومية"
+                    },
+                    {
+                        "en": "PORE STRIPS",
+                        "ar": "شرائط قياس المسام"
+                    },
+                    {
+                        "en": "ROSE WATER",
+                        "ar": "ماء الورد"
+                    },
+                    {
+                        "en": "SHAMPOO",
+                        "ar": "شامبو"
+                    },
+                    {
+                        "en": "SHAMPOO COLOUR",
+                        "ar": "شامبو ملون"
+                    },
+                    {
+                        "en": "SHAMPOO HAIR COLOUR",
+                        "ar": "صبغة شعر شامبو"
+                    },
+                    {
+                        "en": "SHAVING CREAM",
+                        "ar": "كريم الحلاقة"
+                    },
+                    {
+                        "en": "SKIN CARE",
+                        "ar": "العناية بالبشرة"
+                    },
+                    {
+                        "en": "SKIN CREAM",
+                        "ar": "كريم للبشرة"
+                    },
+                    {
+                        "en": "SOOTHING GEL",
+                        "ar": "جل مهدئ"
+                    },
+                    {
+                        "en": "SUNSCREEN",
+                        "ar": "واقي الشمس"
+                    },
+                    {
+                        "en": "TOOTH BRUSH",
+                        "ar": "فرشاة الأسنان"
+                    },
+                    {
+                        "en": "TOOTH PASTE",
+                        "ar": "معجون أسنان"
+                    },
+                    {
+                        "en": "TOOTH POWDER",
+                        "ar": "مسحوق الأسنان"
+                    }
+                ]
+            }
+        ],
+        "priceRange": {
+            "min": 0.06,
+            "max": 3.97
+        },
+        "tags": []
+    }
+}
+
+modified response:
+{
+    "success": true,
+    "code": "FILTERS_RETRIEVED",
+    "message": "Available filters retrieved successfully",
+    "data": {
+        "queryParams": {
+            "sortBy": [
+                "price_asc",
+                "price_desc",
+                "rating_desc",
+                "newest"
+            ],
+            "values": [
+                "search",
+                "category",
+                "subCategory",
+                "minPrice",
+                "maxPrice",
+                "minRating",
+                "tags",
+                "isFeatured",
+                "inStock",
+                "page",
+                "limit"
+            ]
+        },
+        "categories": [
+            {
+                "en": "BABY CARE",
+                "ar": "رعاية الأطفال",
+                "subCategories": [
+                    {
+                        "en": "BABY COLOGNE",
+                        "ar": "كولونيا للأطفال"
+                    }
+                ]
+            },
+            {
+                "en": "BATH AND BODY",
+                "ar": "باث آند بودي",
+                "subCategories": [
+                    {
+                        "en": "SOAPS",
+                        "ar": "الصابون"
+                    }
+                ]
+            },
+            {
+                "en": "DISHWASH",
+                "ar": "غسل الصحون",
+                "subCategories": [
+                    {
+                        "en": "DISHWASH GEL",
+                        "ar": "جل غسيل الأطباق"
+                    }
+                ]
+            },
+            {
+                "en": "HAIR CARE",
+                "ar": "العناية بالشعر",
+                "subCategories": [
+                    {
+                        "en": "SHAMPOO",
+                        "ar": "شامبو"
+                    }
+                ]
+            },
+            {
+                "en": "HEALTH AND WELLNESS",
+                "ar": "الصحة والعافية",
+                "subCategories": [
+                    {
+                        "en": "ANTISEPTIC ALCOHOL",
+                        "ar": "الكحول المطهر"
+                    },
+                    {
+                        "en": "CONDOMS",
+                        "ar": "الواقي الذكري"
+                    },
+                    {
+                        "en": "FIRST AID",
+                        "ar": "الإسعافات الأولية"
+                    },
+                    {
+                        "en": "PAIN RELEF CREAM",
+                        "ar": "كريم لتخفيف الألم"
+                    },
+                    {
+                        "en": "PAIN RELEF SPRAY",
+                        "ar": "بخاخ مسكن للألم"
+                    },
+                    {
+                        "en": "PAIN RELIEF BALM",
+                        "ar": "بلسم مسكن للألم"
+                    },
+                    {
+                        "en": "PAIN RELIEF CREAM",
+                        "ar": "كريم لتخفيف الألم"
+                    },
+                    {
+                        "en": "PAIN RELIEF GEL",
+                        "ar": "جل لتخفيف الألم"
+                    },
+                    {
+                        "en": "PAIN RELIEF LINIMENT",
+                        "ar": "مرهم لتسكين الألم"
+                    },
+                    {
+                        "en": "PAIN RELIEF OIL",
+                        "ar": "زيت مسكن للألم"
+                    },
+                    {
+                        "en": "PAIN RELIEF SPRAY",
+                        "ar": "بخاخ مسكن للألم"
+                    }
+                ]
+            },
+            {
+                "en": "HOME AND HARDWARE",
+                "ar": "الأدوات المنزلية",
+                "subCategories": [
+                    {
+                        "en": "ADHESIVES",
+                        "ar": "المواد اللاصقة"
+                    }
+                ]
+            },
+            {
+                "en": "HOME CARE",
+                "ar": "الرعاية المنزلية",
+                "subCategories": [
+                    {
+                        "en": "AIR FRESHENER",
+                        "ar": "معطر جو"
+                    },
+                    {
+                        "en": "CANDLES",
+                        "ar": "الشموع"
+                    },
+                    {
+                        "en": "CHARCOAL",
+                        "ar": "فحم"
+                    },
+                    {
+                        "en": "DISHWASH LIQUID",
+                        "ar": "سائل غسيل الأطباق"
+                    },
+                    {
+                        "en": "DISHWASHING BAR",
+                        "ar": "صابون غسيل الأطباق"
+                    },
+                    {
+                        "en": "DISHWASHING PASTE",
+                        "ar": "معجون غسيل الأطباق"
+                    },
+                    {
+                        "en": "FLOOR CLEANER",
+                        "ar": "منظف ​​أرضيات"
+                    },
+                    {
+                        "en": "GLASS CLEANER",
+                        "ar": "منظف ​​زجاج"
+                    },
+                    {
+                        "en": "INCENSE",
+                        "ar": "البخور"
+                    },
+                    {
+                        "en": "INSECT REPELLANT",
+                        "ar": "طارد للحشرات"
+                    },
+                    {
+                        "en": "KITCHEN ESSENTIALS",
+                        "ar": "مستلزمات المطبخ الأساسية"
+                    },
+                    {
+                        "en": "LAUNDRY",
+                        "ar": "مغسلة"
+                    },
+                    {
+                        "en": "LAUNDRY BAR SOAP",
+                        "ar": "صابون غسيل الملابس"
+                    },
+                    {
+                        "en": "LAUNDRY SOAP BAR",
+                        "ar": "صابون غسيل الملابس"
+                    },
+                    {
+                        "en": "LIGHTERS",
+                        "ar": "ولاعات"
+                    },
+                    {
+                        "en": "LIQUID DETERGENT",
+                        "ar": "منظف ​​سائل"
+                    },
+                    {
+                        "en": "PARTY SUPPLIES",
+                        "ar": "مستلزمات الحفلات"
+                    },
+                    {
+                        "en": "PEST CONTROL",
+                        "ar": "مكافحة الآفات"
+                    },
+                    {
+                        "en": "TOILET CLEANER",
+                        "ar": "منظف ​​المراحيض"
+                    },
+                    {
+                        "en": "TOILET CLEANER GEL",
+                        "ar": "جل منظف للمراحيض"
+                    }
+                ]
+            },
+            {
+                "en": "HOUSEHOLD",
+                "ar": "أُسرَة",
+                "subCategories": [
+                    {
+                        "en": "ALUMINIUM TAPE",
+                        "ar": "شريط ألومنيوم"
+                    },
+                    {
+                        "en": "COTTON WICKS",
+                        "ar": "فتائل قطنية"
+                    },
+                    {
+                        "en": "DOUBLE SIDED TAPE",
+                        "ar": "شريط لاصق مزدوج الجوانب"
+                    },
+                    {
+                        "en": "PACKING TAPE",
+                        "ar": "شريط تغليف"
+                    },
+                    {
+                        "en": "STRETCH FILM",
+                        "ar": "فيلم مطاطي"
+                    }
+                ]
+            },
+            {
+                "en": "LAUNDRY CARE",
+                "ar": "العناية بالغسيل",
+                "subCategories": [
+                    {
+                        "en": "DETERGENT",
+                        "ar": "منظف"
+                    },
+                    {
+                        "en": "DETERGENT",
+                        "ar": "المنظفات"
+                    }
+                ]
+            },
+            {
+                "en": "PERSONAL CARE",
+                "ar": "العناية الشخصية",
+                "subCategories": [
+                    {
+                        "en": "AFTER SHAVE",
+                        "ar": "ما بعد الحلاقة"
+                    },
+                    {
+                        "en": "ALOE VERA GEL",
+                        "ar": "جل الصبار"
+                    },
+                    {
+                        "en": "ANTISEPTIC ALCOHOL",
+                        "ar": "الكحول المطهر"
+                    },
+                    {
+                        "en": "BODY COLOGNE",
+                        "ar": "عطر للجسم"
+                    },
+                    {
+                        "en": "BODY CREAM",
+                        "ar": "كريم للجسم"
+                    },
+                    {
+                        "en": "BODY LOTION",
+                        "ar": "لوشن للجسم"
+                    },
+                    {
+                        "en": "BODY OIL",
+                        "ar": "زيت للجسم"
+                    },
+                    {
+                        "en": "BODY POWDER",
+                        "ar": "بودرة للجسم"
+                    },
+                    {
+                        "en": "BODY SCRUB",
+                        "ar": "مقشر للجسم"
+                    },
+                    {
+                        "en": "COTTON BALLS",
+                        "ar": "كرات قطنية"
+                    },
+                    {
+                        "en": "COTTON BUDS",
+                        "ar": "براعم القطن"
+                    },
+                    {
+                        "en": "COTTON PADS",
+                        "ar": "فوط قطنية"
+                    },
+                    {
+                        "en": "COTTON SWABS",
+                        "ar": "مسحات قطنية"
+                    },
+                    {
+                        "en": "DENTAL FLOSS",
+                        "ar": "خيط تنظيف الأسنان"
+                    },
+                    {
+                        "en": "EYE SERUM",
+                        "ar": "سيروم للعين"
+                    },
+                    {
+                        "en": "FACE CREAM",
+                        "ar": "كريم للوجه"
+                    },
+                    {
+                        "en": "FACE MASK",
+                        "ar": "قناع وجه"
+                    },
+                    {
+                        "en": "FACE POWDER",
+                        "ar": "بودرة الوجه"
+                    },
+                    {
+                        "en": "FACE SERUM",
+                        "ar": "سيروم للوجه"
+                    },
+                    {
+                        "en": "FACE TONER",
+                        "ar": "تونر للوجه"
+                    },
+                    {
+                        "en": "FACE WASH",
+                        "ar": "غسل الوجه"
+                    },
+                    {
+                        "en": "FACIAL CLEANSER",
+                        "ar": "غسول للوجه"
+                    },
+                    {
+                        "en": "FOOT CARE",
+                        "ar": "العناية بالقدمين"
+                    },
+                    {
+                        "en": "GROOMING TOOLS",
+                        "ar": "أدوات العناية الشخصية"
+                    },
+                    {
+                        "en": "HAIR ACCESSORIES",
+                        "ar": "إكسسوارات الشعر"
+                    },
+                    {
+                        "en": "HAIR COLOUR",
+                        "ar": "لون الشعر"
+                    },
+                    {
+                        "en": "HAIR OIL",
+                        "ar": "زيت الشعر"
+                    },
+                    {
+                        "en": "HAIR SERUM",
+                        "ar": "سيروم للشعر"
+                    },
+                    {
+                        "en": "HAIR STYLING",
+                        "ar": "تصفيف الشعر"
+                    },
+                    {
+                        "en": "HAIR TREATMENT",
+                        "ar": "علاج الشعر"
+                    },
+                    {
+                        "en": "HENNA HAIR COLOUR",
+                        "ar": "صبغة الشعر بالحناء"
+                    },
+                    {
+                        "en": "HENNA POWDER",
+                        "ar": "مسحوق الحناء"
+                    },
+                    {
+                        "en": "HERBAL HENNA POWDER",
+                        "ar": "مسحوق الحناء العشبي"
+                    },
+                    {
+                        "en": "INTIMATE WASH",
+                        "ar": "غسول للمناطق الحساسة"
+                    },
+                    {
+                        "en": "MOUTH WASH",
+                        "ar": "غسول الفم"
+                    },
+                    {
+                        "en": "NAIL POLISH REMOVER",
+                        "ar": "مزيل طلاء الأظافر"
+                    },
+                    {
+                        "en": "PANTY LINERS",
+                        "ar": "فوط صحية يومية"
+                    },
+                    {
+                        "en": "PORE STRIPS",
+                        "ar": "شرائط قياس المسام"
+                    },
+                    {
+                        "en": "ROSE WATER",
+                        "ar": "ماء الورد"
+                    },
+                    {
+                        "en": "SHAMPOO",
+                        "ar": "شامبو"
+                    },
+                    {
+                        "en": "SHAMPOO COLOUR",
+                        "ar": "شامبو ملون"
+                    },
+                    {
+                        "en": "SHAMPOO HAIR COLOUR",
+                        "ar": "صبغة شعر شامبو"
+                    },
+                    {
+                        "en": "SHAVING CREAM",
+                        "ar": "كريم الحلاقة"
+                    },
+                    {
+                        "en": "SKIN CARE",
+                        "ar": "العناية بالبشرة"
+                    },
+                    {
+                        "en": "SKIN CREAM",
+                        "ar": "كريم للبشرة"
+                    },
+                    {
+                        "en": "SOOTHING GEL",
+                        "ar": "جل مهدئ"
+                    },
+                    {
+                        "en": "SUNSCREEN",
+                        "ar": "واقي الشمس"
+                    },
+                    {
+                        "en": "TOOTH BRUSH",
+                        "ar": "فرشاة الأسنان"
+                    },
+                    {
+                        "en": "TOOTH PASTE",
+                        "ar": "معجون أسنان"
+                    },
+                    {
+                        "en": "TOOTH POWDER",
+                        "ar": "مسحوق الأسنان"
+                    }
+                ]
+            }
+        ],
+        "priceRange": {
+            "min": 0.06,
+            "max": 3.97
+        },
+        "ratingRange": {
+            "min": 0,
+            "max": 5
+        },
+        "tags": []
+    }
+}

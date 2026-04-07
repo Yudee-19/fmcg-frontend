@@ -6,6 +6,7 @@ import type {
   CategoryDto,
   ReviewListResponse,
   ProductStatsDto,
+  FiltersResponse,
 } from '@/types';
 
 export interface GetProductsParams {
@@ -13,11 +14,14 @@ export interface GetProductsParams {
   limit?: number;
   search?: string;
   category?: string;
+  subCategory?: string;
   minPrice?: number;
   maxPrice?: number;
   minRating?: number;
   tags?: string;
-  sort?: string;
+  isFeatured?: boolean;
+  inStock?: boolean;
+  sortBy?: string;
 }
 
 export interface GetReviewsParams {
@@ -85,29 +89,8 @@ export async function getSubcategories(
   return data;
 }
 
-export async function getFilters(): Promise<ApiResponse<any>> {
-  const { data } = await apiServer.get<ApiResponse<any>>('/products/filters');
-  return data;
-}
-
-export async function getAllFilters(): Promise<
-  ApiResponse<{
-    categories: string[];
-    subCategories: string[];
-    tags: string[];
-    priceRange: { min: number; max: number };
-    ratings: number[];
-  }>
-> {
-  const { data } = await apiServer.get<
-    ApiResponse<{
-      categories: string[];
-      subCategories: string[];
-      tags: string[];
-      priceRange: { min: number; max: number };
-      ratings: number[];
-    }>
-  >('/products/filters');
+export async function getFilters(): Promise<ApiResponse<FiltersResponse>> {
+  const { data } = await apiServer.get<ApiResponse<FiltersResponse>>('/products/filters');
   return data;
 }
 

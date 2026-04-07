@@ -295,7 +295,18 @@
     "no_products": "No products found",
     "no_products_desc": "Try adjusting your search or filters to find what you are looking for.",
     "clear_filters": "Clear Filters",
-    "all_products": "All Products"
+    "all_products": "All Products",
+    "filters": "Filters",
+    "categories": "Categories",
+    "price_range": "Price Range",
+    "min_price": "Min",
+    "max_price": "Max",
+    "apply_filters": "Apply",
+    "sort_by": "Sort by",
+    "sort_newest": "Newest",
+    "sort_price_low": "Price: Low to High",
+    "sort_price_high": "Price: High to Low",
+    "sort_rating": "Highest Rated"
   },
   "category": {
     "title": "{category} - Shop by Category",

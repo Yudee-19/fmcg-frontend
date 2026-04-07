@@ -6,6 +6,7 @@ import {
   getFeaturedProducts,
   getNewArrivals,
   getProductReviews,
+  getFilters,
 } from './productService';
 import type { GetProductsParams, GetReviewsParams } from './productService';
 
@@ -44,4 +45,10 @@ export const getCachedProductReviews = unstable_cache(
     getProductReviews(productId, params),
   ['product-reviews'],
   { revalidate: 60, tags: ['product-reviews'] }
+);
+
+export const getCachedFilters = unstable_cache(
+  async () => getFilters(),
+  ['product-filters'],
+  { revalidate: 3600, tags: ['product-filters'] }
 );
