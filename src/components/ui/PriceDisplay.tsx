@@ -19,6 +19,8 @@ export default function PriceDisplay({
 }: PriceDisplayProps) {
   const [mounted, setMounted] = useState(false);
   const formatPrice = usePreferenceStore((s) => s.formatPrice);
+  // Subscribe to currency so we re-render when it changes
+  const _currency = usePreferenceStore((s) => s.currency);
 
   useEffect(() => setMounted(true), []);
 

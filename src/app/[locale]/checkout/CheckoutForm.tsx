@@ -32,6 +32,7 @@ export default function CheckoutForm() {
   const user = useAuthStore((s) => s.user);
 
   const formatPrice = usePreferenceStore((s) => s.formatPrice);
+  const _currency = usePreferenceStore((s) => s.currency);
 
   const router = useRouter();
 

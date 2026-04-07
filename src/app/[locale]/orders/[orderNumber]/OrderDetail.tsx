@@ -43,6 +43,7 @@ export default function OrderDetail({
 
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
   const formatPrice = usePreferenceStore((s) => s.formatPrice);
+  const _currency = usePreferenceStore((s) => s.currency);
 
   useEffect(() => {
     setMounted(true);

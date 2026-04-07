@@ -26,6 +26,7 @@ export default function WishlistContent() {
     const addItem = useCartStore((s) => s.addItem);
     const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
     const formatPrice = usePreferenceStore((s) => s.formatPrice);
+    const _currency = usePreferenceStore((s) => s.currency);
 
     useEffect(() => {
         setMounted(true);

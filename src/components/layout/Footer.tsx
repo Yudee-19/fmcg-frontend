@@ -1,88 +1,192 @@
-import { getTranslations } from 'next-intl/server';
-import Link from 'next/link';
+import { getTranslations } from "next-intl/server";
+import Link from "next/link";
+import Image from "next/image";
+import { Globe, Phone, MapPin, ShoppingCart } from "lucide-react";
+import { getCachedCategories } from "@/services/productService.cached";
+import { getLocalized } from "@/lib/utils";
+import { FaFacebook, FaInstagram, FaYoutube, FaTwitter } from "react-icons/fa6";
+
+const SOCIAL_LINKS = [
+    { label: "Facebook", href: "#", letter: "f", icons: FaFacebook },
+    { label: "Instagram", href: "#", letter: "in", icons: FaInstagram },
+    { label: "YouTube", href: "#", letter: "yt", icons: FaYoutube },
+    { label: "Twitter", href: "#", letter: "x", icons: FaTwitter },
+];
 
 export default async function Footer() {
-  const t = await getTranslations('footer');
-  const tn = await getTranslations('nav');
+    const t = await getTranslations("footer");
+    const tn = await getTranslations("nav");
 
-  return (
-    <footer className="bg-footer-bg text-white">
-      <div className="max-w-7xl mx-auto px-4 py-10">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {/* Logo & Tagline */}
-          <div>
-            <div className="flex items-center gap-1 mb-3">
-              <span className="text-white font-bold text-xl">Crown</span>
-              <svg
-                className="w-6 h-6 text-white"
-                fill="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49A1.003 1.003 0 0020.01 4H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z" />
-              </svg>
-              <span className="text-xs opacity-80">Value Mart</span>
+    // Fetch real categories — deduplicate by en name, show first 6
+    let categoryLinks: { en: string; display: string }[] = [];
+    try {
+        const res = await getCachedCategories();
+        const seen = new Set<string>();
+        categoryLinks = (res.data ?? [])
+            .filter((c) => {
+                if (seen.has(c.en)) return false;
+                seen.add(c.en);
+                return true;
+            })
+            .slice(0, 6)
+            .map((c) => ({
+                en: c.en,
+                display: getLocalized(c, "en"),
+            }));
+    } catch {
+        // fallback — no categories
+    }
+
+    return (
+        <footer className="bg-footer-bg text-white">
+            <div className="max-w-7xl mx-auto px-4 py-10">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    {/* Logo & Tagline */}
+                    <div>
+                        <Link href="/" className="flex items-center gap-2 mb-3">
+                            <div className="flex items-center justify-center">
+                                <Image
+                                    src="/logo.svg"
+                                    alt="Logo"
+                                    width={150}
+                                    height={150}
+                                />
+                            </div>
+                        </Link>
+                        <p className="text-sm text-white/70 leading-relaxed">
+                            {t("tagline")}
+                        </p>
+
+                        {/* Social icons */}
+                        <div className="flex items-center gap-2.5 mt-4">
+                            {SOCIAL_LINKS.map(
+                                ({ label, href, letter, icons: Icon }) => (
+                                    <a
+                                        key={label}
+                                        href={href}
+                                        aria-label={label}
+                                        className="w-8 h-8 rounded-full bg-white/15 flex items-center justify-center hover:bg-white/25 transition-colors text-xs font-bold uppercase"
+                                    >
+                                        <Icon className="w-4 h-4" />
+                                    </a>
+                                ),
+                            )}
+                        </div>
+                    </div>
+
+                    {/* Quick Links */}
+                    <div>
+                        <h3 className="font-semibold mb-3">
+                            {t("quick_links")}
+                        </h3>
+                        <ul className="space-y-2 text-sm text-white/70">
+                            <li>
+                                <Link
+                                    href="/shop"
+                                    className="hover:text-white transition-colors"
+                                >
+                                    {tn("shop")}
+                                </Link>
+                            </li>
+                            <li>
+                                <Link
+                                    href="/deals"
+                                    className="hover:text-white transition-colors"
+                                >
+                                    {tn("deals")}
+                                </Link>
+                            </li>
+                            <li>
+                                <Link
+                                    href="/shop?sortBy=newest"
+                                    className="hover:text-white transition-colors"
+                                >
+                                    {tn("new_arrivals")}
+                                </Link>
+                            </li>
+                            <li>
+                                <Link
+                                    href="/support"
+                                    className="hover:text-white transition-colors"
+                                >
+                                    {tn("contact_us")}
+                                </Link>
+                            </li>
+                        </ul>
+                    </div>
+
+                    {/* Categories — fetched from API */}
+                    <div>
+                        <h3 className="font-semibold mb-3">
+                            {t("categories")}
+                        </h3>
+                        <ul className="space-y-2 text-sm text-white/70">
+                            {categoryLinks.map((cat) => (
+                                <li key={cat.en}>
+                                    <Link
+                                        href={`/category/${encodeURIComponent(cat.en)}`}
+                                        className="hover:text-white transition-colors capitalize"
+                                    >
+                                        {cat.display
+                                            .toLowerCase()
+                                            .replace(/\b\w/g, (c) =>
+                                                c.toUpperCase(),
+                                            )}
+                                    </Link>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+
+                    {/* Contact Info */}
+                    <div>
+                        <h3 className="font-semibold mb-3">
+                            {t("contact_info")}
+                        </h3>
+                        <ul className="space-y-2.5 text-sm text-white/70">
+                            <li className="flex items-center gap-2">
+                                <Globe className="w-4 h-4 shrink-0 text-white/50" />
+                                {t("website")}
+                            </li>
+                            <li className="flex items-center gap-2">
+                                <Phone className="w-4 h-4 shrink-0 text-white/50" />
+                                {t("phone")}
+                            </li>
+                            <li className="flex items-center gap-2">
+                                <MapPin className="w-4 h-4 shrink-0 text-white/50" />
+                                {t("location")}
+                            </li>
+                        </ul>
+                    </div>
+                </div>
             </div>
-            <p className="text-sm opacity-80 leading-relaxed">
-              {t('tagline')}
-            </p>
-            {/* Social icons */}
-            <div className="flex items-center gap-3 mt-4">
-              {['facebook', 'instagram', 'youtube', 'twitter'].map((social) => (
-                <span
-                  key={social}
-                  className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center hover:bg-white/30 transition-colors cursor-pointer"
-                >
-                  <span className="text-xs capitalize">{social[0].toUpperCase()}</span>
-                </span>
-              ))}
+
+            {/* Bottom bar */}
+            <div className="border-t border-white/15">
+                <div className="max-w-7xl mx-auto px-4 py-4 flex flex-col sm:flex-row items-center justify-between gap-2 text-sm text-white/60">
+                    <p>{t("copyright")}</p>
+                    <div className="flex items-center gap-4">
+                        <Link
+                            href="/terms"
+                            className="hover:text-white transition-colors"
+                        >
+                            {t("terms")}
+                        </Link>
+                        <Link
+                            href="/privacy"
+                            className="hover:text-white transition-colors"
+                        >
+                            {t("privacy")}
+                        </Link>
+                        <Link
+                            href="/cookies"
+                            className="hover:text-white transition-colors"
+                        >
+                            {t("cookies")}
+                        </Link>
+                    </div>
+                </div>
             </div>
-          </div>
-
-          {/* Quick Links */}
-          <div>
-            <h3 className="font-semibold mb-3">{t('quick_links')}</h3>
-            <ul className="space-y-2 text-sm opacity-80">
-              <li><Link href="/shop" className="hover:underline">{tn('shop')}</Link></li>
-              <li><Link href="/deals" className="hover:underline">{tn('deals')}</Link></li>
-              <li><Link href="/shop?sort=newest" className="hover:underline">{tn('new_arrivals')}</Link></li>
-              <li><Link href="/support" className="hover:underline">{tn('contact_us')}</Link></li>
-            </ul>
-          </div>
-
-          {/* Categories */}
-          <div>
-            <h3 className="font-semibold mb-3">{t('categories')}</h3>
-            <ul className="space-y-2 text-sm opacity-80">
-              <li><Link href="/category/fruits-vegetables" className="hover:underline">{t('fruits_vegetables')}</Link></li>
-              <li><Link href="/category/dairy-bakery" className="hover:underline">{t('dairy_bakery')}</Link></li>
-              <li><Link href="/category/snacks" className="hover:underline">{t('snacks')}</Link></li>
-              <li><Link href="/category/household" className="hover:underline">{t('household')}</Link></li>
-            </ul>
-          </div>
-
-          {/* Contact Info */}
-          <div>
-            <h3 className="font-semibold mb-3">{t('contact_info')}</h3>
-            <ul className="space-y-2 text-sm opacity-80">
-              <li>{t('website')}</li>
-              <li>{t('phone')}</li>
-              <li>{t('location')}</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-
-      {/* Bottom bar */}
-      <div className="border-t border-white/20">
-        <div className="max-w-7xl mx-auto px-4 py-4 flex flex-col sm:flex-row items-center justify-between gap-2 text-sm opacity-80">
-          <p>{t('copyright')}</p>
-          <div className="flex items-center gap-4">
-            <Link href="/terms" className="hover:underline">{t('terms')}</Link>
-            <Link href="/privacy" className="hover:underline">{t('privacy')}</Link>
-            <Link href="/cookies" className="hover:underline">{t('cookies')}</Link>
-          </div>
-        </div>
-      </div>
-    </footer>
-  );
+        </footer>
+    );
 }

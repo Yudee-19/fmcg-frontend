@@ -17,7 +17,8 @@
       "Bash(grep -r \"apiClient\\\\|adminApi\\\\|import.*api\" /d/Projects/fmcg-frontend/src --include=*.ts --include=*.tsx)",
       "Bash(grep -r \"from ['''']@/lib\" /d/Projects/fmcg-frontend/src --include=*.ts --include=*.tsx)",
       "Bash(npm install:*)",
-      "Bash(node -e \"require\\(''axios''\\); console.log\\(''axios installed''\\)\")"
+      "Bash(node -e \"require\\(''axios''\\); console.log\\(''axios installed''\\)\")",
+      "Bash(node -e \"const l = require\\(''lucide-react''\\); const names = Object.keys\\(l\\).filter\\(k => /facebook|instagram|youtube|twitter/i.test\\(k\\)\\); console.log\\(names\\);\")"
     ]
   }
 }
