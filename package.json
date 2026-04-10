@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "eslint"
   },
+  
   "dependencies": {
     "@stripe/stripe-js": "^9.0.0",
     "axios": "^1.14.0",
