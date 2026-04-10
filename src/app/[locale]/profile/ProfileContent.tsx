@@ -3,11 +3,13 @@
 import { useState, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { useAuthStore } from '@/store/authStore';
-import { getProfile } from '@/services/authService';
+import { getProfile, logout } from '@/services/authService';
+import { useCartStore } from '@/store/cartStore';
+import { useWishlistStore } from '@/store/wishlistStore';
 import { formatDate } from '@/lib/utils';
 import Button from '@/components/ui/Button';
 import Skeleton from '@/components/ui/Skeleton';
-import { Link } from '@/i18n/navigation';
+import { Link, useRouter } from '@/i18n/navigation';
 import type { ProfileUserDto, ProfileAddressDto } from '@/types';
 
 export default function ProfileContent() {
@@ -18,10 +20,15 @@ export default function ProfileContent() {
   const [profile, setProfile] = useState<ProfileUserDto | null>(null);
   const [addresses, setAddresses] = useState<ProfileAddressDto[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loggingOut, setLoggingOut] = useState(false);
   const [error, setError] = useState('');
 
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
   const user = useAuthStore((s) => s.user);
+  const clearAuth = useAuthStore((s) => s.clearAuth);
+  const clearCart = useCartStore((s) => s.clearCart);
+  const clearWishlist = useWishlistStore((s) => s.clear);
+  const router = useRouter();
 
   useEffect(() => {
     setMounted(true);
@@ -51,6 +58,23 @@ export default function ProfileContent() {
 
     fetchProfile();
   }, [mounted, isAuthenticated, user, t]);
+
+  const handleLogout = async () => {
+    setLoggingOut(true);
+    setError('');
+
+    try {
+      await logout();
+    } catch {
+      // Even if the API call fails, clear local session state so the user is logged out.
+    } finally {
+      clearAuth();
+      clearCart();
+      clearWishlist();
+      router.push('/auth/login');
+      setLoggingOut(false);
+    }
+  };
 
   if (!mounted) {
     return (
@@ -238,6 +262,15 @@ export default function ProfileContent() {
             Support
           </Button>
         </Link>
+        <Button
+          type="button"
+          variant="primary"
+          size="sm"
+          loading={loggingOut}
+          onClick={handleLogout}
+        >
+          {tAuth('logout')}
+        </Button>
       </div>
     </div>
   );

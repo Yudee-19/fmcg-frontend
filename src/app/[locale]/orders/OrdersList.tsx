@@ -19,6 +19,10 @@ const statusColors: Record<string, string> = {
   cancelled: 'bg-red-100 text-red-800',
 };
 
+function normalizeOrderStatus(status: string) {
+  return status.toLowerCase();
+}
+
 export default function OrdersList() {
   const t = useTranslations('order');
   const tCommon = useTranslations('common');
@@ -140,6 +144,10 @@ export default function OrdersList() {
   return (
     <div className="space-y-4">
       {orders.map((order) => (
+        (() => {
+          const orderStatus = normalizeOrderStatus(order.orderStatus);
+
+          return (
         <div
           key={order.id}
           className="bg-bg-card rounded-xl border border-border p-6 transition-shadow hover:shadow-md"
@@ -155,10 +163,10 @@ export default function OrdersList() {
             </div>
             <span
               className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold ${
-                statusColors[order.orderStatus] || 'bg-gray-100 text-gray-800'
+                statusColors[orderStatus] || 'bg-gray-100 text-gray-800'
               }`}
             >
-              {t(order.orderStatus)}
+              {t(orderStatus)}
             </span>
           </div>
 
@@ -197,6 +205,8 @@ export default function OrdersList() {
             </Link>
           </div>
         </div>
+          );
+        })()
       ))}
     </div>
   );

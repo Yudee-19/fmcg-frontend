@@ -2,6 +2,7 @@
 
 import type { PaginationMeta } from '@/types';
 import { cn } from '@/lib/utils';
+import { useTranslations } from 'next-intl';
 
 interface PaginationProps {
   meta: PaginationMeta;
@@ -14,6 +15,7 @@ export default function Pagination({
   onPageChange,
   className,
 }: PaginationProps) {
+  const t = useTranslations('common');
   const { currentPage, totalPages, hasPrevPage, hasNextPage } = meta;
 
   if (totalPages <= 1) return null;
@@ -38,7 +40,7 @@ export default function Pagination({
         disabled={!hasPrevPage}
         className="px-3 py-1.5 text-sm rounded-md border border-border text-text-secondary hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none"
       >
-        Previous
+        {t('previous')}
       </button>
       {pages.map((page, idx) =>
         page === '...' ? (
@@ -65,7 +67,7 @@ export default function Pagination({
         disabled={!hasNextPage}
         className="px-3 py-1.5 text-sm rounded-md border border-border text-text-secondary hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none"
       >
-        Next
+        {t('next')}
       </button>
     </nav>
   );

@@ -179,7 +179,7 @@ export interface Order {
 
 export interface OrderItem {
     productId: string;
-    title: string;
+    title: LocalizedString | string;
     price: number;
     quantity: number;
     thumbnail: string;
@@ -259,9 +259,9 @@ export interface Ticket {
     messages: TicketMessage[];
     orderId?: string;
     assignedTo?: string;
-    escalationLevel: number;
+    escalationLevel?: number;
     resolvedAt?: string;
-    messageCount: number;
+    messageCount?: number;
     createdAt: string;
     updatedAt: string;
 }
