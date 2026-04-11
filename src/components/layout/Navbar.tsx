@@ -23,10 +23,10 @@ const USER_NAV_ITEMS = [
 
 const ADMIN_NAV_ITEMS = [
     { key: "product_management", href: "/admin/products" },
-    { key: "orders_all", href: "/orders" },
-    { key: "wishlists_all", href: "/wishlist" },
-    { key: "carts_all", href: "/cart" },
-    { key: "tickets_all", href: "/support" },
+    { key: "orders_all", href: "/admin/orders" },
+    { key: "wishlists_all", href: "/admin/wishlists" },
+    { key: "carts_all", href: "/admin/carts" },
+    { key: "tickets_all", href: "/admin/support" },
 ] as const;
 
 export default function Navbar() {

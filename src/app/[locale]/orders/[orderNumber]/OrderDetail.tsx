@@ -84,7 +84,7 @@ export default function OrderDetail({
     try {
       await cancelOrder(order.id);
       setOrder((prev) =>
-        prev ? { ...prev, orderStatus: 'cancelled' } : null
+        prev ? { ...prev, orderStatus: 'CANCELLED' } : null
       );
     } catch (err: any) {
       setError(err.message || 'Failed to cancel order');

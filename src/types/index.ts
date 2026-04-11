@@ -154,13 +154,13 @@ export interface Order {
     items: OrderItem[];
     shippingAddress: ShippingAddress;
     paymentMethod: "ONLINE" | "COD";
-    paymentStatus: "PENDING" | "PROCESSING" | "PAID" | "REFUNDED";
+    paymentStatus: "PENDING" | "PROCESSING" | "PAID" | "REFUNDED" | "FAILED";
     orderStatus:
-        | "pending"
-        | "confirmed"
-        | "shipped"
-        | "delivered"
-        | "cancelled";
+        | "PENDING"
+        | "CONFIRMED"
+        | "SHIPPED"
+        | "DELIVERED"
+        | "CANCELLED";
     totalAmount: number;
     totalItems: number;
     stripeSessionId?: string;
@@ -183,6 +183,8 @@ export interface OrderItem {
     price: number;
     quantity: number;
     thumbnail: string;
+    variantId?: string;
+    variantName?: string;
 }
 
 export interface ShippingAddress {
