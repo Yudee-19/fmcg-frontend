@@ -1,13 +1,14 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { useCartStore } from '@/store/cartStore';
 import { useAuthStore } from '@/store/authStore';
 import { createOrder } from '@/services/orderService';
 import { getAddresses } from '@/services/addressService';
 import { clearCartApi } from '@/services/cartService';
 import { usePreferenceStore } from '@/store/preferenceStore';
+import { getLocalized } from '@/lib/utils';
 import Button from '@/components/ui/Button';
 import PriceDisplay from '@/components/ui/PriceDisplay';
 import Skeleton from '@/components/ui/Skeleton';
@@ -18,6 +19,7 @@ export default function CheckoutForm() {
   const t = useTranslations('checkout');
   const tCart = useTranslations('cart');
   const tCommon = useTranslations('common');
+  const locale = useLocale();
 
   const [mounted, setMounted] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -380,31 +382,35 @@ export default function CheckoutForm() {
         </h2>
 
         <div className="space-y-3">
-          {items.map((item) => (
-            <div
-              key={item.productId}
-              className="flex items-center gap-3 py-2 border-b border-border last:border-b-0"
-            >
-              <div className="relative h-12 w-12 flex-shrink-0 overflow-hidden rounded-lg bg-gray-100">
-                <Image
-                  src={item.thumbnail}
-                  alt={item.title}
-                  fill
-                  className="object-cover"
-                  sizes="48px"
-                />
+          {items.map((item) => {
+            const itemTitle = getLocalized(item.title, locale);
+
+            return (
+              <div
+                key={item.productId}
+                className="flex items-center gap-3 py-2 border-b border-border last:border-b-0"
+              >
+                <div className="relative h-12 w-12 flex-shrink-0 overflow-hidden rounded-lg bg-gray-100">
+                  <Image
+                    src={item.thumbnail}
+                    alt={itemTitle}
+                    fill
+                    className="object-cover"
+                    sizes="48px"
+                  />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium text-text-primary truncate">
+                    {itemTitle}
+                  </p>
+                  <p className="text-xs text-text-muted">
+                    {tCart('quantity')}: {item.quantity}
+                  </p>
+                </div>
+                <PriceDisplay price={item.price * item.quantity} size="sm" />
               </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-text-primary truncate">
-                  {item.title}
-                </p>
-                <p className="text-xs text-text-muted">
-                  {tCart('quantity')}: {item.quantity}
-                </p>
-              </div>
-              <PriceDisplay price={item.price * item.quantity} size="sm" />
-            </div>
-          ))}
+            );
+          })}
         </div>
 
         <div className="mt-4 pt-4 border-t border-border space-y-2">
