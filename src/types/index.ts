@@ -237,7 +237,7 @@ export interface ReviewStats {
 
 export interface WishlistItem {
     productId: string;
-    title: string;
+    title: LocalizedString | string;
     price: number;
     thumbnail: string;
     addedAt: string;
@@ -322,13 +322,14 @@ export interface FiltersResponse {
 
 export interface Wishlist {
     id: string;
-    userId: string;
+    userId?: string;
     items: WishlistItem[];
     isActive: boolean;
-    totalItems: number;
+    totalItems?: number;
     userDetails?: {
         userName: string;
         userEmail: string;
+        userPhone?: string;
     };
     createdAt: string;
     updatedAt: string;
@@ -388,6 +389,16 @@ export interface WishlistStatsDto {
         userName: string;
         userEmail: string;
     };
+}
+
+export interface AdminWishlistUserDto {
+    userId: string;
+    userName: string;
+    userEmail: string;
+    userPhone?: string;
+    itemCount: number;
+    totalValue: number;
+    lastUpdated: string;
 }
 
 export interface TicketStatsDto {
