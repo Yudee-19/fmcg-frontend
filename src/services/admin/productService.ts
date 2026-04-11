@@ -1,7 +1,7 @@
 'use client';
 
 import apiClient from '../apiClient';
-import type { ApiResponse, Product } from '@/types';
+import type { ApiResponse, Product, ProductDetailApiResponse } from '@/types';
 
 export const createProduct = (
   formData: FormData
@@ -16,7 +16,16 @@ export const updateProduct = (
   id: string,
   data: any
 ): Promise<ApiResponse<Product>> =>
-  apiClient.put(`/products/${id}`, data).then((res) => res.data);
+  apiClient
+    .put(`/products/${id}`, data, data instanceof FormData
+      ? { headers: { 'Content-Type': undefined as any } }
+      : undefined)
+    .then((res) => res.data);
+
+export const getAdminProduct = (
+  id: string
+): Promise<ProductDetailApiResponse> =>
+  apiClient.get(`/products/${id}`).then((res) => res.data);
 
 export const deleteProduct = (id: string): Promise<ApiResponse<any>> =>
   apiClient.delete(`/products/${id}`).then((res) => res.data);

@@ -9,8 +9,9 @@ import Image from "next/image";
 import type { LocalizedString } from "@/types";
 import { getCategoryImage } from "@/lib/categoryImage";
 import { getCategoriesClient } from "@/services/categoryService";
+import { useAuthStore } from "@/store/authStore";
 
-const NAV_ITEMS = [
+const USER_NAV_ITEMS = [
     { key: "deals", href: "/deals" },
     { key: "home", href: "/" },
     { key: "shop", href: "/shop" },
@@ -20,13 +21,27 @@ const NAV_ITEMS = [
     { key: "contact_us", href: "/support" },
 ] as const;
 
+const ADMIN_NAV_ITEMS = [
+    { key: "product_management", href: "/admin/products" },
+    { key: "orders_all", href: "/orders" },
+    { key: "wishlists_all", href: "/wishlist" },
+    { key: "carts_all", href: "/cart" },
+    { key: "tickets_all", href: "/support" },
+] as const;
+
 export default function Navbar() {
+    const [mounted, setMounted] = useState(false);
     const [mobileOpen, setMobileOpen] = useState(false);
     const [categories, setCategories] = useState<LocalizedString[]>([]);
     const [showCategories, setShowCategories] = useState(false);
     const timeoutRef = useRef<ReturnType<typeof setTimeout>>(undefined);
     const t = useTranslations("nav");
     const locale = useLocale();
+    const userRole = useAuthStore((state) => state.user?.role);
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
 
     useEffect(() => {
         getCategoriesClient()
@@ -50,6 +65,10 @@ export default function Navbar() {
     const handleMouseLeave = () => {
         timeoutRef.current = setTimeout(() => setShowCategories(false), 150);
     };
+
+    const navItems = mounted && userRole && userRole !== "USER"
+        ? ADMIN_NAV_ITEMS
+        : USER_NAV_ITEMS;
 
     return (
         <nav className="bg-primary relative">
@@ -89,7 +108,7 @@ export default function Navbar() {
 
                     {/* ── Desktop nav links with dividers ── */}
                     <div className="hidden lg:flex items-center flex-1 justify-center">
-                        {NAV_ITEMS.map(({ key, href }, index) => (
+                        {navItems.map(({ key, href }, index) => (
                             <div key={key} className="flex items-center">
                                 {/* Divider */}
                                 {index > 0 && (
@@ -234,7 +253,7 @@ export default function Navbar() {
                         </div>
                     )}
                     {/* Mobile nav links */}
-                    {NAV_ITEMS.map(({ key, href }) => (
+                    {navItems.map(({ key, href }) => (
                         <Link
                             key={key}
                             href={href}

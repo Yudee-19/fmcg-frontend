@@ -8,6 +8,7 @@ import Footer from "@/components/layout/Footer";
 import TrustBadges from "@/components/layout/TrustBadges";
 import RatesSync from "@/components/providers/RatesSync";
 import AuthSync from "@/components/providers/AuthSync";
+import ToastProvider from "@/components/providers/ToastProvider";
 
 export function generateStaticParams() {
     return routing.locales.map((locale) => ({ locale }));
@@ -28,6 +29,7 @@ export default async function LocaleLayout({
         <NextIntlClientProvider messages={messages}>
             <RatesSync />
             <AuthSync />
+            <ToastProvider />
             <AnnouncementBar />
             <Header />
             <Navbar />
