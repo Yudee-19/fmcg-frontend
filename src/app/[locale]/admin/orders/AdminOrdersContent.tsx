@@ -7,6 +7,7 @@ import { LayoutGrid, List, PackageSearch, ShieldAlert, Truck, BadgeCheck, Clock3
 import { toast } from 'sonner';
 import Button from '@/components/ui/Button';
 import Pagination from '@/components/ui/Pagination';
+import PriceDisplay from '@/components/ui/PriceDisplay';
 import Skeleton from '@/components/ui/Skeleton';
 import { Link } from '@/i18n/navigation';
 import { getLocalized, formatDate } from '@/lib/utils';
@@ -48,14 +49,6 @@ function formatOrderDate(value: string) {
     hour: '2-digit',
     minute: '2-digit',
   }).format(new Date(value));
-}
-
-function formatMoney(value: number) {
-  return new Intl.NumberFormat('en-IN', {
-    style: 'currency',
-    currency: 'INR',
-    maximumFractionDigits: 2,
-  }).format(value);
 }
 
 export default function AdminOrdersContent() {
@@ -402,9 +395,10 @@ export default function AdminOrdersContent() {
                     <p className="text-xs font-semibold uppercase tracking-[0.14em] text-text-muted">
                       {order.orderNumber}
                     </p>
-                    <h2 className="mt-2 text-xl font-bold text-text-primary">
-                      {t('items_count', { count: order.totalItems })} · {formatMoney(order.totalAmount)}
-                    </h2>
+                    <div className="mt-2 flex flex-wrap items-center gap-2 text-xl font-bold text-text-primary">
+                      <span>{t('items_count', { count: order.totalItems })} ·</span>
+                      <PriceDisplay price={order.totalAmount} size="md" className="gap-0" />
+                    </div>
                     <div className="mt-3 flex flex-wrap items-center gap-3 text-sm text-text-secondary">
                       <span className="inline-flex items-center gap-1">
                         <Clock3 className="h-4 w-4" />
@@ -448,9 +442,10 @@ export default function AdminOrdersContent() {
                           )}
                         </div>
                         <p className="mt-3 line-clamp-2 text-sm font-semibold text-text-primary">{itemTitle}</p>
-                        <p className="mt-1 text-xs text-text-secondary">
-                          {formatMoney(item.price)} · Qty {item.quantity}
-                        </p>
+                        <div className="mt-1 flex flex-wrap items-center gap-1 text-xs text-text-secondary">
+                          <PriceDisplay price={item.price} size="sm" className="gap-0" />
+                          <span>· Qty {item.quantity}</span>
+                        </div>
                       </div>
                     );
                   })}
@@ -465,7 +460,7 @@ export default function AdminOrdersContent() {
                   </div>
                   <div>
                     <p className="font-medium text-text-primary">{t('customer_total')}</p>
-                    <p className="mt-1">{formatMoney(order.totalAmount)}</p>
+                    <PriceDisplay price={order.totalAmount} size="sm" className="mt-1 gap-0" />
                   </div>
                   <div className="lg:justify-self-end">{renderOrderActions(order)}</div>
                 </div>
@@ -504,7 +499,7 @@ export default function AdminOrdersContent() {
                         <p className="mt-1 text-xs text-text-muted">{t('updated_on_short', { date: formatDate(order.updatedAt) })}</p>
                       </td>
                       <td className="px-4 py-4 text-text-secondary">{order.totalItems}</td>
-                      <td className="px-4 py-4 font-semibold text-primary">{formatMoney(order.totalAmount)}</td>
+                      <td className="px-4 py-4"><PriceDisplay price={order.totalAmount} size="sm" className="gap-0" /></td>
                       <td className="px-4 py-4">
                         <span className={`inline-flex rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.08em] ${orderStatusStyles[order.orderStatus]}`}>
                           {order.orderStatus}
