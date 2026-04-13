@@ -1,21 +1,42 @@
 'use client';
 
 import apiClient from './apiClient';
-import type { ApiResponse } from '@/types';
+import type {
+  ApiResponse,
+  ProfileResponse,
+  UpdateProfileResponseDto,
+  User,
+} from '@/types';
+
+type AuthLoginResponse = {
+  user: User;
+  token: string;
+};
+
+type JsonRecord = Record<string, unknown>;
+
+export interface UpdateProfilePayload {
+  firstName?: string;
+  lastName?: string;
+  phoneNumber?: string;
+  countryCode?: string;
+  oldPassword?: string;
+  password?: string;
+}
 
 export async function login(
   email: string,
   password: string
-): Promise<ApiResponse<any>> {
-  const { data } = await apiClient.post<ApiResponse<any>>('/users/login', {
+): Promise<ApiResponse<AuthLoginResponse>> {
+  const { data } = await apiClient.post<ApiResponse<AuthLoginResponse>>('/users/login', {
     email,
     password,
   });
   return data;
 }
 
-export async function register(payload: any): Promise<ApiResponse<any>> {
-  const { data } = await apiClient.post<ApiResponse<any>>(
+export async function register(payload: JsonRecord): Promise<ApiResponse<unknown>> {
+  const { data } = await apiClient.post<ApiResponse<unknown>>(
     '/users/register',
     payload
   );
@@ -25,9 +46,9 @@ export async function register(payload: any): Promise<ApiResponse<any>> {
 export async function sendOtp(
   email: string,
   purpose: string,
-  updateData?: any
-): Promise<ApiResponse<any>> {
-  const { data } = await apiClient.post<ApiResponse<any>>('/users/send-otp', {
+  updateData?: JsonRecord
+): Promise<ApiResponse<unknown>> {
+  const { data } = await apiClient.post<ApiResponse<unknown>>('/users/send-otp', {
     email,
     purpose,
     updateData,
@@ -38,8 +59,8 @@ export async function sendOtp(
 export async function verifyOtp(
   email: string,
   otp: string
-): Promise<ApiResponse<any>> {
-  const { data } = await apiClient.post<ApiResponse<any>>(
+): Promise<ApiResponse<unknown>> {
+  const { data } = await apiClient.post<ApiResponse<unknown>>(
     '/users/verify-otp',
     { email, otp }
   );
@@ -50,28 +71,30 @@ export async function resetPassword(
   email: string,
   otp: string,
   newPassword: string
-): Promise<ApiResponse<any>> {
-  const { data } = await apiClient.post<ApiResponse<any>>(
+): Promise<ApiResponse<unknown>> {
+  const { data } = await apiClient.post<ApiResponse<unknown>>(
     '/users/reset-password',
     { email, otp, newPassword }
   );
   return data;
 }
 
-export async function logout(): Promise<ApiResponse<any>> {
-  const { data } = await apiClient.post<ApiResponse<any>>('/users/logout');
+export async function logout(): Promise<ApiResponse<unknown>> {
+  const { data } = await apiClient.post<ApiResponse<unknown>>('/users/logout');
   return data;
 }
 
-export async function getProfile(): Promise<ApiResponse<any>> {
-  const { data } = await apiClient.get<ApiResponse<any>>('/users/profile');
+export async function getProfile(): Promise<ApiResponse<ProfileResponse>> {
+  const { data } = await apiClient.get<ApiResponse<ProfileResponse>>('/users/profile');
   return data;
 }
 
-export async function updateProfile(otp: string): Promise<ApiResponse<any>> {
-  const { data } = await apiClient.post<ApiResponse<any>>(
+export async function updateProfile(
+  payload: UpdateProfilePayload
+): Promise<ApiResponse<UpdateProfileResponseDto>> {
+  const { data } = await apiClient.post<ApiResponse<UpdateProfileResponseDto>>(
     '/users/update-profile',
-    { otp }
+    payload
   );
   return data;
 }

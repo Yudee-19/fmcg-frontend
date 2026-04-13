@@ -24,6 +24,14 @@ export const shipOrder = (orderId: string): Promise<ApiResponse<Order>> =>
     .put(`/orders/admin/${orderId}/ship`)
     .then((res) => res.data);
 
+export const verifyOrderDelivery = (
+  orderId: string,
+  otp: string
+): Promise<ApiResponse<Order>> =>
+  apiClient
+    .post(`/orders/${orderId}/verify-delivery`, { otp })
+    .then((res) => res.data);
+
 export const refundOrder = (orderId: string): Promise<ApiResponse<any>> =>
   apiClient
     .post(`/orders/admin/${orderId}/refund`)

@@ -120,6 +120,7 @@ export interface ProfileResponse {
 // Admin cart DTO
 export interface AdminCartUserDto {
     id: string;
+    userId?: string;
     user: {
         name: string;
         email: string;
@@ -127,15 +128,19 @@ export interface AdminCartUserDto {
     };
     totalAmount: number;
     totalItems: number;
+    lastUpdated?: string;
 }
 
 export interface CartItem {
     productId: string;
-    title: string;
+    title: LocalizedString | string;
     price: number;
     quantity: number;
     thumbnail: string;
     addedAt: string;
+    sku?: string;
+    variantId?: string;
+    variantName?: string;
 }
 
 export interface Cart {
@@ -143,8 +148,15 @@ export interface Cart {
     userId?: string;
     items: CartItem[];
     isActive: boolean;
-    totalItems: number;
-    totalAmount: number;
+    totalItems?: number;
+    totalAmount?: number;
+    createdAt?: string;
+    updatedAt?: string;
+    userDetails?: {
+        userName: string;
+        userEmail: string;
+        userPhone?: string;
+    };
 }
 
 export interface Order {
@@ -154,13 +166,13 @@ export interface Order {
     items: OrderItem[];
     shippingAddress: ShippingAddress;
     paymentMethod: "ONLINE" | "COD";
-    paymentStatus: "PENDING" | "PROCESSING" | "PAID" | "REFUNDED";
+    paymentStatus: "PENDING" | "PROCESSING" | "PAID" | "REFUNDED" | "FAILED";
     orderStatus:
-        | "pending"
-        | "confirmed"
-        | "shipped"
-        | "delivered"
-        | "cancelled";
+        | "PENDING"
+        | "CONFIRMED"
+        | "SHIPPED"
+        | "DELIVERED"
+        | "CANCELLED";
     totalAmount: number;
     totalItems: number;
     stripeSessionId?: string;
@@ -179,10 +191,12 @@ export interface Order {
 
 export interface OrderItem {
     productId: string;
-    title: string;
+    title: LocalizedString | string;
     price: number;
     quantity: number;
     thumbnail: string;
+    variantId?: string;
+    variantName?: string;
 }
 
 export interface ShippingAddress {
@@ -235,7 +249,7 @@ export interface ReviewStats {
 
 export interface WishlistItem {
     productId: string;
-    title: string;
+    title: LocalizedString | string;
     price: number;
     thumbnail: string;
     addedAt: string;
@@ -259,9 +273,9 @@ export interface Ticket {
     messages: TicketMessage[];
     orderId?: string;
     assignedTo?: string;
-    escalationLevel: number;
+    escalationLevel?: number;
     resolvedAt?: string;
-    messageCount: number;
+    messageCount?: number;
     createdAt: string;
     updatedAt: string;
 }
@@ -320,13 +334,14 @@ export interface FiltersResponse {
 
 export interface Wishlist {
     id: string;
-    userId: string;
+    userId?: string;
     items: WishlistItem[];
     isActive: boolean;
-    totalItems: number;
+    totalItems?: number;
     userDetails?: {
         userName: string;
         userEmail: string;
+        userPhone?: string;
     };
     createdAt: string;
     updatedAt: string;
@@ -386,6 +401,16 @@ export interface WishlistStatsDto {
         userName: string;
         userEmail: string;
     };
+}
+
+export interface AdminWishlistUserDto {
+    userId: string;
+    userName: string;
+    userEmail: string;
+    userPhone?: string;
+    itemCount: number;
+    totalValue: number;
+    lastUpdated: string;
 }
 
 export interface TicketStatsDto {

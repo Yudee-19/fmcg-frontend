@@ -2,10 +2,11 @@
 
 import { useState, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
+import { useLocale } from 'next-intl';
 import { useAuthStore } from '@/store/authStore';
 import { getOrderByNumber, cancelOrder } from '@/services/orderService';
 import { usePreferenceStore } from '@/store/preferenceStore';
-import { formatDate } from '@/lib/utils';
+import { formatDate, getLocalized } from '@/lib/utils';
 import Button from '@/components/ui/Button';
 import PriceDisplay from '@/components/ui/PriceDisplay';
 import Skeleton from '@/components/ui/Skeleton';
@@ -27,6 +28,14 @@ const paymentStatusColors: Record<string, string> = {
   failed: 'bg-red-100 text-red-800',
 };
 
+function normalizeOrderStatus(status: string) {
+  return status.toLowerCase();
+}
+
+function normalizePaymentStatus(status: string) {
+  return status.toLowerCase();
+}
+
 export default function OrderDetail({
   orderNumber,
 }: {
@@ -34,6 +43,7 @@ export default function OrderDetail({
 }) {
   const t = useTranslations('order');
   const tCommon = useTranslations('common');
+  const locale = useLocale();
 
   const [mounted, setMounted] = useState(false);
   const [order, setOrder] = useState<Order | null>(null);
@@ -74,7 +84,7 @@ export default function OrderDetail({
     try {
       await cancelOrder(order.id);
       setOrder((prev) =>
-        prev ? { ...prev, orderStatus: 'cancelled' } : null
+        prev ? { ...prev, orderStatus: 'CANCELLED' } : null
       );
     } catch (err: any) {
       setError(err.message || 'Failed to cancel order');
@@ -125,6 +135,9 @@ export default function OrderDetail({
 
   if (!order) return null;
 
+  const orderStatus = normalizeOrderStatus(order.orderStatus);
+  const paymentStatus = normalizePaymentStatus(order.paymentStatus);
+
   return (
     <div className="space-y-6">
       {/* Order Overview */}
@@ -138,10 +151,10 @@ export default function OrderDetail({
           </div>
           <span
             className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-bold ${
-              statusColors[order.orderStatus] || 'bg-gray-100 text-gray-800'
+              statusColors[orderStatus] || 'bg-gray-100 text-gray-800'
             }`}
           >
-            {t(order.orderStatus)}
+            {t(orderStatus)}
           </span>
         </div>
 
@@ -168,16 +181,16 @@ export default function OrderDetail({
             <p className="text-text-muted">{t('payment_status')}</p>
             <span
               className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold ${
-                paymentStatusColors[order.paymentStatus] ||
+                paymentStatusColors[paymentStatus] ||
                 'bg-gray-100 text-gray-800'
               }`}
             >
-              {order.paymentStatus}
+              {paymentStatus}
             </span>
           </div>
         </div>
 
-        {order.orderStatus === 'pending' && (
+        {orderStatus === 'pending' && (
           <div className="mt-4 pt-4 border-t border-border">
             <Button
               variant="outline"
@@ -199,34 +212,38 @@ export default function OrderDetail({
         </h2>
 
         <div className="divide-y divide-border">
-          {order.items.map((item) => (
-            <div
-              key={item.productId}
-              className="flex items-center gap-4 py-4 first:pt-0 last:pb-0"
-            >
-              <div className="relative h-16 w-16 flex-shrink-0 overflow-hidden rounded-lg bg-gray-100">
-                <Image
-                  src={item.thumbnail}
-                  alt={item.title}
-                  fill
-                  className="object-cover"
-                  sizes="64px"
-                />
+          {order.items.map((item) => {
+            const itemTitle = getLocalized(item.title, locale);
+
+            return (
+              <div
+                key={item.productId}
+                className="flex items-center gap-4 py-4 first:pt-0 last:pb-0"
+              >
+                <div className="relative h-16 w-16 flex-shrink-0 overflow-hidden rounded-lg bg-gray-100">
+                  <Image
+                    src={item.thumbnail}
+                    alt={itemTitle}
+                    fill
+                    className="object-cover"
+                    sizes="64px"
+                  />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <Link
+                    href={`/products/${item.productId}`}
+                    className="text-sm font-medium text-text-primary hover:text-primary transition-colors line-clamp-2"
+                  >
+                    {itemTitle}
+                  </Link>
+                  <p className="text-xs text-text-muted mt-1">
+                    {t('quantity')}: {item.quantity}
+                  </p>
+                </div>
+                <PriceDisplay price={item.price * item.quantity} size="sm" />
               </div>
-              <div className="flex-1 min-w-0">
-                <Link
-                  href={`/products/${item.productId}`}
-                  className="text-sm font-medium text-text-primary hover:text-primary transition-colors line-clamp-2"
-                >
-                  {item.title}
-                </Link>
-                <p className="text-xs text-text-muted mt-1">
-                  {t('quantity')}: {item.quantity}
-                </p>
-              </div>
-              <PriceDisplay price={item.price * item.quantity} size="sm" />
-            </div>
-          ))}
+            );
+          })}
         </div>
 
         <div className="mt-4 pt-4 border-t border-border flex justify-between items-center">

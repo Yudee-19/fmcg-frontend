@@ -1,7 +1,7 @@
 'use client';
 
 import apiClient from '../apiClient';
-import type { ApiResponse, Ticket, TicketStatsDto } from '@/types';
+import type { AdminTicketDto, ApiResponse, Ticket, TicketStatsDto } from '@/types';
 
 export const getAllTickets = (params?: {
   page?: number;
@@ -10,7 +10,7 @@ export const getAllTickets = (params?: {
   category?: string;
   priority?: string;
   search?: string;
-}): Promise<ApiResponse<Ticket[]>> =>
+}): Promise<ApiResponse<AdminTicketDto[]>> =>
   apiClient
     .get('/tickets/admin/all', { params })
     .then((res) => res.data);
@@ -25,7 +25,7 @@ export const getAdminTicket = (
 
 export const updateTicketStatus = (
   ticketId: string,
-  status: string
+  status: Ticket['status']
 ): Promise<ApiResponse<Ticket>> =>
   apiClient
     .patch(`/tickets/admin/${ticketId}/status`, { status })
@@ -33,7 +33,7 @@ export const updateTicketStatus = (
 
 export const updateTicketPriority = (
   ticketId: string,
-  priority: string
+  priority: Ticket['priority']
 ): Promise<ApiResponse<Ticket>> =>
   apiClient
     .patch(`/tickets/admin/${ticketId}/priority`, { priority })
@@ -49,7 +49,7 @@ export const escalateTicket = (
 export const adminReplyToTicket = (
   ticketId: string,
   message: string
-): Promise<ApiResponse<any>> =>
+): Promise<ApiResponse<Ticket>> =>
   apiClient
     .post(`/tickets/admin/${ticketId}/messages`, { message })
     .then((res) => res.data);

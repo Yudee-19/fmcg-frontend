@@ -2,12 +2,14 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import { useLocale } from "next-intl";
 import { useCartStore } from "@/store/cartStore";
 import { useAuthStore } from "@/store/authStore";
 import {
     updateCartItem,
     removeCartItem,
 } from "@/services/cartService";
+import { getLocalized } from "@/lib/utils";
 import type { CartItem as CartItemType } from "@/types";
 import PriceDisplay from "@/components/ui/PriceDisplay";
 import QuantityStepper from "@/components/product/QuantityStepper";
@@ -18,9 +20,11 @@ interface CartItemProps {
 
 export default function CartItem({ item }: CartItemProps) {
     const [updating, setUpdating] = useState(false);
+    const locale = useLocale();
     const storeUpdateQuantity = useCartStore((s) => s.updateQuantity);
     const storeRemoveItem = useCartStore((s) => s.removeItem);
     const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
+    const itemTitle = getLocalized(item.title, locale);
 
     const handleQuantityChange = async (qty: number) => {
         if (updating) return;
@@ -73,14 +77,14 @@ export default function CartItem({ item }: CartItemProps) {
                     <div className="relative w-16 h-16 rounded-lg overflow-hidden bg-gray-50 shrink-0">
                         <Image
                             src={item.thumbnail}
-                            alt={item.title}
+                            alt={itemTitle}
                             fill
                             sizes="64px"
                             className="object-contain p-1"
                         />
                     </div>
                     <span className="text-sm font-medium text-text-primary line-clamp-2">
-                        {item.title}
+                        {itemTitle}
                     </span>
                 </div>
             </td>

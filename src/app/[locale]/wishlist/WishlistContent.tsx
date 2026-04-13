@@ -1,13 +1,14 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useWishlistStore } from "@/store/wishlistStore";
 import { useCartStore } from "@/store/cartStore";
 import { useAuthStore } from "@/store/authStore";
 import { usePreferenceStore } from "@/store/preferenceStore";
 import { addToCart } from "@/services/cartService";
 import { removeFromWishlist } from "@/services/wishlistService";
+import { getLocalized } from "@/lib/utils";
 import Button from "@/components/ui/Button";
 import Skeleton from "@/components/ui/Skeleton";
 import { Link } from "@/i18n/navigation";
@@ -16,6 +17,7 @@ import Image from "next/image";
 export default function WishlistContent() {
     const t = useTranslations("wishlist");
     const tCommon = useTranslations("common");
+    const locale = useLocale();
 
     const [mounted, setMounted] = useState(false);
     const [addedMap, setAddedMap] = useState<Record<string, boolean>>({});
@@ -150,7 +152,10 @@ export default function WishlistContent() {
             </p>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                {items.map((item) => (
+                {items.map((item) => {
+                    const itemTitle = getLocalized(item.title, locale);
+
+                    return (
                     <div
                         key={item.productId}
                         className="bg-bg-card rounded-xl border border-border overflow-hidden transition-shadow hover:shadow-md"
@@ -159,7 +164,7 @@ export default function WishlistContent() {
                             <div className="relative aspect-square bg-gray-50">
                                 <Image
                                     src={item.thumbnail}
-                                    alt={item.title}
+                                    alt={itemTitle}
                                     fill
                                     className="object-contain p-4"
                                     sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
@@ -170,7 +175,7 @@ export default function WishlistContent() {
                         <div className="p-4">
                             <Link href={`/products/${item.productId}`}>
                                 <h3 className="text-sm font-medium text-text-primary line-clamp-2 hover:text-primary transition-colors">
-                                    {item.title}
+                                    {itemTitle}
                                 </h3>
                             </Link>
 
@@ -217,7 +222,8 @@ export default function WishlistContent() {
                             </div>
                         </div>
                     </div>
-                ))}
+                    );
+                })}
             </div>
         </>
     );
