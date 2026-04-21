@@ -8,10 +8,11 @@ import { useWishlistStore } from "@/store/wishlistStore";
 import { useAuthStore } from "@/store/authStore";
 import SearchBar from "@/components/ui/SearchBar";
 import Image from "next/image";
-import { Heart, Search, ShoppingCart, User } from "lucide-react";
+import { Heart, Search, ShoppingCart, User, X } from "lucide-react";
 
 export default function Header() {
     const [mounted, setMounted] = useState(false);
+    const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
     const cartCount = useCartStore((s) => s.totalItems);
     const wishlistCount = useWishlistStore((s) => s.items.length);
     const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
@@ -38,12 +39,19 @@ export default function Header() {
                 {/* Icons */}
                 <div className="flex items-center gap-3 ml-auto">
                     {/* Mobile search toggle */}
-                    <Link
-                        href="/shop"
-                        className="sm:hidden p-2  text-white transition-colors"
+                    <button
+                        type="button"
+                        onClick={() => setMobileSearchOpen((v) => !v)}
+                        aria-label={mobileSearchOpen ? "Close search" : "Open search"}
+                        aria-expanded={mobileSearchOpen}
+                        className="sm:hidden p-2 text-white transition-colors"
                     >
-                        <Search className="w-5 h-5" />
-                    </Link>
+                        {mobileSearchOpen ? (
+                            <X className="w-5 h-5" />
+                        ) : (
+                            <Search className="w-5 h-5" />
+                        )}
+                    </button>
 
                     {/* Wishlist */}
                     <Link
@@ -80,6 +88,16 @@ export default function Header() {
                     </Link>
                 </div>
             </div>
+
+            {/* Mobile search bar — expands inline when toggled */}
+            {mobileSearchOpen && (
+                <div className="sm:hidden px-4 pb-3">
+                    <SearchBar
+                        autoFocus
+                        onSubmitted={() => setMobileSearchOpen(false)}
+                    />
+                </div>
+            )}
         </header>
     );
 }
