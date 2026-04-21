@@ -9,6 +9,7 @@ import { Search, Trash2, ShieldAlert, RefreshCw, PackageSearch, Plus, X, Upload,
 import { toast } from 'sonner';
 import Button from '@/components/ui/Button';
 import Pagination from '@/components/ui/Pagination';
+import PriceDisplay from '@/components/ui/PriceDisplay';
 import Skeleton from '@/components/ui/Skeleton';
 import { getLocalized, getFinalPrice, formatDate } from '@/lib/utils';
 import { createProduct, deleteProduct, getAdminProduct, updateProduct } from '@/services/admin/productService';
@@ -723,12 +724,12 @@ export default function AdminProductsContent({
 
                     <div className="space-y-1">
                       <p className="text-xs uppercase tracking-[0.14em] text-text-muted xl:hidden">{t('columns_price')}</p>
-                      <div className="flex flex-col gap-0.5">
-                        <span className="text-sm font-semibold text-primary">KWD {finalPrice.toFixed(3)}</span>
-                        {product.discountPercentage > 0 && (
-                          <span className="text-xs text-text-muted line-through">KWD {product.price.toFixed(3)}</span>
-                        )}
-                      </div>
+                      <PriceDisplay
+                        price={finalPrice}
+                        originalPrice={product.discountPercentage > 0 ? product.price : undefined}
+                        size="sm"
+                        className="gap-0"
+                      />
                     </div>
 
                     <div className="space-y-1">

@@ -120,6 +120,7 @@ export interface ProfileResponse {
 // Admin cart DTO
 export interface AdminCartUserDto {
     id: string;
+    userId?: string;
     user: {
         name: string;
         email: string;
@@ -127,15 +128,19 @@ export interface AdminCartUserDto {
     };
     totalAmount: number;
     totalItems: number;
+    lastUpdated?: string;
 }
 
 export interface CartItem {
     productId: string;
-    title: string;
+    title: LocalizedString | string;
     price: number;
     quantity: number;
     thumbnail: string;
     addedAt: string;
+    sku?: string;
+    variantId?: string;
+    variantName?: string;
 }
 
 export interface Cart {
@@ -143,8 +148,15 @@ export interface Cart {
     userId?: string;
     items: CartItem[];
     isActive: boolean;
-    totalItems: number;
-    totalAmount: number;
+    totalItems?: number;
+    totalAmount?: number;
+    createdAt?: string;
+    updatedAt?: string;
+    userDetails?: {
+        userName: string;
+        userEmail: string;
+        userPhone?: string;
+    };
 }
 
 export interface Order {
