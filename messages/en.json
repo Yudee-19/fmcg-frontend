@@ -231,6 +231,15 @@
     "order_items": "Order Items",
     "processing": "Processing..."
   },
+  "legal": {
+    "home": "Home",
+    "terms_title": "Terms and Conditions",
+    "terms_description": "Read the terms and conditions governing your use of Crown Value Mart.",
+    "privacy_title": "Privacy Policy",
+    "privacy_description": "Learn how Crown Value Mart collects, uses, and protects your personal data.",
+    "refund_title": "Return & Refund Policy",
+    "refund_description": "Our return, refund, and cancellation policy for grocery orders in Kuwait."
+  },
   "footer": {
     "tagline": "Your one-stop destination for groceries, essentials, and more at the best prices.",
     "quick_links": "Quick Links",
@@ -242,6 +251,7 @@
     "household": "Household",
     "terms": "Terms",
     "privacy": "Privacy",
+    "refund": "Refund Policy",
     "cookies": "Cookies",
     "copyright": "© 2026 Crown Value Mart",
     "website": "crownvaluemart.com",
