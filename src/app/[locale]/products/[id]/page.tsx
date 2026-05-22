@@ -2,7 +2,10 @@ import { setRequestLocale } from "next-intl/server";
 import { getTranslations } from "next-intl/server";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getCachedProduct, getCachedNewArrivals } from "@/services/productService.cached";
+import {
+    getCachedProduct,
+    getCachedNewArrivals,
+} from "@/services/productService.cached";
 import type { Product, ProductListDto } from "@/types";
 import { getLocalized, getLocalizedRecord } from "@/lib/utils";
 import Breadcrumb from "@/components/ui/Breadcrumb";
@@ -76,7 +79,7 @@ export default async function ProductDetailPage({
     try {
         const res = await getCachedProduct(id);
         product = res.data;
-        console.log("Product data:", product);
+        // console.log("Product data:", product);
         recommendations = res.recommended ?? [];
     } catch {
         notFound();

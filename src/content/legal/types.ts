@@ -1,7 +1,8 @@
 export type LegalBlock =
     | { type: "paragraph"; text: string }
     | { type: "list"; items: string[] }
-    | { type: "callout"; text: string };
+    | { type: "callout"; text: string }
+    | { type: "table"; headers: string[]; rows: string[][] };
 
 export interface LegalSubsection {
     number?: string;

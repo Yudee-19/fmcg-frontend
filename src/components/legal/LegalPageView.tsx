@@ -24,6 +24,40 @@ function Block({ block }: { block: LegalBlock }) {
             </ul>
         );
     }
+    if (block.type === "table") {
+        return (
+            <div className="overflow-x-auto rounded-lg border border-border">
+                <table className="min-w-full text-sm border-collapse">
+                    <thead className="bg-primary-light/60">
+                        <tr>
+                            {block.headers.map((h, i) => (
+                                <th
+                                    key={i}
+                                    className="border-b border-border px-3 py-2 text-start font-semibold text-text-primary whitespace-nowrap"
+                                >
+                                    {h}
+                                </th>
+                            ))}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {block.rows.map((row, r) => (
+                            <tr key={r} className="even:bg-bg-page/40 align-top">
+                                {row.map((cell, c) => (
+                                    <td
+                                        key={c}
+                                        className="border-t border-border px-3 py-2 text-text-secondary leading-relaxed"
+                                    >
+                                        {cell}
+                                    </td>
+                                ))}
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
+        );
+    }
     return (
         <div className="border-s-4 border-primary bg-primary-light/60 ps-4 py-3 rounded-e-md text-text-primary font-medium">
             {block.text}
