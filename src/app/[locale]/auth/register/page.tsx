@@ -8,11 +8,11 @@ import Button from "@/components/ui/Button";
 import {
     ArrowRight,
     BadgeCheck,
-    ChevronRight,
     Eye,
     EyeOff,
     LockKeyhole,
     Mail,
+    MessageCircle,
     Phone,
     UserRound,
 } from "lucide-react";
@@ -33,6 +33,7 @@ export default function RegisterPage() {
         lastName: "",
         phoneNumber: "",
         countryCode: "",
+        whatsappNumber: "",
     });
     const [address, setAddress] = useState({
         street: "",
@@ -42,7 +43,6 @@ export default function RegisterPage() {
         country: "",
         addressType: "home" as "home" | "work",
     });
-    const [showAddress, setShowAddress] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [error, setError] = useState("");
@@ -57,24 +57,19 @@ export default function RegisterPage() {
     }
 
     function buildPayload() {
-        // Required fields
+        // Backend requires: username, email, password, confirmPassword,
+        // firstName, lastName, phoneNumber, countryCode, address.
+        // Optional: whatsappNumber.
         const payload: Record<string, any> = {
             username: form.username,
             email: form.email,
             password: form.password,
             confirmPassword: form.confirmPassword,
-        };
-
-        // Optional fields — only include if non-empty
-        if (form.firstName.trim()) payload.firstName = form.firstName.trim();
-        if (form.lastName.trim()) payload.lastName = form.lastName.trim();
-        if (form.phoneNumber.trim())
-            payload.phoneNumber = form.phoneNumber.trim();
-        if (form.countryCode) payload.countryCode = form.countryCode;
-
-        // Address — include if at least street is filled
-        if (showAddress && address.street.trim()) {
-            payload.address = {
+            firstName: form.firstName.trim(),
+            lastName: form.lastName.trim(),
+            phoneNumber: form.phoneNumber.trim(),
+            countryCode: form.countryCode,
+            address: {
                 street: address.street.trim(),
                 city: address.city.trim(),
                 state: address.state.trim(),
@@ -82,8 +77,11 @@ export default function RegisterPage() {
                 country: address.country.trim(),
                 isDefault: true,
                 addressType: address.addressType,
-            };
-        }
+            },
+        };
+
+        const whatsapp = form.whatsappNumber.trim();
+        if (whatsapp) payload.whatsappNumber = whatsapp;
 
         return payload;
     }
@@ -191,6 +189,7 @@ export default function RegisterPage() {
                                 <input
                                     id="firstName"
                                     type="text"
+                                    required
                                     value={form.firstName}
                                     onChange={(e) =>
                                         updateField("firstName", e.target.value)
@@ -211,6 +210,7 @@ export default function RegisterPage() {
                                 <input
                                     id="lastName"
                                     type="text"
+                                    required
                                     value={form.lastName}
                                     onChange={(e) =>
                                         updateField("lastName", e.target.value)
@@ -279,6 +279,7 @@ export default function RegisterPage() {
                         <div className="flex gap-2">
                             <select
                                 id="countryCode"
+                                required
                                 value={form.countryCode}
                                 onChange={(e) =>
                                     updateField("countryCode", e.target.value)
@@ -307,6 +308,7 @@ export default function RegisterPage() {
                                 <input
                                     id="phone"
                                     type="tel"
+                                    required
                                     value={form.phoneNumber}
                                     onChange={(e) =>
                                         updateField("phoneNumber", e.target.value)
@@ -316,6 +318,32 @@ export default function RegisterPage() {
                                 />
                             </div>
                         </div>
+                    </div>
+
+                    {/* WhatsApp number (optional) */}
+                    <div>
+                        <label
+                            htmlFor="whatsappNumber"
+                            className="mb-1.5 block text-sm font-medium text-text-primary"
+                        >
+                            {t("whatsapp_number")}
+                        </label>
+                        <div className="relative">
+                            <MessageCircle className="pointer-events-none absolute left-3.5 top-1/2 h-4.5 w-4.5 -translate-y-1/2 text-text-muted" />
+                            <input
+                                id="whatsappNumber"
+                                type="tel"
+                                value={form.whatsappNumber}
+                                onChange={(e) =>
+                                    updateField("whatsappNumber", e.target.value)
+                                }
+                                className={inputClass}
+                                placeholder="51234567"
+                            />
+                        </div>
+                        <p className="mt-1 text-xs text-text-muted">
+                            {t("whatsapp_hint")}
+                        </p>
                     </div>
 
                     {/* Password */}
@@ -390,23 +418,14 @@ export default function RegisterPage() {
                         </div>
                     </div>
 
-                    {/* Address toggle */}
+                    {/* Address (required) */}
                     <div className="border-t border-border pt-4">
-                        <button
-                            type="button"
-                            onClick={() => setShowAddress(!showAddress)}
-                            className="flex items-center gap-2 text-sm font-medium text-primary hover:text-primary-hover transition-colors"
-                        >
-                            <ChevronRight
-                                className={`h-4 w-4 transition-transform ${showAddress ? "rotate-90" : ""}`}
-                            />
+                        <h3 className="text-sm font-semibold text-text-primary">
                             {t("address_section")}
-                        </button>
+                        </h3>
                     </div>
 
-                    {/* Address fields */}
-                    {showAddress && (
-                        <div className="space-y-3 pl-1 border-l-2 border-primary/20 ml-1 pl-4">
+                    <div className="space-y-3 pl-1 border-l-2 border-primary/20 ml-1 pl-4">
                             <div>
                                 <label
                                     htmlFor="street"
@@ -417,6 +436,7 @@ export default function RegisterPage() {
                                 <input
                                     id="street"
                                     type="text"
+                                    required
                                     value={address.street}
                                     onChange={(e) =>
                                         updateAddress("street", e.target.value)
@@ -436,6 +456,7 @@ export default function RegisterPage() {
                                     <input
                                         id="city"
                                         type="text"
+                                        required
                                         value={address.city}
                                         onChange={(e) =>
                                             updateAddress(
@@ -456,6 +477,7 @@ export default function RegisterPage() {
                                     <input
                                         id="state"
                                         type="text"
+                                        required
                                         value={address.state}
                                         onChange={(e) =>
                                             updateAddress(
@@ -479,6 +501,7 @@ export default function RegisterPage() {
                                     <input
                                         id="postalCode"
                                         type="text"
+                                        required
                                         value={address.postalCode}
                                         onChange={(e) =>
                                             updateAddress(
@@ -499,6 +522,7 @@ export default function RegisterPage() {
                                     <input
                                         id="country"
                                         type="text"
+                                        required
                                         value={address.country}
                                         onChange={(e) =>
                                             updateAddress(
@@ -507,7 +531,7 @@ export default function RegisterPage() {
                                             )
                                         }
                                         className={inputClass}
-                                        placeholder="IN"
+                                        placeholder="KW"
                                     />
                                 </div>
                             </div>
@@ -539,7 +563,6 @@ export default function RegisterPage() {
                                 </select>
                             </div>
                         </div>
-                    )}
 
                     <Button
                         type="submit"

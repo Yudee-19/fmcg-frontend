@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import Image from 'next/image';
 import { useLocale, useTranslations } from 'next-intl';
-import { LayoutGrid, List, PackageSearch, ShieldAlert, Truck, BadgeCheck, Clock3 } from 'lucide-react';
+import { LayoutGrid, List, PackageSearch, ShieldAlert, Truck, BadgeCheck, Clock3, Undo2 } from 'lucide-react';
 import { toast } from 'sonner';
 import Button from '@/components/ui/Button';
 import Pagination from '@/components/ui/Pagination';
@@ -11,12 +11,12 @@ import PriceDisplay from '@/components/ui/PriceDisplay';
 import Skeleton from '@/components/ui/Skeleton';
 import { Link } from '@/i18n/navigation';
 import { getLocalized, formatDate } from '@/lib/utils';
-import { getAllOrders, shipOrder, updateOrderStatus, verifyOrderDelivery } from '@/services/admin/orderService';
+import { getAllOrders, shipOrder, updateOrderStatus, verifyOrderDelivery, refundOrder } from '@/services/admin/orderService';
 import { useAuthStore } from '@/store/authStore';
 import type { Order, PaginationMeta } from '@/types';
 
 type ViewMode = 'grid' | 'table';
-type PendingActionType = 'confirm' | 'cancel' | 'ship' | 'verify';
+type PendingActionType = 'confirm' | 'cancel' | 'ship' | 'verify' | 'refund';
 
 interface PendingAction {
   type: PendingActionType;
@@ -189,6 +189,11 @@ export default function AdminOrdersContent() {
         toast.success(t('verify_success', { orderNumber: pendingAction.order.orderNumber }));
       }
 
+      if (pendingAction.type === 'refund') {
+        await refundOrder(pendingAction.order.id);
+        toast.success(t('refund_success', { orderNumber: pendingAction.order.orderNumber }));
+      }
+
       setPendingAction(null);
       setDeliveryOtp('');
       await loadOrders(false, currentPage);
@@ -203,6 +208,7 @@ export default function AdminOrdersContent() {
     if (type === 'confirm') return t('action_confirm');
     if (type === 'cancel') return t('action_cancel');
     if (type === 'ship') return t('action_ship');
+    if (type === 'refund') return t('action_refund');
     return t('action_verify');
   }
 
@@ -210,6 +216,7 @@ export default function AdminOrdersContent() {
     if (type === 'confirm') return t('action_confirm_description');
     if (type === 'cancel') return t('action_cancel_description');
     if (type === 'ship') return t('action_ship_description');
+    if (type === 'refund') return t('action_refund_description');
     return t('action_verify_description');
   }
 
@@ -262,6 +269,20 @@ export default function AdminOrdersContent() {
           >
             <BadgeCheck className="h-3.5 w-3.5" />
             {t('action_verify')}
+          </button>
+        ) : null}
+
+        {order.paymentMethod === 'ONLINE' &&
+        order.paymentStatus === 'PAID' &&
+        order.refundStatus !== 'COMPLETED' &&
+        order.refundStatus !== 'INITIATED' ? (
+          <button
+            type="button"
+            onClick={() => openActionModal('refund', order)}
+            className="inline-flex items-center gap-1 rounded-full border border-amber-300 bg-amber-50 px-4 py-2 text-xs font-semibold text-amber-700 transition hover:bg-amber-100"
+          >
+            <Undo2 className="h-3.5 w-3.5" />
+            {t('action_refund')}
           </button>
         ) : null}
       </div>

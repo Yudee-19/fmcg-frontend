@@ -327,6 +327,10 @@ export interface FiltersResponse {
         min: number;
         max: number;
     };
+    ratingRange?: {
+        min: number;
+        max: number;
+    };
     tags: string[];
 }
 

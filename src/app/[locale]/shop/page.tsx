@@ -39,9 +39,14 @@ export default async function ShopPage({
     searchParams: Promise<{
         search?: string;
         category?: string;
+        subCategory?: string;
         page?: string;
         minPrice?: string;
         maxPrice?: string;
+        minRating?: string;
+        tags?: string;
+        isFeatured?: string;
+        inStock?: string;
         sortBy?: string;
     }>;
 }) {
@@ -61,10 +66,15 @@ export default async function ShopPage({
             getCachedProducts({
                 search: query.search,
                 category: query.category,
+                subCategory: query.subCategory,
                 page: query.page ? Number(query.page) : 1,
                 limit: 12,
                 minPrice: query.minPrice ? Number(query.minPrice) : undefined,
                 maxPrice: query.maxPrice ? Number(query.maxPrice) : undefined,
+                minRating: query.minRating ? Number(query.minRating) : undefined,
+                tags: query.tags || undefined,
+                isFeatured: query.isFeatured === "true" ? true : undefined,
+                inStock: query.inStock === "true" ? true : undefined,
                 sortBy: query.sortBy || undefined,
             }),
             getCachedFilters(),
@@ -164,8 +174,13 @@ export default async function ShopPage({
                             </p>
                             {(query.search ||
                                 query.category ||
+                                query.subCategory ||
                                 query.minPrice ||
-                                query.maxPrice) && (
+                                query.maxPrice ||
+                                query.minRating ||
+                                query.tags ||
+                                query.isFeatured ||
+                                query.inStock) && (
                                 <Link
                                     href={`/${locale}/shop`}
                                     className="px-4 py-2 bg-primary text-white text-sm font-medium rounded-lg hover:bg-primary-hover transition-colors"

@@ -5,13 +5,14 @@ import { useTranslations, useLocale } from "next-intl";
 import { useRouter, usePathname } from "@/i18n/navigation";
 import { useSearchParams } from "next/navigation";
 import { getLocalized, cn } from "@/lib/utils";
-import { X, SlidersHorizontal } from "lucide-react";
+import { X, SlidersHorizontal, Star } from "lucide-react";
 import type { FilterCategoryDto } from "@/types";
 
 interface ShopFiltersProps {
     filters: {
         categories: FilterCategoryDto[];
         priceRange: { min: number; max: number };
+        ratingRange?: { min: number; max: number };
         tags: string[];
     } | null;
 }
@@ -26,13 +27,20 @@ export default function ShopFilters({ filters }: ShopFiltersProps) {
     const currentCategory = searchParams.get("category") || "";
     const currentMinPrice = searchParams.get("minPrice") || "";
     const currentMaxPrice = searchParams.get("maxPrice") || "";
+    const currentMinRating = searchParams.get("minRating") || "";
+    const currentTagsParam = searchParams.get("tags") || "";
+    const currentIsFeatured = searchParams.get("isFeatured") === "true";
+    const currentInStock = searchParams.get("inStock") === "true";
     const currentSort = searchParams.get("sortBy") || "";
+
+    const selectedTags = currentTagsParam
+        ? currentTagsParam.split(",").filter(Boolean)
+        : [];
 
     const [minPrice, setMinPrice] = useState(currentMinPrice);
     const [maxPrice, setMaxPrice] = useState(currentMaxPrice);
     const [mobileOpen, setMobileOpen] = useState(false);
 
-    // Deduplicate categories by en name
     const categories = filters?.categories ?? [];
     const seen = new Set<string>();
     const uniqueCategories = categories.filter((c) => {
@@ -40,6 +48,8 @@ export default function ShopFilters({ filters }: ShopFiltersProps) {
         seen.add(c.en);
         return true;
     });
+
+    const availableTags = filters?.tags ?? [];
 
     function updateParams(updates: Record<string, string | null>) {
         const params = new URLSearchParams(searchParams.toString());
@@ -50,7 +60,7 @@ export default function ShopFilters({ filters }: ShopFiltersProps) {
                 params.set(key, value);
             }
         }
-        params.delete("page"); // reset to page 1 on filter change
+        params.delete("page");
         router.push(`${pathname}?${params.toString()}`);
     }
 
@@ -67,6 +77,26 @@ export default function ShopFilters({ filters }: ShopFiltersProps) {
         });
     }
 
+    function handleRatingClick(rating: number) {
+        const value = currentMinRating === String(rating) ? null : String(rating);
+        updateParams({ minRating: value });
+    }
+
+    function handleTagToggle(tag: string) {
+        const next = selectedTags.includes(tag)
+            ? selectedTags.filter((t) => t !== tag)
+            : [...selectedTags, tag];
+        updateParams({ tags: next.length > 0 ? next.join(",") : null });
+    }
+
+    function handleFeaturedToggle() {
+        updateParams({ isFeatured: currentIsFeatured ? null : "true" });
+    }
+
+    function handleInStockToggle() {
+        updateParams({ inStock: currentInStock ? null : "true" });
+    }
+
     function handleSortChange(sortBy: string) {
         updateParams({ sortBy: sortBy || null });
     }
@@ -79,11 +109,14 @@ export default function ShopFilters({ filters }: ShopFiltersProps) {
         !!currentCategory ||
         !!currentMinPrice ||
         !!currentMaxPrice ||
+        !!currentMinRating ||
+        selectedTags.length > 0 ||
+        currentIsFeatured ||
+        currentInStock ||
         !!currentSort;
 
     const filterContent = (
         <div className="space-y-6">
-            {/* Header */}
             <div className="flex items-center justify-between">
                 <h3 className="text-sm font-bold text-text-primary uppercase tracking-wider">
                     {t("filters")}
@@ -113,6 +146,28 @@ export default function ShopFilters({ filters }: ShopFiltersProps) {
                     <option value="price_desc">{t("sort_price_high")}</option>
                     <option value="rating_desc">{t("sort_rating")}</option>
                 </select>
+            </div>
+
+            {/* Quick toggles */}
+            <div className="space-y-2">
+                <label className="flex items-center gap-2 text-sm text-text-primary cursor-pointer">
+                    <input
+                        type="checkbox"
+                        checked={currentIsFeatured}
+                        onChange={handleFeaturedToggle}
+                        className="h-4 w-4 rounded border-border text-primary focus:ring-primary"
+                    />
+                    {t("featured_only")}
+                </label>
+                <label className="flex items-center gap-2 text-sm text-text-primary cursor-pointer">
+                    <input
+                        type="checkbox"
+                        checked={currentInStock}
+                        onChange={handleInStockToggle}
+                        className="h-4 w-4 rounded border-border text-primary focus:ring-primary"
+                    />
+                    {t("in_stock_only")}
+                </label>
             </div>
 
             {/* Categories */}
@@ -185,12 +240,78 @@ export default function ShopFilters({ filters }: ShopFiltersProps) {
                     </p>
                 </div>
             )}
+
+            {/* Minimum rating */}
+            <div>
+                <h4 className="text-xs font-semibold text-text-secondary uppercase tracking-wide mb-2">
+                    {t("min_rating")}
+                </h4>
+                <div className="space-y-1">
+                    {[4, 3, 2, 1].map((rating) => {
+                        const isActive = currentMinRating === String(rating);
+                        return (
+                            <button
+                                key={rating}
+                                onClick={() => handleRatingClick(rating)}
+                                className={cn(
+                                    "flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-sm transition-colors",
+                                    isActive
+                                        ? "bg-primary/5 text-primary font-semibold"
+                                        : "text-text-primary hover:bg-gray-50",
+                                )}
+                            >
+                                <span className="flex items-center gap-0.5">
+                                    {Array.from({ length: 5 }, (_, i) => (
+                                        <Star
+                                            key={i}
+                                            className={cn(
+                                                "h-3.5 w-3.5",
+                                                i < rating
+                                                    ? "fill-amber-400 text-amber-400"
+                                                    : "text-gray-300",
+                                            )}
+                                        />
+                                    ))}
+                                </span>
+                                <span>{t("rating_and_up", { rating })}</span>
+                            </button>
+                        );
+                    })}
+                </div>
+            </div>
+
+            {/* Tags */}
+            {availableTags.length > 0 && (
+                <div>
+                    <h4 className="text-xs font-semibold text-text-secondary uppercase tracking-wide mb-2">
+                        {t("tags")}
+                    </h4>
+                    <div className="flex flex-wrap gap-1.5">
+                        {availableTags.map((tag) => {
+                            const isActive = selectedTags.includes(tag);
+                            return (
+                                <button
+                                    key={tag}
+                                    onClick={() => handleTagToggle(tag)}
+                                    className={cn(
+                                        "rounded-full border px-3 py-1 text-xs transition-colors",
+                                        isActive
+                                            ? "border-primary bg-primary text-white"
+                                            : "border-border bg-white text-text-primary hover:border-primary/40",
+                                    )}
+                                >
+                                    {tag}
+                                </button>
+                            );
+                        })}
+                    </div>
+                </div>
+            )}
         </div>
     );
 
     return (
         <>
-            {/* Mobile filter toggle */}
             <button
                 onClick={() => setMobileOpen(true)}
                 className="lg:hidden flex items-center gap-2 px-4 py-2 border border-border rounded-lg text-sm text-text-primary hover:bg-gray-50 transition-colors"
@@ -202,14 +323,12 @@ export default function ShopFilters({ filters }: ShopFiltersProps) {
                 )}
             </button>
 
-            {/* Desktop sidebar */}
             <aside className="hidden lg:block w-64 shrink-0">
                 <div className="sticky top-20 bg-white border border-border rounded-xl p-4">
                     {filterContent}
                 </div>
             </aside>
 
-            {/* Mobile drawer */}
             {mobileOpen && (
                 <div className="fixed inset-0 z-50 lg:hidden">
                     <div
