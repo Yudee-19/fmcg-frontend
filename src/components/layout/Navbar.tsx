@@ -23,6 +23,7 @@ const USER_NAV_ITEMS = [
 
 const ADMIN_NAV_ITEMS = [
     { key: "product_management", href: "/admin/products" },
+    { key: "banner_management", href: "/admin/banners" },
     { key: "orders_all", href: "/admin/orders" },
     { key: "wishlists_all", href: "/admin/wishlists" },
     { key: "carts_all", href: "/admin/carts" },

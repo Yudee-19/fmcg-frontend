@@ -78,6 +78,17 @@ export interface User {
     updatedAt: string;
 }
 
+// Banner (homepage carousel)
+export interface Banner {
+    _id: string;
+    imageUrl: string;
+    imageKey: string;
+    position: number;
+    status: "PUBLISHED" | "DRAFT";
+    createdAt: string;
+    updatedAt: string;
+}
+
 // Standalone address entity (decoupled from User)
 export interface Address {
     id: string;

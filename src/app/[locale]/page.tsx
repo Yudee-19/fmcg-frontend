@@ -1,6 +1,6 @@
 import { setRequestLocale } from "next-intl/server";
 import type { Metadata } from "next";
-import HeroBanner from "@/components/home/HeroBanner";
+import HomeBanner from "@/components/home/HomeBanner";
 import CategoryStrip from "@/components/home/CategoryStrip";
 // import TrendingProducts from '@/components/home/TrendingProducts';
 import PromoCards from "@/components/home/PromoCards";
@@ -24,7 +24,7 @@ export default async function HomePage({
     return (
         <>
             <div className="max-w-7xl mx-auto px-4 py-6 space-y-8">
-                <HeroBanner />
+                <HomeBanner />
                 <CategoryStrip />
                 <NewArrivals />
                 <PromoCards />
