@@ -48,6 +48,15 @@ export async function getProduct(
   return data;
 }
 
+export async function getProductBySlug(
+  slug: string
+): Promise<ProductDetailApiResponse> {
+  const { data } = await apiServer.get<ProductDetailApiResponse>(
+    `/products/slug/${encodeURIComponent(slug)}`
+  );
+  return data;
+}
+
 export async function getCategories(): Promise<ApiResponse<CategoryDto[]>> {
   const { data } = await apiServer.get<ApiResponse<CategoryDto[]>>(
     '/products/categories'

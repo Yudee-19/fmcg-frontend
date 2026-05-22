@@ -94,7 +94,7 @@ export default function ProductCard({
         <div className="bg-white rounded-2xl border border-border overflow-hidden hover:shadow-lg transition-all duration-300 group flex flex-col">
             {/* ── Image area with padding ── */}
             <Link
-                href={`/products/${product.id}`}
+                href={`/products/${product.slug ?? product.id}`}
                 className="block relative p-4 pb-3"
             >
                 <div className="relative aspect-square rounded-xl overflow-hidden bg-gray-50/50">
@@ -136,7 +136,7 @@ export default function ProductCard({
 
             {/* ── Info area ── */}
             <div className="px-4 pb-4 pt-0 flex flex-col flex-1">
-                <Link href={`/products/${product.id}`}>
+                <Link href={`/products/${product.slug ?? product.id}`}>
                     <h3 className="text-sm font-semibold text-text-primary line-clamp-2 leading-snug min-h-10">
                         {title}
                     </h3>

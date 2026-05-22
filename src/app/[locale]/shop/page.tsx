@@ -71,7 +71,9 @@ export default async function ShopPage({
                 limit: 12,
                 minPrice: query.minPrice ? Number(query.minPrice) : undefined,
                 maxPrice: query.maxPrice ? Number(query.maxPrice) : undefined,
-                minRating: query.minRating ? Number(query.minRating) : undefined,
+                minRating: query.minRating
+                    ? Number(query.minRating)
+                    : undefined,
                 tags: query.tags || undefined,
                 isFeatured: query.isFeatured === "true" ? true : undefined,
                 inStock: query.inStock === "true" ? true : undefined,
@@ -80,6 +82,7 @@ export default async function ShopPage({
             getCachedFilters(),
         ]);
         products = productsRes.data ?? [];
+        console.log("Fetched products:", products);
         pagination = productsRes.pagination;
         filters = filtersRes.data ?? null;
     } catch {

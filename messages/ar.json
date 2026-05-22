@@ -81,7 +81,16 @@
     "rating_title": "التقييمات والمراجعات",
     "quantity": "الكمية",
     "price": "السعر",
-    "more_images": "+{count} المزيد"
+    "more_images": "+{count} المزيد",
+    "notify_restock_cta": "أعلمني عند توفر المنتج",
+    "notify_restock_subscribing": "جاري الاشتراك...",
+    "notify_restock_subscribed": "سنُعلمك",
+    "notify_restock_success": "سنُعلمك عبر البريد الإلكتروني وواتساب عند عودة هذا المنتج إلى المخزون.",
+    "notify_restock_already": "أنت مشترك بالفعل في تنبيهات إعادة التوفر لهذا المنتج.",
+    "notify_restock_no_whatsapp": "أضف رقم واتساب إلى ملفك الشخصي لتلقي تنبيهات إعادة التوفر.",
+    "notify_restock_add_whatsapp": "إضافة رقم واتساب",
+    "notify_restock_in_stock": "هذا المنتج متوفر بالفعل — حدّث الصفحة لإتمام الطلب.",
+    "notify_restock_failed": "تعذّر الاشتراك في تنبيهات إعادة التوفر. يرجى المحاولة مرة أخرى."
   },
   "cart": {
     "title": "سلة التسوق",

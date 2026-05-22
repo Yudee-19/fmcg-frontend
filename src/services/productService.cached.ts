@@ -2,6 +2,7 @@ import { unstable_cache } from 'next/cache';
 import {
   getProducts,
   getProduct,
+  getProductBySlug,
   getCategories,
   getFeaturedProducts,
   getNewArrivals,
@@ -19,6 +20,12 @@ export const getCachedProducts = unstable_cache(
 export const getCachedProduct = unstable_cache(
   async (id: string) => getProduct(id),
   ['product-detail'],
+  { revalidate: 300, tags: ['product-detail'] }
+);
+
+export const getCachedProductBySlug = unstable_cache(
+  async (slug: string) => getProductBySlug(slug),
+  ['product-detail-slug'],
   { revalidate: 300, tags: ['product-detail'] }
 );
 

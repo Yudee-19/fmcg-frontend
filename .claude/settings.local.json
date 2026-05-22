@@ -20,7 +20,12 @@
       "Bash(node -e \"require\\(''axios''\\); console.log\\(''axios installed''\\)\")",
       "Bash(node -e \"const l = require\\(''lucide-react''\\); const names = Object.keys\\(l\\).filter\\(k => /facebook|instagram|youtube|twitter/i.test\\(k\\)\\); console.log\\(names\\);\")",
       "Bash(git *)",
-      "Bash(node *)"
+      "Bash(node *)",
+      "Bash(curl -s \"http://localhost:3000/api/products?limit=2\")",
+      "Bash(curl -s \"https://niwsqpk34y.us-east-1.awsapprunner.com/api/products?limit=2\")",
+      "Bash(python -m json.tool)",
+      "Bash(curl -s \"https://niwsqpk34y.us-east-1.awsapprunner.com/api/products/69ccee3c431e8c2463a5324c\")",
+      "Bash(curl -s \"https://niwsqpk34y.us-east-1.awsapprunner.com/api/products/slug/acetone-white-125ml\")"
     ],
     "additionalDirectories": [
       "D:\\Projects\\fmcg-backend"

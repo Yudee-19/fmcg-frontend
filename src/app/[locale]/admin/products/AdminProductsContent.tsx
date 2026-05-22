@@ -702,7 +702,7 @@ export default function AdminProductsContent({
 
                       <div className="min-w-0 space-y-1">
                         <Link
-                          href={`/products/${product.id}`}
+                          href={`/products/${product.slug ?? product.id}`}
                           className="line-clamp-2 text-sm font-semibold text-text-primary transition-colors hover:text-primary"
                         >
                           {title}
@@ -740,7 +740,7 @@ export default function AdminProductsContent({
                     </div>
 
                     <div className="flex items-center gap-2 md:col-span-2 xl:col-span-1 xl:justify-end xl:flex-nowrap">
-                      <Link href={`/products/${product.id}`} className="inline-flex shrink-0">
+                      <Link href={`/products/${product.slug ?? product.id}`} className="inline-flex shrink-0">
                         <Button
                           type="button"
                           variant="ghost"

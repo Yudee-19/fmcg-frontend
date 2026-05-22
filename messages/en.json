@@ -81,7 +81,16 @@
     "rating_title": "Rating & Reviews",
     "quantity": "Quantity",
     "price": "Price",
-    "more_images": "+{count} more"
+    "more_images": "+{count} more",
+    "notify_restock_cta": "Notify me when back in stock",
+    "notify_restock_subscribing": "Subscribing...",
+    "notify_restock_subscribed": "We'll notify you",
+    "notify_restock_success": "You'll be notified via email and WhatsApp when this product is back in stock.",
+    "notify_restock_already": "You're already subscribed to restock alerts for this product.",
+    "notify_restock_no_whatsapp": "Add a WhatsApp number to your profile to receive restock alerts.",
+    "notify_restock_add_whatsapp": "Add WhatsApp number",
+    "notify_restock_in_stock": "This product is already in stock — refresh the page to order.",
+    "notify_restock_failed": "Couldn't subscribe to restock alerts. Please try again."
   },
   "cart": {
     "title": "Shopping Cart",

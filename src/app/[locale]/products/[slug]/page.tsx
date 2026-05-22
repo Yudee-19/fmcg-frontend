@@ -4,9 +4,39 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import {
     getCachedProduct,
+    getCachedProductBySlug,
     getCachedNewArrivals,
 } from "@/services/productService.cached";
-import type { Product, ProductListDto } from "@/types";
+import type {
+    Product,
+    ProductDetailApiResponse,
+    ProductListDto,
+} from "@/types";
+
+const OBJECT_ID_PATTERN = /^[a-f0-9]{24}$/i;
+
+/**
+ * Accept either a slug or a MongoDB ObjectId in the URL.
+ * - 24-char hex looks like an _id: try id first, fall back to slug.
+ * - Anything else: try slug first, fall back to id.
+ */
+async function resolveProduct(
+    param: string,
+): Promise<ProductDetailApiResponse> {
+    const looksLikeId = OBJECT_ID_PATTERN.test(param);
+    const primary = looksLikeId
+        ? () => getCachedProduct(param)
+        : () => getCachedProductBySlug(param);
+    const fallback = looksLikeId
+        ? () => getCachedProductBySlug(param)
+        : () => getCachedProduct(param);
+
+    try {
+        return await primary();
+    } catch {
+        return await fallback();
+    }
+}
 import { getLocalized, getLocalizedRecord } from "@/lib/utils";
 import Breadcrumb from "@/components/ui/Breadcrumb";
 import StarRating from "@/components/ui/StarRating";
@@ -15,6 +45,7 @@ import Badge from "@/components/ui/Badge";
 import ProductGallery from "@/components/product/ProductGallery";
 import ProductJsonLd from "@/components/product/ProductJsonLd";
 import AddToCartButton from "@/components/product/AddToCartButton";
+import NotifyRestockButton from "@/components/product/NotifyRestockButton";
 import WishlistButton from "@/components/product/WishlistButton";
 import ReviewSection from "@/components/product/ReviewSection";
 import ProductGrid from "@/components/product/ProductGrid";
@@ -22,14 +53,15 @@ import ProductGrid from "@/components/product/ProductGrid";
 export async function generateMetadata({
     params,
 }: {
-    params: Promise<{ locale: string; id: string }>;
+    params: Promise<{ locale: string; slug: string }>;
 }): Promise<Metadata> {
-    const { id, locale } = await params;
+    const { slug, locale } = await params;
     try {
-        const { data: product } = await getCachedProduct(id);
+        const { data: product } = await resolveProduct(slug);
         const title = getLocalized(product.title, locale);
         const category = getLocalized(product.category, locale);
         const subCategory = getLocalized(product.subCategory, locale);
+        const canonicalSlug = product.slug ?? product.id;
         return {
             title: `${title} | Crown Value Mart`,
             description: title,
@@ -50,10 +82,10 @@ export async function generateMetadata({
                 type: "website",
             },
             alternates: {
-                canonical: `${process.env.NEXT_PUBLIC_SITE_URL}/en/products/${id}`,
+                canonical: `${process.env.NEXT_PUBLIC_SITE_URL}/en/products/${canonicalSlug}`,
                 languages: {
-                    en: `${process.env.NEXT_PUBLIC_SITE_URL}/en/products/${id}`,
-                    ar: `${process.env.NEXT_PUBLIC_SITE_URL}/ar/products/${id}`,
+                    en: `${process.env.NEXT_PUBLIC_SITE_URL}/en/products/${canonicalSlug}`,
+                    ar: `${process.env.NEXT_PUBLIC_SITE_URL}/ar/products/${canonicalSlug}`,
                 },
             },
         };
@@ -65,9 +97,9 @@ export async function generateMetadata({
 export default async function ProductDetailPage({
     params,
 }: {
-    params: Promise<{ locale: string; id: string }>;
+    params: Promise<{ locale: string; slug: string }>;
 }) {
-    const { locale, id } = await params;
+    const { locale, slug } = await params;
     setRequestLocale(locale);
 
     const t = await getTranslations("product");
@@ -77,9 +109,8 @@ export default async function ProductDetailPage({
     let product: Product;
     let recommendations: ProductListDto[] = [];
     try {
-        const res = await getCachedProduct(id);
+        const res = await resolveProduct(slug);
         product = res.data;
-        // console.log("Product data:", product);
         recommendations = res.recommended ?? [];
     } catch {
         notFound();
@@ -199,8 +230,12 @@ export default async function ProductDetailPage({
                             )}
                         </div>
 
-                        {/* Add to cart */}
-                        <AddToCartButton product={product} />
+                        {/* Add to cart or notify when back in stock */}
+                        {product.stock > 0 ? (
+                            <AddToCartButton product={product} />
+                        ) : (
+                            <NotifyRestockButton productId={product.id} />
+                        )}
 
                         {/* Trust badges */}
                         <div className="flex items-center gap-6 pt-4 border-t border-border">
@@ -248,7 +283,7 @@ export default async function ProductDetailPage({
                                 return (
                                     <a
                                         key={rec.id}
-                                        href={`/${locale}/products/${rec.id}`}
+                                        href={`/${locale}/products/${rec.slug ?? rec.id}`}
                                         className="bg-bg-card rounded-xl border border-border overflow-hidden hover:shadow-md transition-shadow p-3"
                                     >
                                         <div className="relative aspect-square bg-gray-50 rounded-lg overflow-hidden mb-2">

@@ -12,6 +12,7 @@ export interface LocalizedRecord {
 // Matches ProductResponseDto (updated schema — description REMOVED per changelog)
 export interface Product {
     id: string;
+    slug: string;
     title: LocalizedString;
     category: LocalizedString;
     subCategory?: LocalizedString;
@@ -38,6 +39,7 @@ export interface Product {
 // Flattened English-only DTO — used in list views and recommendations
 export interface ProductListDto {
     id: string;
+    slug?: string;
     title: string;
     category: string;
     subCategory: string;
