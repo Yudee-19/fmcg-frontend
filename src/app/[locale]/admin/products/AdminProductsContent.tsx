@@ -288,7 +288,8 @@ export default function AdminProductsContent({
       const product = response.data;
       const images = (product.images ?? []).map((url, index) => ({
         url,
-        sourceIndex: index + 1,
+        // 0-based — must match backend's indexing (imgmap/delimg expect 0..length-1).
+        sourceIndex: index,
       }));
 
       setOriginalImages(images);
@@ -405,11 +406,14 @@ export default function AdminProductsContent({
     formData.append('searchKeywords', formState.searchKeywords.trim());
     formData.append('attributes', JSON.stringify(parsedAttributes));
 
+    // `imgmap` describes the target position in the existing images array
+    // for each NEW uploaded file. Kept existing images stay implicitly —
+    // they should NOT be listed here. (The backend rejects any imgmap entry
+    // that doesn't have a matching uploaded file.) Each new file appends to
+    // the end of the current array, so the target index is the original
+    // images length.
     const keptExistingIndices = existingImages.map((image) => image.sourceIndex);
-    const newImageIndices = keptExistingIndices.length === 0
-      ? selectedImages.map((_, index) => index)
-      : selectedImages.map((_, index) => originalImages.length + index + 1);
-    const imageMap = [...keptExistingIndices, ...newImageIndices];
+    const imageMap = selectedImages.map(() => originalImages.length);
     const deletedImages = originalImages
       .map((image) => image.sourceIndex)
       .filter((index) => !keptExistingIndices.includes(index));
@@ -740,7 +744,7 @@ export default function AdminProductsContent({
                     </div>
 
                     <div className="flex items-center gap-2 md:col-span-2 xl:col-span-1 xl:justify-end xl:flex-nowrap">
-                      <Link href={`/products/${product.id}`} className="inline-flex shrink-0">
+                      <Link href={`/products/${product.slug ?? product.id}`} className="inline-flex shrink-0">
                         <Button
                           type="button"
                           variant="ghost"
@@ -958,7 +962,7 @@ export default function AdminProductsContent({
                           <Image src={image.url} alt="Existing product image" fill className="object-cover" sizes="240px" />
                         </div>
                         <div className="flex items-center justify-between px-3 py-2">
-                          <p className="text-xs text-text-secondary">{t('image_position', { index: image.sourceIndex })}</p>
+                          <p className="text-xs text-text-secondary">{t('image_position', { index: image.sourceIndex + 1 })}</p>
                           <button
                             type="button"
                             className="text-xs font-medium text-red-600 hover:text-red-700"

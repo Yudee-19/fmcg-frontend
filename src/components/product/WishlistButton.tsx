@@ -25,12 +25,15 @@ export default function WishlistButton({
     const [mounted, setMounted] = useState(false);
     const [loading, setLoading] = useState(false);
     const toggle = useWishlistStore((s) => s.toggle);
-    const isWishlisted = useWishlistStore((s) => s.isWishlisted);
+    // Subscribe to a derived boolean so this component re-renders when the
+    // items array changes (selecting the function reference alone is stable
+    // and would never trigger a re-render).
+    const active = useWishlistStore(
+        (s) => mounted && s.items.some((i) => i.productId === product.productId),
+    );
     const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
 
     useEffect(() => setMounted(true), []);
-
-    const active = mounted && isWishlisted(product.productId);
 
     const handleClick = async (e: React.MouseEvent) => {
         e.preventDefault();

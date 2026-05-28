@@ -43,6 +43,8 @@ export default function OrderDetail({
 }) {
   const t = useTranslations('order');
   const tCommon = useTranslations('common');
+  const tOs = useTranslations('order_summary');
+  const tBadge = useTranslations('order_loyalty_badge');
   const locale = useLocale();
 
   const [mounted, setMounted] = useState(false);
@@ -246,6 +248,38 @@ export default function OrderDetail({
           })}
         </div>
 
+        {/* Discount breakdown — only show if any discount was applied */}
+        {((order.pointsDiscount ?? 0) > 0 || (order.couponDiscount ?? 0) > 0) && (
+          <div className="mt-4 pt-4 border-t border-border space-y-2">
+            {(order.pointsDiscount ?? 0) > 0 && (
+              <div className="flex justify-between text-sm">
+                <span className="text-text-secondary flex items-center gap-1">
+                  <span aria-hidden>👑</span> {tOs('loyalty_discount')}
+                  <span className="text-text-muted">
+                    ({tOs('loyalty_pts_redeemed', { points: order.appliedLoyaltyPoints ?? 0 })})
+                  </span>
+                </span>
+                <span className="text-success font-medium">
+                  −{formatPrice(order.pointsDiscount ?? 0)}
+                </span>
+              </div>
+            )}
+            {(order.couponDiscount ?? 0) > 0 && (
+              <div className="flex justify-between text-sm">
+                <span className="text-text-secondary">
+                  {tOs('coupon_discount')}
+                  {order.appliedCouponCode && (
+                    <span className="text-text-muted"> ({order.appliedCouponCode})</span>
+                  )}
+                </span>
+                <span className="text-success font-medium">
+                  −{formatPrice(order.couponDiscount ?? 0)}
+                </span>
+              </div>
+            )}
+          </div>
+        )}
+
         <div className="mt-4 pt-4 border-t border-border flex justify-between items-center">
           <span className="text-sm font-semibold text-text-primary">
             {t('total')}
@@ -254,6 +288,25 @@ export default function OrderDetail({
             {formatPrice(order.totalAmount)}
           </span>
         </div>
+
+        {/* Points earned badge — only on delivered orders */}
+        {orderStatus === 'delivered' && (
+          <div className="mt-4 flex items-start gap-2 bg-success/10 border border-success/30 rounded-xl px-3 py-2.5">
+            <span aria-hidden className="text-base mt-0.5">👑</span>
+            <p className="text-sm text-text-secondary">
+              {tBadge.rich('earned_note', {
+                link: (chunks) => (
+                  <Link
+                    href="/loyalty"
+                    className="text-primary font-semibold hover:underline"
+                  >
+                    {chunks}
+                  </Link>
+                ),
+              })}
+            </p>
+          </div>
+        )}
       </div>
 
       {/* Shipping Address */}

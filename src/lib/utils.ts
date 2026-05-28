@@ -17,6 +17,16 @@ export function truncate(str: string, maxLength: number): string {
   return str.slice(0, maxLength).trimEnd() + '...';
 }
 
+// MongoDB ObjectId — 24 hex chars
+export function isObjectId(value: string): boolean {
+  return /^[a-f\d]{24}$/i.test(value);
+}
+
+// Pick slug if available, otherwise fall back to id — for product URLs
+export function productPath(product: { id: string; slug?: string }): string {
+  return `/products/${product.slug ?? product.id}`;
+}
+
 // --- Localization helpers ---
 
 /**

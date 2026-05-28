@@ -55,8 +55,12 @@ export default function ShopFilters({ filters }: ShopFiltersProps) {
     }
 
     function handleCategoryClick(catEn: string) {
+        // Picking a category is a new browse intent — drop the prior search
+        // query so users don't end up with empty result sets like
+        // "BABY CARE matching GARNIER VITAMIN C FACE WASH".
         updateParams({
             category: currentCategory === catEn ? null : catEn,
+            search: null,
         });
     }
 
