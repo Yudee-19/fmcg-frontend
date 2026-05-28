@@ -10,7 +10,6 @@ export default async function NewArrivals() {
     let products: import("@/types").Product[] = [];
     try {
         const res = await getCachedNewArrivals();
-        console.log("New Arrivals:", res.data);
         products = res.data ?? [];
     } catch {
         products = [];

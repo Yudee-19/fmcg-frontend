@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { useLocale } from 'next-intl';
 import { useAuthStore } from '@/store/authStore';
-import { getOrderByNumber, cancelOrder } from '@/services/orderService';
+import { getOrderByNumber, cancelOrder, verifyDelivery } from '@/services/orderService';
 import { usePreferenceStore } from '@/store/preferenceStore';
 import { formatDate, getLocalized } from '@/lib/utils';
 import Button from '@/components/ui/Button';
@@ -52,6 +52,10 @@ export default function OrderDetail({
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [cancelling, setCancelling] = useState(false);
+  const [otpModalOpen, setOtpModalOpen] = useState(false);
+  const [otpValue, setOtpValue] = useState('');
+  const [otpError, setOtpError] = useState('');
+  const [verifyingDelivery, setVerifyingDelivery] = useState(false);
 
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
   const formatPrice = usePreferenceStore((s) => s.formatPrice);
@@ -93,6 +97,42 @@ export default function OrderDetail({
     } finally {
       setCancelling(false);
     }
+  };
+
+  const handleVerifyDelivery = async () => {
+    if (!order) return;
+    if (!otpValue.trim()) {
+      setOtpError(t('verify_delivery_otp_required'));
+      return;
+    }
+
+    setOtpError('');
+    setVerifyingDelivery(true);
+    try {
+      const response = await verifyDelivery(order.id, otpValue.trim());
+      setOrder((prev) =>
+        prev
+          ? {
+              ...prev,
+              orderStatus: 'DELIVERED',
+              deliveredAt: response?.data?.deliveredAt ?? new Date().toISOString(),
+            }
+          : null
+      );
+      setOtpModalOpen(false);
+      setOtpValue('');
+    } catch (err: any) {
+      setOtpError(err?.message || t('verify_delivery_failed'));
+    } finally {
+      setVerifyingDelivery(false);
+    }
+  };
+
+  const closeOtpModal = () => {
+    if (verifyingDelivery) return;
+    setOtpModalOpen(false);
+    setOtpValue('');
+    setOtpError('');
   };
 
   if (!mounted) {
@@ -202,6 +242,20 @@ export default function OrderDetail({
               className="text-red-600 border-red-300 hover:bg-red-50"
             >
               {cancelling ? t('cancelling') : t('cancel')}
+            </Button>
+          </div>
+        )}
+
+        {orderStatus === 'shipped' && (
+          <div className="mt-4 pt-4 border-t border-border space-y-2">
+            <p className="text-sm text-text-secondary">
+              {t('verify_delivery_hint')}
+            </p>
+            <Button
+              size="sm"
+              onClick={() => setOtpModalOpen(true)}
+            >
+              {t('verify_delivery_cta')}
             </Button>
           </div>
         )}
@@ -345,6 +399,61 @@ export default function OrderDetail({
           </Button>
         </Link>
       </div>
+
+      {/* Delivery OTP modal */}
+      {otpModalOpen && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4"
+          role="dialog"
+          aria-modal="true"
+        >
+          <div className="w-full max-w-md rounded-2xl border border-border bg-white p-6 shadow-xl">
+            <h3 className="text-lg font-semibold text-text-primary">
+              {t('verify_delivery_title')}
+            </h3>
+            <p className="mt-2 text-sm text-text-secondary">
+              {t('verify_delivery_description')}
+            </p>
+
+            <label className="mt-5 block">
+              <span className="mb-1.5 block text-sm font-medium text-text-primary">
+                {t('verify_delivery_otp_label')}
+              </span>
+              <input
+                type="text"
+                inputMode="numeric"
+                autoFocus
+                value={otpValue}
+                onChange={(e) => setOtpValue(e.target.value)}
+                placeholder="000000"
+                className="w-full rounded-xl border border-border px-4 py-3 text-base tracking-widest text-text-primary outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/15"
+              />
+            </label>
+
+            {otpError && (
+              <p className="mt-2 text-sm text-red-600">{otpError}</p>
+            )}
+
+            <div className="mt-6 flex items-center justify-end gap-2">
+              <Button
+                variant="outline"
+                onClick={closeOtpModal}
+                disabled={verifyingDelivery}
+              >
+                {tCommon('cancel')}
+              </Button>
+              <Button
+                onClick={handleVerifyDelivery}
+                loading={verifyingDelivery}
+              >
+                {verifyingDelivery
+                  ? t('verify_delivery_submitting')
+                  : t('verify_delivery_confirm')}
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

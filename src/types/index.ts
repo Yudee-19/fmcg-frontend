@@ -12,7 +12,7 @@ export interface LocalizedRecord {
 // Matches ProductResponseDto (updated schema — description REMOVED per changelog)
 export interface Product {
     id: string;
-    slug?: string;
+    slug: string;
     title: LocalizedString;
     category: LocalizedString;
     subCategory?: LocalizedString;
@@ -74,6 +74,17 @@ export interface User {
     countryCode: string;
     status: "ACTIVE" | "INACTIVE";
     role: "USER" | "ADMIN" | "SUPER_ADMIN";
+    createdAt: string;
+    updatedAt: string;
+}
+
+// Banner (homepage carousel)
+export interface Banner {
+    _id: string;
+    imageUrl: string;
+    imageKey: string;
+    position: number;
+    status: "PUBLISHED" | "DRAFT";
     createdAt: string;
     updatedAt: string;
 }
@@ -177,10 +188,6 @@ export interface Order {
         | "CANCELLED";
     totalAmount: number;
     totalItems: number;
-    appliedLoyaltyPoints?: number;
-    pointsDiscount?: number;
-    appliedCouponCode?: string | null;
-    couponDiscount?: number;
     stripeSessionId?: string;
     deliveryOtp?: string;
     deliveredAt?: string;
@@ -330,6 +337,10 @@ export interface FiltersResponse {
     };
     categories: FilterCategoryDto[];
     priceRange: {
+        min: number;
+        max: number;
+    };
+    ratingRange?: {
         min: number;
         max: number;
     };

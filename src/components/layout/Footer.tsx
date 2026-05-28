@@ -179,11 +179,17 @@ export default async function Footer() {
                             {t("privacy")}
                         </Link>
                         <Link
+                            href="/refund-policy"
+                            className="hover:text-white transition-colors"
+                        >
+                            {t("refund")}
+                        </Link>
+                        {/* <Link
                             href="/cookies"
                             className="hover:text-white transition-colors"
                         >
                             {t("cookies")}
-                        </Link>
+                        </Link> */}
                     </div>
                 </div>
             </div>

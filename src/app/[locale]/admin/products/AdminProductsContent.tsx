@@ -706,7 +706,7 @@ export default function AdminProductsContent({
 
                       <div className="min-w-0 space-y-1">
                         <Link
-                          href={`/products/${product.id}`}
+                          href={`/products/${product.slug ?? product.id}`}
                           className="line-clamp-2 text-sm font-semibold text-text-primary transition-colors hover:text-primary"
                         >
                           {title}

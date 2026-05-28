@@ -1,20 +1,24 @@
-import type { Product } from '@/types';
-import ProductCard from './ProductCard';
+import type { Product } from "@/types";
+import ProductCard from "./ProductCard";
 
 interface ProductGridProps {
-  products: Product[];
-  variant?: 'trending' | 'new-arrival';
+    products: Product[];
+    variant?: "trending" | "new-arrival";
 }
 
 export default function ProductGrid({
-  products,
-  variant = 'trending',
+    products,
+    variant = "trending",
 }: ProductGridProps) {
-  return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-      {products.map((product) => (
-        <ProductCard key={product.id} product={product} variant={variant} />
-      ))}
-    </div>
-  );
+    return (
+        <div className="grid mx-auto grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {products.map((product) => (
+                <ProductCard
+                    key={product.id}
+                    product={product}
+                    variant={variant}
+                />
+            ))}
+        </div>
+    );
 }

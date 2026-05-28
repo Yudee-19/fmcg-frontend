@@ -373,22 +373,22 @@ export default function ProfileContent() {
     setSavingProfile(true);
 
     try {
-      const payload = {
-        firstName: profileForm.firstName.trim(),
-        lastName: profileForm.lastName.trim(),
-        phoneNumber: profileForm.phoneNumber.trim(),
-        countryCode: profileForm.countryCode.trim(),
-      };
+      const firstName = profileForm.firstName.trim();
+      const lastName = profileForm.lastName.trim();
+      const phoneNumber = profileForm.phoneNumber.trim();
 
-      await updateProfile(payload);
+      // Backend update-profile accepts: username, phoneNumber, whatsappNumber,
+      // currentPassword, newPassword. firstName/lastName/countryCode are kept
+      // client-side only until backend exposes them.
+      await updateProfile({ phoneNumber: phoneNumber || undefined });
 
-      updateUser(payload);
+      updateUser({ firstName, lastName, phoneNumber });
       setProfile((current) =>
         current
           ? {
               ...current,
-              name: [payload.firstName, payload.lastName].filter(Boolean).join(' ').trim(),
-              phone: payload.phoneNumber || null,
+              name: [firstName, lastName].filter(Boolean).join(' ').trim(),
+              phone: phoneNumber || null,
               updatedAt: new Date().toISOString(),
             }
           : current
@@ -423,8 +423,8 @@ export default function ProfileContent() {
 
     try {
       await updateProfile({
-        oldPassword: passwordForm.oldPassword,
-        password: passwordForm.password,
+        currentPassword: passwordForm.oldPassword,
+        newPassword: passwordForm.password,
       });
       setPasswordForm({ oldPassword: '', password: '', confirmPassword: '' });
       setActiveModal(null);

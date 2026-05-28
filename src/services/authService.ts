@@ -15,13 +15,14 @@ type AuthLoginResponse = {
 
 type JsonRecord = Record<string, unknown>;
 
+export type OtpPurpose = 'registration' | 'password_reset';
+
 export interface UpdateProfilePayload {
-  firstName?: string;
-  lastName?: string;
+  username?: string;
   phoneNumber?: string;
-  countryCode?: string;
-  oldPassword?: string;
-  password?: string;
+  whatsappNumber?: string;
+  currentPassword?: string;
+  newPassword?: string;
 }
 
 export async function login(
@@ -45,7 +46,7 @@ export async function register(payload: JsonRecord): Promise<ApiResponse<unknown
 
 export async function sendOtp(
   email: string,
-  purpose: string,
+  purpose: OtpPurpose,
   updateData?: JsonRecord
 ): Promise<ApiResponse<unknown>> {
   const { data } = await apiClient.post<ApiResponse<unknown>>('/users/send-otp', {
@@ -92,7 +93,7 @@ export async function getProfile(): Promise<ApiResponse<ProfileResponse>> {
 export async function updateProfile(
   payload: UpdateProfilePayload
 ): Promise<ApiResponse<UpdateProfileResponseDto>> {
-  const { data } = await apiClient.post<ApiResponse<UpdateProfileResponseDto>>(
+  const { data } = await apiClient.put<ApiResponse<UpdateProfileResponseDto>>(
     '/users/update-profile',
     payload
   );

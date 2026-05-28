@@ -52,17 +52,7 @@ export async function getProductBySlug(
   slug: string
 ): Promise<ProductDetailApiResponse> {
   const { data } = await apiServer.get<ProductDetailApiResponse>(
-    `/products/slug/${slug}`
-  );
-  return data;
-}
-
-export async function getProductSuggestions(
-  q: string
-): Promise<{ success: boolean; suggestions: string[] }> {
-  const { data } = await apiServer.get<{ success: boolean; suggestions: string[] }>(
-    '/products/suggestions',
-    { params: { q } }
+    `/products/slug/${encodeURIComponent(slug)}`
   );
   return data;
 }
