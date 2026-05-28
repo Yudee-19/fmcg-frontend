@@ -5,9 +5,11 @@ import { useTranslations } from 'next-intl';
 import { Link, useRouter } from '@/i18n/navigation';
 import { login as loginApi } from '@/services/authService';
 import { getCart } from '@/services/cartService';
+import { mergeAndFetchWishlist } from '@/services/wishlistService';
 import { ApiError } from '@/services/apiError';
 import { useAuthStore } from '@/store/authStore';
 import { useCartStore } from '@/store/cartStore';
+import { useWishlistStore } from '@/store/wishlistStore';
 import Button from '@/components/ui/Button';
 import { ArrowRight, Eye, EyeOff, LockKeyhole, Mail, ShieldCheck } from 'lucide-react';
 
@@ -19,6 +21,7 @@ export default function LoginPage() {
   const router = useRouter();
   const setAuth = useAuthStore((s) => s.setAuth);
   const syncCart = useCartStore((s) => s.syncWithServer);
+  const syncWishlist = useWishlistStore((s) => s.syncWithServer);
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -47,6 +50,16 @@ export default function LoginPage() {
         syncCart(items, total);
       } catch {
         // user has no server cart yet, or fetch failed — leave store as-is
+      }
+
+      // Merge anonymous wishlist into the server wishlist, then sync the
+      // local store with the authoritative server list.
+      try {
+        const localItems = useWishlistStore.getState().items;
+        const merged = await mergeAndFetchWishlist(localItems);
+        syncWishlist(merged);
+      } catch {
+        // fetch failed — leave persisted local wishlist untouched
       }
 
       router.push('/');

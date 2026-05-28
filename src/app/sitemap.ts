@@ -11,7 +11,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const { data: products } = await getProducts({ limit: 1000 });
     productUrls = products.flatMap((p: any) =>
       routing.locales.map((locale) => ({
-        url: `${SITE_URL}/${locale}/products/${p.id}`,
+        url: `${SITE_URL}/${locale}/products/${p.slug ?? p.id}`,
         lastModified: p.updatedAt ? new Date(p.updatedAt) : new Date(),
         changeFrequency: 'weekly' as const,
         priority: 0.8,

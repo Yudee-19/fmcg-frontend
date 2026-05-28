@@ -2,9 +2,13 @@ import { setRequestLocale } from "next-intl/server";
 import { getTranslations } from "next-intl/server";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getCachedProduct, getCachedNewArrivals } from "@/services/productService.cached";
-import type { Product, ProductListDto } from "@/types";
-import { getLocalized, getLocalizedRecord } from "@/lib/utils";
+import {
+    getCachedProduct,
+    getCachedProductBySlug,
+    getCachedNewArrivals,
+} from "@/services/productService.cached";
+import type { Product, ProductListDto, ProductDetailApiResponse } from "@/types";
+import { getLocalized, getLocalizedRecord, isObjectId, productPath } from "@/lib/utils";
 import Breadcrumb from "@/components/ui/Breadcrumb";
 import StarRating from "@/components/ui/StarRating";
 import PriceDisplay from "@/components/ui/PriceDisplay";
@@ -12,22 +16,40 @@ import Badge from "@/components/ui/Badge";
 import ProductGallery from "@/components/product/ProductGallery";
 import ProductJsonLd from "@/components/product/ProductJsonLd";
 import AddToCartButton from "@/components/product/AddToCartButton";
+import NotifyRestockButton from "@/components/product/NotifyRestockButton";
 import { EarnHint } from "@/components/loyalty/EarnHint";
 import WishlistButton from "@/components/product/WishlistButton";
 import ReviewSection from "@/components/product/ReviewSection";
 import ProductGrid from "@/components/product/ProductGrid";
+
+// Fetch by slug, falling back to id for legacy ObjectId URLs.
+async function fetchProductByParam(param: string): Promise<ProductDetailApiResponse> {
+    if (isObjectId(param)) {
+        try {
+            return await getCachedProduct(param);
+        } catch {
+            return await getCachedProductBySlug(param);
+        }
+    }
+    try {
+        return await getCachedProductBySlug(param);
+    } catch {
+        return await getCachedProduct(param);
+    }
+}
 
 export async function generateMetadata({
     params,
 }: {
     params: Promise<{ locale: string; id: string }>;
 }): Promise<Metadata> {
-    const { id, locale } = await params;
+    const { id: param, locale } = await params;
     try {
-        const { data: product } = await getCachedProduct(id);
+        const { data: product } = await fetchProductByParam(param);
         const title = getLocalized(product.title, locale);
         const category = getLocalized(product.category, locale);
         const subCategory = getLocalized(product.subCategory, locale);
+        const canonicalSeg = product.slug ?? product.id;
         return {
             title: `${title} | Crown Value Mart`,
             description: title,
@@ -48,10 +70,10 @@ export async function generateMetadata({
                 type: "website",
             },
             alternates: {
-                canonical: `${process.env.NEXT_PUBLIC_SITE_URL}/en/products/${id}`,
+                canonical: `${process.env.NEXT_PUBLIC_SITE_URL}/en/products/${canonicalSeg}`,
                 languages: {
-                    en: `${process.env.NEXT_PUBLIC_SITE_URL}/en/products/${id}`,
-                    ar: `${process.env.NEXT_PUBLIC_SITE_URL}/ar/products/${id}`,
+                    en: `${process.env.NEXT_PUBLIC_SITE_URL}/en/products/${canonicalSeg}`,
+                    ar: `${process.env.NEXT_PUBLIC_SITE_URL}/ar/products/${canonicalSeg}`,
                 },
             },
         };
@@ -65,7 +87,7 @@ export default async function ProductDetailPage({
 }: {
     params: Promise<{ locale: string; id: string }>;
 }) {
-    const { locale, id } = await params;
+    const { locale, id: param } = await params;
     setRequestLocale(locale);
 
     const t = await getTranslations("product");
@@ -75,9 +97,8 @@ export default async function ProductDetailPage({
     let product: Product;
     let recommendations: ProductListDto[] = [];
     try {
-        const res = await getCachedProduct(id);
+        const res = await fetchProductByParam(param);
         product = res.data;
-        console.log("Product data:", product);
         recommendations = res.recommended ?? [];
     } catch {
         notFound();
@@ -200,8 +221,12 @@ export default async function ProductDetailPage({
                         {/* Loyalty earn hint */}
                         <EarnHint />
 
-                        {/* Add to cart */}
-                        <AddToCartButton product={product} />
+                        {/* Add to cart OR notify when back in stock */}
+                        {product.stock > 0 ? (
+                            <AddToCartButton product={product} />
+                        ) : (
+                            <NotifyRestockButton productId={product.id} />
+                        )}
 
                         {/* Trust badges */}
                         <div className="flex items-center gap-6 pt-4 border-t border-border">
@@ -249,7 +274,7 @@ export default async function ProductDetailPage({
                                 return (
                                     <a
                                         key={rec.id}
-                                        href={`/${locale}/products/${rec.id}`}
+                                        href={`/${locale}${productPath(rec)}`}
                                         className="bg-bg-card rounded-xl border border-border overflow-hidden hover:shadow-md transition-shadow p-3"
                                     >
                                         <div className="relative aspect-square bg-gray-50 rounded-lg overflow-hidden mb-2">

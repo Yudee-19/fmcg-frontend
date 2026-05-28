@@ -506,7 +506,7 @@
     "field_search_keywords": "Search Keywords",
     "field_search_keywords_placeholder": "canon,eos r6,mirrorless,camera",
     "field_attributes": "Attributes JSON",
-    "field_attributes_hint": "Use the exact localized JSON structure: { \"en\": {...}, \"ar\": {...} }.",
+    "field_attributes_hint": "Use the exact localized JSON structure: '{' \"en\": '{'...'}', \"ar\": '{'...'}' '}'.",
     "field_images": "Product Images",
     "field_images_cta": "Select one or more product images",
     "field_images_hint": "These files will be sent as repeated images fields in multipart form-data.",

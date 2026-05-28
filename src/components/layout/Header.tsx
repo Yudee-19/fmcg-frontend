@@ -8,6 +8,7 @@ import { useWishlistStore } from "@/store/wishlistStore";
 import { useAuthStore } from "@/store/authStore";
 import { useLoyaltyStore } from "@/store/loyaltyStore";
 import { getCart } from "@/services/cartService";
+import { mergeAndFetchWishlist } from "@/services/wishlistService";
 import SearchBar from "@/components/ui/SearchBar";
 import Image from "next/image";
 import { Crown, Heart, Search, ShoppingCart, User } from "lucide-react";
@@ -17,6 +18,7 @@ export default function Header() {
     const cartCount = useCartStore((s) => s.totalItems);
     const syncCart = useCartStore((s) => s.syncWithServer);
     const wishlistCount = useWishlistStore((s) => s.items.length);
+    const syncWishlist = useWishlistStore((s) => s.syncWithServer);
     const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
     const userRole = useAuthStore((s) => s.user?.role);
     const isAdmin = !!userRole && userRole !== "USER";
@@ -31,7 +33,8 @@ export default function Header() {
     }, [isAuthenticated, pointsLoaded, fetchMyPoints]);
 
     // On app boot (fresh tab / refresh) — if the user is already authenticated,
-    // pull their server cart so items saved before don't appear empty.
+    // pull their server cart + wishlist so items saved before don't appear empty
+    // or stale.
     useEffect(() => {
         if (!isAuthenticated) return;
         let alive = true;
@@ -51,10 +54,21 @@ export default function Header() {
             .catch(() => {
                 // ignore — leave persisted local cart untouched on network error
             });
+
+        const localWishlistItems = useWishlistStore.getState().items;
+        mergeAndFetchWishlist(localWishlistItems)
+            .then((merged) => {
+                if (!alive) return;
+                syncWishlist(merged);
+            })
+            .catch(() => {
+                // ignore — leave persisted local wishlist untouched on network error
+            });
+
         return () => {
             alive = false;
         };
-    }, [isAuthenticated, syncCart]);
+    }, [isAuthenticated, syncCart, syncWishlist]);
 
     return (
         <header className="bg-primary border-b border-primary sticky top-0 z-40">
