@@ -48,7 +48,6 @@ export function useApplePaySDK() {
       if (typeof window === 'undefined' || window.location.protocol !== 'https:') {
         setApplePayAvailable(false);
         setApplePayReady(true);
-        onError('Apple Pay requires HTTPS — open the site via your ngrok URL');
         return;
       }
 
@@ -66,7 +65,6 @@ export function useApplePaySDK() {
       if (!canPay) {
         setApplePayAvailable(false);
         setApplePayReady(true);
-        onError('Apple Pay is not available on this device or browser');
         return;
       }
       setApplePayAvailable(true);

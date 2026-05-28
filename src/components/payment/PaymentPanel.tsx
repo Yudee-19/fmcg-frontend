@@ -1,5 +1,7 @@
 'use client';
 
+import type { ReactNode } from 'react';
+
 export type TapPaymentSource = 'CARD' | 'KNET' | 'GOOGLE_PAY' | 'APPLE_PAY';
 
 interface Props {
@@ -16,11 +18,30 @@ interface Props {
   onPay: () => void;
 }
 
-const METHODS: { id: TapPaymentSource; label: string }[] = [
-  { id: 'CARD', label: '💳 Card' },
-  { id: 'KNET', label: '🏦 Knet' },
-  { id: 'GOOGLE_PAY', label: 'G Pay' },
-  { id: 'APPLE_PAY', label: ' Pay' },
+const AppleLogo = ({ className = '' }: { className?: string }) => (
+  <svg
+    viewBox="0 0 24 24"
+    fill="currentColor"
+    aria-hidden="true"
+    className={className}
+  >
+    <path d="M17.05 12.04c-.03-2.84 2.32-4.2 2.42-4.27-1.32-1.93-3.38-2.2-4.11-2.23-1.75-.18-3.41 1.03-4.3 1.03-.89 0-2.25-1.01-3.7-.98-1.91.03-3.67 1.11-4.65 2.82-1.98 3.44-.51 8.53 1.42 11.33.94 1.37 2.06 2.91 3.52 2.86 1.41-.06 1.95-.91 3.65-.91 1.7 0 2.18.91 3.67.88 1.51-.03 2.47-1.4 3.4-2.78 1.07-1.6 1.51-3.15 1.54-3.23-.03-.02-2.95-1.13-2.98-4.49zM14.27 4.07c.78-.94 1.3-2.25 1.16-3.55-1.12.05-2.48.75-3.29 1.69-.72.83-1.36 2.17-1.19 3.44 1.25.1 2.53-.63 3.32-1.58z" />
+  </svg>
+);
+
+const METHODS: { id: TapPaymentSource; label: ReactNode }[] = [
+  { id: 'CARD', label: <span>💳 Card</span> },
+  { id: 'KNET', label: <span>🏦 Knet</span> },
+  { id: 'GOOGLE_PAY', label: <span>G Pay</span> },
+  {
+    id: 'APPLE_PAY',
+    label: (
+      <span className="inline-flex items-center justify-center gap-1">
+        <AppleLogo className="h-3.5 w-3.5 -mt-0.5" />
+        Pay
+      </span>
+    ),
+  },
 ];
 
 export function PaymentPanel({
@@ -138,8 +159,8 @@ export function PaymentPanel({
             <p className="text-xs text-text-muted text-center">Loading Apple Pay…</p>
           )}
           {applePayReady && !applePayAvailable && (
-            <p className="text-xs text-red-600 text-center">
-              Apple Pay is only available in Safari on macOS/iOS with a card configured in Wallet.
+            <p className="text-xs text-text-muted text-center">
+              Apple Pay is available on Safari (macOS/iOS) with a card in Wallet, over a secure (HTTPS) connection.
             </p>
           )}
           {applePayReady && applePayAvailable && (
