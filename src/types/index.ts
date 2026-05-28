@@ -198,6 +198,12 @@ export interface Order {
     refundId?: string;
     refundAmount?: number;
     refundedAt?: string;
+    pointsDiscount?: number;
+    couponDiscount?: number;
+    pointsUsed?: number;
+    couponCode?: string;
+    appliedLoyaltyPoints?: number;
+    appliedCouponCode?: string;
     createdAt: string;
     updatedAt: string;
 }
