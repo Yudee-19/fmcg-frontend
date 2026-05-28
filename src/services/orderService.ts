@@ -10,11 +10,13 @@ import type {
 
 export const createOrder = (payload: {
   paymentMethod: 'ONLINE' | 'COD';
+  paymentSource?: 'CARD' | 'KNET' | 'GOOGLE_PAY' | 'APPLE_PAY';
+  token?: string;
   shippingAddress?: any;
   addressId?: string;
   successUrl?: string;
   cancelUrl?: string;
-}): Promise<ApiResponse<Order> & { checkoutSession?: { id: string; url: string } }> =>
+}): Promise<ApiResponse<Order> & { checkoutSession?: { id: string; url: string; threeDSUrl?: string } }> =>
   apiClient.post('/orders', payload).then((res) => res.data);
 
 export const getOrders = (

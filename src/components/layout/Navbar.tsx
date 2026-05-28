@@ -18,6 +18,7 @@ const USER_NAV_ITEMS = [
     { key: "new_arrivals", href: "/shop?sort=newest" },
     { key: "best_sellers", href: "/shop?sort=popular" },
     { key: "track_order", href: "/track-order" },
+    { key: "loyalty", href: "/loyalty" },
     { key: "contact_us", href: "/support" },
 ] as const;
 
@@ -26,6 +27,8 @@ const ADMIN_NAV_ITEMS = [
     { key: "orders_all", href: "/admin/orders" },
     { key: "wishlists_all", href: "/admin/wishlists" },
     { key: "carts_all", href: "/admin/carts" },
+    { key: "loyalty_admin", href: "/admin/loyalty" },
+    { key: "coupons_admin", href: "/admin/coupons" },
     { key: "tickets_all", href: "/admin/support" },
 ] as const;
 

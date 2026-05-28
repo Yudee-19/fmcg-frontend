@@ -18,6 +18,7 @@ export default async function OrderSuccessPage({
   setRequestLocale(locale);
 
   const t = await getTranslations('checkout');
+  const tLoyalty = await getTranslations('order_success_loyalty');
 
   return (
     <div className="max-w-2xl mx-auto px-4 py-16">
@@ -47,13 +48,35 @@ export default async function OrderSuccessPage({
 
         {/* Order Number */}
         {orderNumber && (
-          <div className="mb-8 inline-block rounded-lg bg-gray-50 border border-border px-6 py-3">
+          <div className="mb-6 inline-block rounded-lg bg-gray-50 border border-border px-6 py-3">
             <p className="text-sm text-text-muted mb-1">{t('order_number')}</p>
             <p className="text-lg font-bold text-text-primary">
               {orderNumber}
             </p>
           </div>
         )}
+
+        {/* Loyalty earn banner */}
+        <div className="mb-8 mx-auto max-w-md flex items-start gap-3 bg-primary-light/40 border border-primary-light rounded-2xl px-4 py-3 text-left">
+          <span aria-hidden className="text-xl">👑</span>
+          <div>
+            <p className="text-sm font-semibold text-text-primary">
+              {tLoyalty('title')}
+            </p>
+            <p className="text-xs text-text-muted mt-0.5">
+              {tLoyalty.rich('description', {
+                link: (chunks) => (
+                  <Link
+                    href={`/${locale}/loyalty`}
+                    className="text-primary font-semibold hover:underline"
+                  >
+                    {chunks}
+                  </Link>
+                ),
+              })}
+            </p>
+          </div>
+        </div>
 
         {/* Action Buttons */}
         <div className="flex flex-col sm:flex-row gap-3 justify-center">

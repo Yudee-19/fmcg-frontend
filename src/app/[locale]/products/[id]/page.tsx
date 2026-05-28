@@ -12,6 +12,7 @@ import Badge from "@/components/ui/Badge";
 import ProductGallery from "@/components/product/ProductGallery";
 import ProductJsonLd from "@/components/product/ProductJsonLd";
 import AddToCartButton from "@/components/product/AddToCartButton";
+import { EarnHint } from "@/components/loyalty/EarnHint";
 import WishlistButton from "@/components/product/WishlistButton";
 import ReviewSection from "@/components/product/ReviewSection";
 import ProductGrid from "@/components/product/ProductGrid";
@@ -195,6 +196,9 @@ export default async function ProductDetailPage({
                                 </div>
                             )}
                         </div>
+
+                        {/* Loyalty earn hint */}
+                        <EarnHint />
 
                         {/* Add to cart */}
                         <AddToCartButton product={product} />

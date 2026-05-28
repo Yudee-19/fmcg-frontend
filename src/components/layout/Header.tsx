@@ -6,17 +6,55 @@ import { Link } from "@/i18n/navigation";
 import { useCartStore } from "@/store/cartStore";
 import { useWishlistStore } from "@/store/wishlistStore";
 import { useAuthStore } from "@/store/authStore";
+import { useLoyaltyStore } from "@/store/loyaltyStore";
+import { getCart } from "@/services/cartService";
 import SearchBar from "@/components/ui/SearchBar";
 import Image from "next/image";
-import { Heart, Search, ShoppingCart, User } from "lucide-react";
+import { Crown, Heart, Search, ShoppingCart, User } from "lucide-react";
 
 export default function Header() {
     const [mounted, setMounted] = useState(false);
     const cartCount = useCartStore((s) => s.totalItems);
+    const syncCart = useCartStore((s) => s.syncWithServer);
     const wishlistCount = useWishlistStore((s) => s.items.length);
     const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
+    const userRole = useAuthStore((s) => s.user?.role);
+    const isAdmin = !!userRole && userRole !== "USER";
+    const loyaltyPoints = useLoyaltyStore((s) => s.currentPoints);
+    const pointsLoaded = useLoyaltyStore((s) => s.pointsLoaded);
+    const fetchMyPoints = useLoyaltyStore((s) => s.fetchMyPoints);
 
     useEffect(() => setMounted(true), []);
+
+    useEffect(() => {
+        if (isAuthenticated && !pointsLoaded) fetchMyPoints();
+    }, [isAuthenticated, pointsLoaded, fetchMyPoints]);
+
+    // On app boot (fresh tab / refresh) — if the user is already authenticated,
+    // pull their server cart so items saved before don't appear empty.
+    useEffect(() => {
+        if (!isAuthenticated) return;
+        let alive = true;
+        getCart()
+            .then((res) => {
+                if (!alive) return;
+                const items = res.data?.items ?? [];
+                const total =
+                    (res as any)?.cartSummary?.finalAmount ??
+                    (res as any)?.cartSummary?.subtotal ??
+                    items.reduce(
+                        (s: number, i: any) => s + i.price * i.quantity,
+                        0,
+                    );
+                syncCart(items, total);
+            })
+            .catch(() => {
+                // ignore — leave persisted local cart untouched on network error
+            });
+        return () => {
+            alive = false;
+        };
+    }, [isAuthenticated, syncCart]);
 
     return (
         <header className="bg-primary border-b border-primary sticky top-0 z-40">
@@ -70,6 +108,22 @@ export default function Header() {
                             </span>
                         )}
                     </Link>
+
+                    {/* Loyalty points — only when logged in */}
+                    {mounted && isAuthenticated && (
+                        <Link
+                            href={isAdmin ? "/admin/loyalty" : "/loyalty"}
+                            aria-label="Loyalty points"
+                            className="relative p-2 text-white transition-colors"
+                        >
+                            <Crown className="w-5 h-5" />
+                            {loyaltyPoints > 0 && (
+                                <span className="absolute -top-0.5 -right-0.5 bg-amber-400 text-black text-[10px] font-bold rounded-full min-w-[16px] h-4 px-1 flex items-center justify-center">
+                                    {loyaltyPoints > 999 ? "999+" : loyaltyPoints}
+                                </span>
+                            )}
+                        </Link>
+                    )}
 
                     {/* User */}
                     <Link

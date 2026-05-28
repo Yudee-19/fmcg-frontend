@@ -175,6 +175,10 @@ export interface Order {
         | "CANCELLED";
     totalAmount: number;
     totalItems: number;
+    appliedLoyaltyPoints?: number;
+    pointsDiscount?: number;
+    appliedCouponCode?: string | null;
+    couponDiscount?: number;
     stripeSessionId?: string;
     deliveryOtp?: string;
     deliveredAt?: string;
