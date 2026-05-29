@@ -338,4 +338,4 @@ This frontend is already structured around a clear split:
 - Client-side feature islands for cart, auth, wishlist, checkout, and interactive controls
 - A centralized service layer for backend access
 - Persisted Zustand state for user/session continuity
-- Locale-aware routing and localized API content throughout the storefront
+- Locale-aware routing and localized API content throughout the storefront.
