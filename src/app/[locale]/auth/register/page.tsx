@@ -1,10 +1,18 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
 import { Link, useRouter } from "@/i18n/navigation";
 import { register as registerApi } from "@/services/authService";
 import Button from "@/components/ui/Button";
+import {
+    getCityOptions,
+    getCountryName,
+    getPhoneCodeOptions,
+    getStateName,
+    getStateOptions,
+    isValidPostalCode,
+} from "@/lib/location";
 import {
     ArrowRight,
     BadgeCheck,
@@ -20,6 +28,10 @@ import {
 const inputClass =
     "w-full rounded-xl border border-border bg-white/90 py-3 pl-11 pr-12 text-sm text-text-primary shadow-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/15";
 
+// Address country is locked to Kuwait (ISO code). State/city options cascade from it.
+const LOCKED_COUNTRY_CODE = "KW";
+const DEFAULT_DIAL_CODE = "+965";
+
 export default function RegisterPage() {
     const t = useTranslations("auth");
     const router = useRouter();
@@ -32,7 +44,7 @@ export default function RegisterPage() {
         firstName: "",
         lastName: "",
         phoneNumber: "",
-        countryCode: "",
+        countryCode: DEFAULT_DIAL_CODE,
         whatsappNumber: "",
     });
     const [address, setAddress] = useState({
@@ -40,13 +52,24 @@ export default function RegisterPage() {
         city: "",
         state: "",
         postalCode: "",
-        country: "",
+        country: LOCKED_COUNTRY_CODE,
         addressType: "home" as "home" | "work",
     });
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [error, setError] = useState("");
+    const [postalError, setPostalError] = useState("");
     const [loading, setLoading] = useState(false);
+
+    const phoneCodeOptions = useMemo(() => getPhoneCodeOptions(), []);
+    const stateOptions = useMemo(
+        () => getStateOptions(LOCKED_COUNTRY_CODE),
+        [],
+    );
+    const cityOptions = useMemo(
+        () => getCityOptions(LOCKED_COUNTRY_CODE, address.state),
+        [address.state],
+    );
 
     function updateField(field: string, value: string) {
         setForm((prev) => ({ ...prev, [field]: value }));
@@ -72,9 +95,9 @@ export default function RegisterPage() {
             address: {
                 street: address.street.trim(),
                 city: address.city.trim(),
-                state: address.state.trim(),
+                state: getStateName(LOCKED_COUNTRY_CODE, address.state),
                 postalCode: address.postalCode.trim(),
-                country: address.country.trim(),
+                country: getCountryName(LOCKED_COUNTRY_CODE),
                 isDefault: true,
                 addressType: address.addressType,
             },
@@ -89,6 +112,12 @@ export default function RegisterPage() {
     async function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
         setError("");
+        setPostalError("");
+
+        if (!isValidPostalCode(address.postalCode, address.country)) {
+            setPostalError(t("invalid_postal_code"));
+            return;
+        }
 
         if (form.password !== form.confirmPassword) {
             setError(t("passwords_do_not_match"));
@@ -286,22 +315,14 @@ export default function RegisterPage() {
                                 }
                                 className="w-28 shrink-0 rounded-xl border border-border bg-white px-3 py-3 text-sm text-text-primary shadow-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/15"
                             >
-                                <option value="">{t("code")}</option>
-                                <option value="+91">+91 IN</option>
-                                <option value="+1">+1 US</option>
-                                <option value="+44">+44 UK</option>
-                                <option value="+61">+61 AU</option>
-                                <option value="+81">+81 JP</option>
-                                <option value="+49">+49 DE</option>
-                                <option value="+33">+33 FR</option>
-                                <option value="+86">+86 CN</option>
-                                <option value="+971">+971 AE</option>
-                                <option value="+966">+966 SA</option>
-                                <option value="+65">+65 SG</option>
-                                <option value="+60">+60 MY</option>
-                                <option value="+62">+62 ID</option>
-                                <option value="+55">+55 BR</option>
-                                <option value="+27">+27 ZA</option>
+                                {phoneCodeOptions.map((option) => (
+                                    <option
+                                        key={option.iso}
+                                        value={option.dialCode}
+                                    >
+                                        {option.dialCode} {option.iso}
+                                    </option>
+                                ))}
                             </select>
                             <div className="relative flex-1">
                                 <Phone className="pointer-events-none absolute left-3.5 top-1/2 h-4.5 w-4.5 -translate-y-1/2 text-text-muted" />
@@ -448,15 +469,48 @@ export default function RegisterPage() {
                             <div className="grid grid-cols-2 gap-3">
                                 <div>
                                     <label
+                                        htmlFor="state"
+                                        className="block text-sm font-medium text-text-primary mb-1"
+                                    >
+                                        {t("state")}
+                                    </label>
+                                    <select
+                                        id="state"
+                                        required
+                                        value={address.state}
+                                        onChange={(e) => {
+                                            updateAddress(
+                                                "state",
+                                                e.target.value,
+                                            );
+                                            updateAddress("city", "");
+                                        }}
+                                        className={inputClass}
+                                    >
+                                        <option value="">
+                                            {t("select_state")}
+                                        </option>
+                                        {stateOptions.map((option) => (
+                                            <option
+                                                key={option.code}
+                                                value={option.code}
+                                            >
+                                                {option.name}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+                                <div>
+                                    <label
                                         htmlFor="city"
                                         className="block text-sm font-medium text-text-primary mb-1"
                                     >
                                         {t("city")}
                                     </label>
-                                    <input
+                                    <select
                                         id="city"
-                                        type="text"
                                         required
+                                        disabled={!address.state}
                                         value={address.city}
                                         onChange={(e) =>
                                             updateAddress(
@@ -465,28 +519,19 @@ export default function RegisterPage() {
                                             )
                                         }
                                         className={inputClass}
-                                    />
-                                </div>
-                                <div>
-                                    <label
-                                        htmlFor="state"
-                                        className="block text-sm font-medium text-text-primary mb-1"
                                     >
-                                        {t("state")}
-                                    </label>
-                                    <input
-                                        id="state"
-                                        type="text"
-                                        required
-                                        value={address.state}
-                                        onChange={(e) =>
-                                            updateAddress(
-                                                "state",
-                                                e.target.value,
-                                            )
-                                        }
-                                        className={inputClass}
-                                    />
+                                        <option value="">
+                                            {t("select_city")}
+                                        </option>
+                                        {cityOptions.map((option) => (
+                                            <option
+                                                key={option.name}
+                                                value={option.name}
+                                            >
+                                                {option.name}
+                                            </option>
+                                        ))}
+                                    </select>
                                 </div>
                             </div>
 
@@ -503,14 +548,22 @@ export default function RegisterPage() {
                                         type="text"
                                         required
                                         value={address.postalCode}
-                                        onChange={(e) =>
+                                        onChange={(e) => {
+                                            if (postalError) {
+                                                setPostalError("");
+                                            }
                                             updateAddress(
                                                 "postalCode",
                                                 e.target.value,
-                                            )
-                                        }
+                                            );
+                                        }}
                                         className={inputClass}
                                     />
+                                    {postalError ? (
+                                        <p className="mt-1 text-xs text-red-600">
+                                            {postalError}
+                                        </p>
+                                    ) : null}
                                 </div>
                                 <div>
                                     <label
@@ -519,20 +572,17 @@ export default function RegisterPage() {
                                     >
                                         {t("country")}
                                     </label>
-                                    <input
+                                    <select
                                         id="country"
-                                        type="text"
                                         required
+                                        disabled
                                         value={address.country}
-                                        onChange={(e) =>
-                                            updateAddress(
-                                                "country",
-                                                e.target.value,
-                                            )
-                                        }
                                         className={inputClass}
-                                        placeholder="KW"
-                                    />
+                                    >
+                                        <option value={LOCKED_COUNTRY_CODE}>
+                                            {getCountryName(LOCKED_COUNTRY_CODE)}
+                                        </option>
+                                    </select>
                                 </div>
                             </div>
 

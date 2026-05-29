@@ -14,6 +14,7 @@
   "dependencies": {
     "@stripe/stripe-js": "^9.0.0",
     "axios": "^1.14.0",
+    "country-state-city": "^3.2.1",
     "lucide-react": "^1.7.0",
     "next": "16.2.1",
     "next-intl": "^4.8.3",
@@ -21,6 +22,7 @@
     "react-dom": "19.2.4",
     "react-icons": "^5.6.0",
     "sonner": "^2.0.7",
+    "validator": "^13.15.35",
     "xlsx": "^0.18.5",
     "zustand": "^5.0.12"
   },
@@ -29,6 +31,7 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@types/validator": "^13.15.10",
     "eslint": "^9",
     "eslint-config-next": "16.2.1",
     "tailwindcss": "^4",
